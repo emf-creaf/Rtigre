@@ -5,7 +5,7 @@
 #' @param dat \code{data.frame} containing at least four columns named 'y1', 'y2', 'tdiff' and 'max_y'. See Details
 #' and accompanying Vignettes for a description.
 #' @param type string to select which growth function to use. It can be equal to 'logistic',
-#' 'schumacher', 'monomolecular', 'gompertz' or 'hyperbolic'.
+#' 'schumacher', 'monomolecular', 'gompertz', 'arctangent' or 'hyperbolic'.
 #'
 #' @details The growth equations are taken from Table 6.2 in
 #' Columns 'y1' and 'y2' in 'dat' correspond to size of the individual at 't1' and 't2', with column 'tdiff'='t2'-'t1'.
@@ -57,6 +57,8 @@ rate_parameter <- function(dat, type = "logistic", sigmoidal = T) {
     k <- with(dat, 1/tdiff*log((max_y-y1)/(max_y-y2)))
   } else if (type == "gompertz") {
     k <- with(dat, 1/tdiff*log(log(max_y/y1)/log(max_y/y2)))
+  } else if (type == "arctangent") {
+    k <- with(dat, 1/tdiff*(tan((y2/max_y-1)*pi)-tan((y1/max_y-1)*pi)))
   } else if (type == "hyperbolic") {
     k <- with(dat,1/(2*tdiff)*log(y2/y1*(2*max_y-y1)/(2*max_y-y2)))
   } else stop("Wrong 'type' value")
