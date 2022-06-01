@@ -1,0 +1,176 @@
+---
+title: "Derivation of time-independent growth functions"
+author: "R. Molowny-Horas"
+date: "`r Sys.Date()`"
+header-includes:
+  - \usepackage{enumerate}
+output:
+  html_document: default
+  pdf_document: default
+  word_document: default
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+<br>
+<br>
+
+Finding a growth function from which a simple time-independent expression can be derived is not an easy task. One is seeking for a functional expression where size at a time $t_{2}$ depends on previous size at time $t_{1}$ plus some set of free parameters. Those parameters, if not known beforehand, would have to be calculated via a regression scheme.
+
+Below we will derive time-independent (also known as age-independent) curves for several growth functions. Some of them are well-known and widely used (e.g. logistic, Schumacher, Gompertz, monomolecular) whereas others are more rarely employed (e.g. arctangent, hyperbolic tangent). The dependence of growth on explanatory variables like e.g. climatic, landscape, competition, etc. is conveyed through the growth rate parameter $k$, which is defined as a coefficient that explicitely multiplies time $t$., 
+
+<br>
+
+### Logistic growth function
+
+The logistic curve is one of the most usually employed functions to determine the growth of an individual plant or animal. In a general case, in which size depends on time $t$ as well as on a set of predictors (e.g. climatic, topographic), the size $y$ of an organism that obeys the logistic rule can be written:
+
+\begin{equation}
+  y=\frac{A}{1+B\cdot e^{-k\cdot t}}
+\end{equation}
+
+where $A$ indicates the asymptotic value of $y$ when $t\to \infty$, $B$ is an offset parameter and $k$ is the growth rate parameter. To obtain a time-independent growth equation that determines growth between two time points $t_{1}$ and $t_{2}$, $t_{1}<t_{2}$, we start by rewriting $t$ as:
+
+\begin{equation}
+  t=-\frac{1}{k}\cdot \ln\left(\frac{1}{B}\cdot\frac{A-y}{y}\right)
+\end{equation}
+
+Let us define a subscript notation whereby $t_{1}$ and $t_{2}$ indicate time points separated by $\Delta$ years, where $\Delta=t_{2}-t_{1}$. Likewise, $y_{1}$ and $y_{2}$ will denote sizes at those time points, respectively. We can easily deduce the following expression for $k$:
+
+\begin{equation}
+  k=-\frac{1}{\Delta}\cdot\ln \left(\frac{A-y_{2}}{A-y_{1}}\cdot\frac{y_{1}}{y_{2}}\right)
+\end{equation}
+
+Since $t_{2}=t_{1}+\Delta$, we can write:
+
+
+\begin{equation}
+  y_{1}=\frac{A}{1+B\cdot e^{-k\cdot t_{1}}}
+\end{equation}
+
+\begin{equation}
+  y_{2}=\frac{A}{1+B\cdot e^{-k\cdot t_{1}}\cdot e^{-k\cdot\Delta}}
+\end{equation}
+
+These two equations can be combined to arrive at an expression for $y_{2}$ as a function of $y_{1}$, $\Delta$ and the coefficients $a_{i}$:
+
+\begin{equation}
+  y_{2}=\frac{A}{1+\left(\frac{A}{y_{1}}-1\right)\cdot e^{-k\cdot\Delta}}
+\end{equation}
+
+The $B$ coefficient has conveniently disappeared from the equation.
+
+<br>
+
+### Schumacher growth function
+
+The Schumacher growth curve can be expressed as:
+
+\begin{equation}
+  y=A\cdot e^{-\frac{1}{k\cdot t+B}}
+\end{equation}
+
+We have departed from the more standard Schumacher function $y=A\cdot e^{-\frac{1}{k\cdot t}}$ to allow for an extra offset parameter $B$ in the exponent. Then, we can express $t$ as:
+
+\begin{equation}
+  t=\frac{1}{k}\cdot\frac{1}{\ln\left(\frac{A}{y}\right)}-\frac{1}{k}\cdot B
+\end{equation}
+
+Now, following the same notation as above, we write:
+
+\begin{equation}
+  \Delta=\frac{1}{k}\cdot\left[\frac{1}{\ln\left(\frac{A}{y_{2}}\right)}-\frac{1}{\ln\left(\frac{A}{y_{1}}\right)}\right]
+\end{equation}
+
+As above, the offset $B$ has vanished from the equation. Then:
+
+\begin{equation}
+  k=\frac{1}{\Delta\cdot\left[\frac{1}{\ln\left(\frac{y_{2}}{A}\right)}-\frac{1}{\ln\left(\frac{y_{1}}{A}\right)}\right]}
+\end{equation}
+
+Therefore:
+
+\begin{equation}
+  y_{0}=A\cdot e^{-\left[\frac{1}{\frac{1}{\ln\left(\frac{A}{y_{1}}\right)}+k\cdot\Delta}\right]}
+\end{equation}
+
+This is exactly Equation [9] in Tomé et al. (2006), Canadian Journal of Forest Research.
+
+<br>
+
+
+### Gompertz growth function
+
+<br>
+
+### Monomolecular growth function
+
+<br>
+
+### Arctangent growth function
+
+The arctangent is another sigmoid curve from which a time-independent growth function can be derived relatively easily. We start by expressing growth as a function of time:
+
+\begin{equation}
+  y=A\cdot \left(\frac{1}{pi}\cdot arctan\left(k\cdot t+B\right)+0.5\right)
+\end {equation}
+
+Thus, growth $y\in \left[0,A\right]$ and $B$ has been included to allow for any possible offset in the curve. We can easily get:
+
+\begin{equation}
+  k\cdot t=tan\left[\left(\frac{y}{A}-0.5\right)\cdot\pi\right]-B
+\end{equation}
+
+Therefore:
+
+\begin{equation}
+  \Delta=\frac{1}{k}\cdot\left[tan\left(\left(\frac{y_{2}}{A}-0.5\right)\cdot\pi\right)-tan\left(\left(\frac{y_{1}}{A}-0.5\right)\cdot\pi\right)\right]
+\end{equation}
+
+Thus, the offset term $B$ has vanished from the equation. An equivalent expression for $k$ is:
+
+\begin{equation}
+  k=\frac{1}{\Delta}\cdot\left[tan\left(\left(\frac{y_{2}}{A}-0.5\right)\cdot\pi\right)-tan\left(\left(\frac{y_{1}}{A}-0.5\right)\cdot\pi\right)\right]
+\end{equation}
+
+
+Finally, we derive:
+
+\begin{equation}
+tan\left(\left(\frac{y_{2}}{A}-0.5\right)\cdot\pi\right)=tan\left(\left(\frac{y_{1}}{A}-0.5\right)\cdot\pi\right)+k\cdot\Delta
+\end{equation}
+
+and then:
+\begin{equation}
+y_{2}=A\cdot\left[\frac{1}{\pi}\cdot atan\left\{tan\left(\left(\frac{y_{1}}{A}-0.5\right)\cdot\pi\right)+k\Delta\right\}+0.5\right]
+\end{equation}
+
+<br>
+
+### Hyperbolic tangent growth function
+
+
+
+
+<br>
+
+### Growth rate parameter
+
+We assume that the dependence of the growth rate parameter on a given set of predictors $X_{i}$ is linear. Then, $k$ can then be expressed as:
+
+\begin{equation}
+  k=\sum_{i=1}^{n} a_{i}\cdot X_{i}
+\end{equation}
+
+where the coefficients $a_{i}$ are unknown and must be calculated. There are cases where we wish to impose a strict positivity on $k$. At the same time, we prefer an expression that does not lead to unrealistically high values for $k$. Examples of this behaviour may come about, for example, when computing projections for $X_{i}$ values that are very different from the ones used during calibration. In those instances, we can force $k$ to be strictly positive by expressing it as a logistic function of the variables $X_{i}$. In this case, we replace the lineal expression from above with the following:
+
+\begin{equation}
+k=\frac{C}{1+e^{-\sum_{i=1}^{n} a_{i}\cdot X_{i}}}
+\end{equation}
+
+Using a logistic function for $k$ has the advantage of not letting $k$ reach absurdly low or high values, since $k\in \left[0,C\right]$ always. A new parameter $C$ is, however, necessary to set an upper limit to $k$.
+
+
+
