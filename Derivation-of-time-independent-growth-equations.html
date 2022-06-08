@@ -11,7 +11,7 @@
 
 <meta name="author" content="R. Molowny-Horas" />
 
-<meta name="date" content="2022-06-01" />
+<meta name="date" content="2022-06-08" />
 
 <title>Derivation of time-independent growth functions</title>
 
@@ -366,30 +366,51 @@ pre code {
 <h1 class="title toc-ignore">Derivation of time-independent growth
 functions</h1>
 <h4 class="author">R. Molowny-Horas</h4>
-<h4 class="date">2022-06-01</h4>
+<h4 class="date">2022-06-08</h4>
 
 </div>
 
 
 <p><br> <br></p>
+<div id="introduction" class="section level3">
+<h3>Introduction</h3>
 <p>Finding a growth function from which a simple time-independent
 expression can be derived is not an easy task. One is seeking for a
 functional expression where size at a time <span class="math inline">\(t_{2}\)</span> depends on previous size at time
-<span class="math inline">\(t_{1}\)</span> plus some set of free
-parameters. Those parameters, if not known beforehand, would have to be
+<span class="math inline">\(t_{1}\)</span>, with <span class="math inline">\(t_{1}&lt;t_{2}\)</span>, plus some set of free
+parameters. Those parameters, if not known beforehand, are usually
 calculated via a regression scheme.</p>
 <p>Below we will derive time-independent (also known as age-independent)
-curves for several growth functions. Some of them are well-known and
+curves for several growth functions. These curves all share the
+characteristic of having a sigmoid shape, which implies that there is
+always asymptotic minimum and maximum sizes. This fits well with the
+general idea that, in most cases, organisms do not grow indefinitely in
+size, irrespective of the amount of resources at their disposal. Rather,
+there is always a limit to that size that is set by structural
+constraints.</p>
+<p>Some of the growth curves that are explained below are well-known and
 widely used (e.g. logistic, Schumacher, Gompertz, monomolecular) whereas
 others are more rarely employed (e.g. arctangent, hyperbolic tangent).
 The dependence of growth on explanatory variables like e.g. climatic,
 landscape, competition, etc. is conveyed through the growth rate
 parameter <span class="math inline">\(k\)</span>, which is defined as a
-coefficient that explicitely multiplies time <span class="math inline">\(t\)</span>.,</p>
+coefficient that explicitely multiplies time (or age) <span class="math inline">\(t\)</span>.</p>
+<p>The obvious non-linearity of the time-independent equations below
+makes it challenging to devise a regression scheme with which to fit
+those expressions to a set of observational data. Good starting guesses
+for the parameters of the fit become a key ingredient for a quick and
+satisfactory convergence of the regression algorithms. Otherwise, those
+algorithms may fail to converge, or do so to a local, rather than
+global, extreme. Therefore, we have extracted simple expressions for the
+so-called growth rate parameter <span class="math inline">\(k\)</span>,
+which can be fitted in an initial step as linear expressions of the
+predictors. The coefficients thus calculated can then be used as first
+guesses for the full non-linear regression to the time-independent
+growth curves.</p>
 <p><br></p>
-<div id="logistic-growth-function" class="section level3">
-<h3>Logistic growth function</h3>
-<p>The logistic curve is one of the most usually employed functions to
+<div id="logistic-growth-function" class="section level4">
+<h4>Logistic growth function</h4>
+<p>The logistic curve is one of the most widely used functions to
 determine the growth of an individual plant or animal. In a general
 case, in which size depends on time <span class="math inline">\(t\)</span> as well as on a set of predictors
 (e.g. climatic, topographic), the size <span class="math inline">\(y\)</span> of an organism that obeys the logistic
@@ -407,8 +428,14 @@ time points <span class="math inline">\(t_{1}\)</span> and <span class="math inl
 \end{equation}\]</span></p>
 <p>Let us define a subscript notation whereby <span class="math inline">\(t_{1}\)</span> and <span class="math inline">\(t_{2}\)</span> indicate time points separated by
 <span class="math inline">\(\Delta\)</span> years, where <span class="math inline">\(\Delta=t_{2}-t_{1}\)</span>. Likewise, <span class="math inline">\(y_{1}\)</span> and <span class="math inline">\(y_{2}\)</span> will denote sizes at those time
-points, respectively. We can easily deduce the following expression for
-<span class="math inline">\(k\)</span>:</p>
+points, respectively. Then:</p>
+<p><span class="math display">\[\begin{equation}
+\Delta
+=t_{2}-t_{1}=-\frac{1}{k}\cdot\left[\ln\left(\frac{A-y_{2}}{y_{2}}\right)-\ln\left(\frac{A-y_{1}}{y_{1}}\right)\right]
+\end{equation}\]</span></p>
+<p>The <span class="math inline">\(B\)</span> coefficient has
+conveniently disappeared from the equation. Now we can easily deduce the
+following expression for <span class="math inline">\(k\)</span>:</p>
 <p><span class="math display">\[\begin{equation}
   k=-\frac{1}{\Delta}\cdot\ln
 \left(\frac{A-y_{2}}{A-y_{1}}\cdot\frac{y_{1}}{y_{2}}\right)
@@ -427,12 +454,10 @@ write:</p>
   y_{2}=\frac{A}{1+\left(\frac{A}{y_{1}}-1\right)\cdot
 e^{-k\cdot\Delta}}
 \end{equation}\]</span></p>
-<p>The <span class="math inline">\(B\)</span> coefficient has
-conveniently disappeared from the equation.</p>
 <p><br></p>
 </div>
-<div id="schumacher-growth-function" class="section level3">
-<h3>Schumacher growth function</h3>
+<div id="schumacher-growth-function" class="section level4">
+<h4>Schumacher growth function</h4>
 <p>The Schumacher growth curve can be expressed as:</p>
 <p><span class="math display">\[\begin{equation}
   y=A\cdot e^{-\frac{1}{k\cdot t+B}}
@@ -455,28 +480,44 @@ vanished from the equation. Then:</p>
 \end{equation}\]</span></p>
 <p>Therefore:</p>
 <p><span class="math display">\[\begin{equation}
-  y_{0}=A\cdot
+  y_{2}=A\cdot
 e^{-\left[\frac{1}{\frac{1}{\ln\left(\frac{A}{y_{1}}\right)}+k\cdot\Delta}\right]}
 \end{equation}\]</span></p>
 <p>This is exactly Equation [9] in Tomé et al. (2006), Canadian Journal
 of Forest Research.</p>
 <p><br></p>
 </div>
-<div id="gompertz-growth-function" class="section level3">
-<h3>Gompertz growth function</h3>
+<div id="gompertz-growth-function" class="section level4">
+<h4>Gompertz growth function</h4>
+<p><span class="math display">\[\begin{equation}
+  y=A\cdot e^{-e^{-\left(k\cdot t+B\right)}}
+\end {equation}\]</span></p>
+<p>B is an offset.</p>
+<p><span class="math display">\[\begin{equation}
+  t=-\frac{1}{k}\cdot\left[\ln\left(\ln\left(\frac{A}{y}\right)\right)-B\right]
+\end{equation}\]</span></p>
+<p><span class="math display">\[\begin{equation}
+  \Delta=\frac{1}{k}\cdot\left[\ln\left(\frac{\ln\left(\frac{A}{y_{1}}\right)}{\ln\left(\frac{A}{y_{2}}\right)}\right)\right]
+\end{equation}\]</span></p>
+<p><span class="math display">\[\begin{equation}
+  k=\frac{1}{\Delta}\cdot\left[\ln\left(\frac{\ln\left(\frac{A}{y_{1}}\right)}{\ln\left(\frac{A}{y_{2}}\right)}\right)\right]
+\end{equation}\]</span></p>
+<p><span class="math display">\[\begin{equation}
+  y_{2}=A\cdot\left(\frac{A}{y_{1}}\right)^{e^{-k\cdot\Delta}}
+\end{equation}\]</span></p>
 <p><br></p>
 </div>
-<div id="monomolecular-growth-function" class="section level3">
-<h3>Monomolecular growth function</h3>
+<div id="monomolecular-growth-function" class="section level4">
+<h4>Monomolecular growth function</h4>
 <p><br></p>
 </div>
-<div id="arctangent-growth-function" class="section level3">
-<h3>Arctangent growth function</h3>
+<div id="arctangent-growth-function" class="section level4">
+<h4>Arctangent growth function</h4>
 <p>The arctangent is another sigmoid curve from which a time-independent
 growth function can be derived relatively easily. We start by expressing
 growth as a function of time:</p>
 <p><span class="math display">\[\begin{equation}
-  y=A\cdot \left(\frac{1}{pi}\cdot arctan\left(k\cdot
+  y=A\cdot \left(\frac{1}{\pi}\cdot \arctan\left(k\cdot
 t+B\right)+0.5\right)
 \end {equation}\]</span></p>
 <p>Thus, growth <span class="math inline">\(y\in
@@ -484,33 +525,33 @@ t+B\right)+0.5\right)
 been included to allow for any possible offset in the curve. We can
 easily get:</p>
 <p><span class="math display">\[\begin{equation}
-  k\cdot t=tan\left[\left(\frac{y}{A}-0.5\right)\cdot\pi\right]-B
+  k\cdot t=\tan\left[\left(\frac{y}{A}-0.5\right)\cdot\pi\right]-B
 \end{equation}\]</span></p>
 <p>Therefore:</p>
 <p><span class="math display">\[\begin{equation}
-  \Delta=\frac{1}{k}\cdot\left[tan\left(\left(\frac{y_{2}}{A}-0.5\right)\cdot\pi\right)-tan\left(\left(\frac{y_{1}}{A}-0.5\right)\cdot\pi\right)\right]
+  \Delta=\frac{1}{k}\cdot\left[\tan\left(\left(\frac{y_{2}}{A}-0.5\right)\cdot\pi\right)-\tan\left(\left(\frac{y_{1}}{A}-0.5\right)\cdot\pi\right)\right]
 \end{equation}\]</span></p>
 <p>Thus, the offset term <span class="math inline">\(B\)</span> has
 vanished from the equation. An equivalent expression for <span class="math inline">\(k\)</span> is:</p>
 <p><span class="math display">\[\begin{equation}
-  k=\frac{1}{\Delta}\cdot\left[tan\left(\left(\frac{y_{2}}{A}-0.5\right)\cdot\pi\right)-tan\left(\left(\frac{y_{1}}{A}-0.5\right)\cdot\pi\right)\right]
+  k=\frac{1}{\Delta}\cdot\left[\tan\left(\left(\frac{y_{2}}{A}-0.5\right)\cdot\pi\right)-\tan\left(\left(\frac{y_{1}}{A}-0.5\right)\cdot\pi\right)\right]
 \end{equation}\]</span></p>
 <p>Finally, we derive:</p>
 <p><span class="math display">\[\begin{equation}
-tan\left(\left(\frac{y_{2}}{A}-0.5\right)\cdot\pi\right)=tan\left(\left(\frac{y_{1}}{A}-0.5\right)\cdot\pi\right)+k\cdot\Delta
+\tan\left(\left(\frac{y_{2}}{A}-0.5\right)\cdot\pi\right)=\tan\left(\left(\frac{y_{1}}{A}-0.5\right)\cdot\pi\right)+k\cdot\Delta
 \end{equation}\]</span></p>
 <p>and then: <span class="math display">\[\begin{equation}
 y_{2}=A\cdot\left[\frac{1}{\pi}\cdot
-atan\left\{tan\left(\left(\frac{y_{1}}{A}-0.5\right)\cdot\pi\right)+k\Delta\right\}+0.5\right]
+\arctan\left\{\tan\left(\left(\frac{y_{1}}{A}-0.5\right)\cdot\pi\right)+k\Delta\right\}+0.5\right]
 \end{equation}\]</span></p>
 <p><br></p>
 </div>
-<div id="hyperbolic-tangent-growth-function" class="section level3">
-<h3>Hyperbolic tangent growth function</h3>
+<div id="hyperbolic-tangent-growth-function" class="section level4">
+<h4>Hyperbolic tangent growth function</h4>
 <p><br></p>
 </div>
-<div id="growth-rate-parameter" class="section level3">
-<h3>Growth rate parameter</h3>
+<div id="growth-rate-parameter" class="section level4">
+<h4>Growth rate parameter</h4>
 <p>We assume that the dependence of the growth rate parameter on a given
 set of predictors <span class="math inline">\(X_{i}\)</span> is linear.
 Then, <span class="math inline">\(k\)</span> can then be expressed
@@ -537,6 +578,7 @@ has the advantage of not letting <span class="math inline">\(k\)</span>
 reach absurdly low or high values, since <span class="math inline">\(k\in \left[0,C\right]\)</span> always. A new
 parameter <span class="math inline">\(C\)</span> is, however, necessary
 to set an upper limit to <span class="math inline">\(k\)</span>.</p>
+</div>
 </div>
 
 
