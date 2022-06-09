@@ -48,15 +48,15 @@ rate_parameter <- function(dat, type = "logistic") {
   if (tolower(type) == "logistic") {
     k <- with(dat, 1/tdiff*log(y2/y1*(max_y-y1)/(max_y-y2)))
   } else if (type == "schumacher") {
-    k <- with(dat, tdiff/(1/log(max_y/y2)-1/log(max_y/y1)))
-  } else if (type == "monomolecular") {
-    k <- with(dat, 1/tdiff*log((max_y-y1)/(max_y-y2)))
+    k <- with(dat, 1/(tdiff*(1/log(max_y/y2)-1/log(max_y/y1))))
   } else if (type == "gompertz") {
     k <- with(dat, 1/tdiff*log(log(max_y/y1)/log(max_y/y2)))
+  } else if (type == "monomolecular") {
+    k <- with(dat, 1/tdiff*log((max_y-y1)/(max_y-y2)))
   } else if (type == "arctangent") {
-    k <- with(dat, 1/tdiff*(tan((y2/max_y-1)*pi)-tan((y1/max_y-1)*pi)))
+    k <- with(dat, 1/tdiff*(tan((y2/max_y-0.5)*pi)-tan((y1/max_y-0.5)*pi)))
   } else if (type == "hyperbolic") {
-    k <- with(dat,1/(2*tdiff)*log(y2/y1*(2*max_y-y1)/(2*max_y-y2)))
+    k <- with(dat,1/(2*tdiff)*log(((max_y+y2)/(max_y+y1))*((max_y-y1)/(max_y-y2))))
   } else stop("Wrong 'type' value")
 
   return(k)

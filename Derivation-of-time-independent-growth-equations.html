@@ -419,7 +419,7 @@ case, in which size depends on time <span class="math inline">\(t\)</span> as we
 (e.g. climatic, topographic), the size <span class="math inline">\(y\)</span> of an organism that obeys the logistic
 rule can be written:</p>
 <p><span class="math display">\[\begin{equation}
-  y=\frac{A}{1+B\cdot e^{-k\cdot t}}
+  y=\frac{A}{1+e^{-\left(k\cdot t+B\right)}}
 \end{equation}\]</span></p>
 <p>where <span class="math inline">\(A\)</span> indicates the asymptotic
 value of <span class="math inline">\(y\)</span> when <span class="math inline">\(t\to \infty\)</span>, <span class="math inline">\(B\)</span> is an offset parameter and <span class="math inline">\(k\)</span> is the growth rate parameter. To obtain
@@ -427,34 +427,30 @@ a time-independent growth equation that determines growth between two
 time points <span class="math inline">\(t_{1}\)</span> and <span class="math inline">\(t_{2}\)</span>, <span class="math inline">\(t_{1}&lt;t_{2}\)</span>, we start by rewriting
 <span class="math inline">\(t\)</span> as:</p>
 <p><span class="math display">\[\begin{equation}
-  t=-\frac{1}{k}\cdot \ln\left(\frac{1}{B}\cdot\frac{A-y}{y}\right)
+  e^{-\left(k\cdot t+B\right)}=\frac{A}{y}-1
+\end{equation}\]</span></p>
+<p><span class="math display">\[\begin{equation}
+  t=\frac{1}{k}\cdot \ln\left(\frac{A-y}{y}-B\right)
 \end{equation}\]</span></p>
 <p>Let us define a subscript notation whereby <span class="math inline">\(t_{1}\)</span> and <span class="math inline">\(t_{2}\)</span> indicate time points separated by
 <span class="math inline">\(\Delta\)</span> years, where <span class="math inline">\(\Delta=t_{2}-t_{1}\)</span>. Likewise, <span class="math inline">\(y_{1}\)</span> and <span class="math inline">\(y_{2}\)</span> will denote sizes at those time
 points, respectively. Then:</p>
 <p><span class="math display">\[\begin{equation}
 \Delta
-=t_{2}-t_{1}=-\frac{1}{k}\cdot\left[\ln\left(\frac{A-y_{2}}{y_{2}}\right)-\ln\left(\frac{A-y_{1}}{y_{1}}\right)\right]
+=t_{2}-t_{1}=\frac{1}{k}\cdot\left[\ln\left(\frac{y_{2}}{y_{1}}\cdot\frac{A-y_{1}}{A-y_{2}}\right)\right]
 \end{equation}\]</span></p>
 <p>The <span class="math inline">\(B\)</span> coefficient has
 conveniently disappeared from the equation. Now we can easily deduce the
 following expression for <span class="math inline">\(k\)</span>:</p>
 <p><span class="math display">\[\begin{equation}
-  k=-\frac{1}{\Delta}\cdot\ln
-\left(\frac{A-y_{2}}{A-y_{1}}\cdot\frac{y_{1}}{y_{2}}\right)
+  k=\frac{1}{\Delta}\cdot\left[\ln\left(\frac{y_{2}}{y_{1}}\cdot\frac{A-y_{1}}{A-y_{2}}\right)\right]
 \end{equation}\]</span></p>
 <p>Since <span class="math inline">\(t_{2}=t_{1}+\Delta\)</span>, we can
-write:</p>
+arrive at an expression for <span class="math inline">\(y_{2}\)</span>
+as a function of <span class="math inline">\(y_{1}\)</span>, <span class="math inline">\(\Delta\)</span> and the coefficients <span class="math inline">\(a_{i}\)</span>:</p>
 <p><span class="math display">\[\begin{equation}
-  y_{1}=\frac{A}{1+B\cdot e^{-k\cdot t_{1}}}
-\end{equation}\]</span></p>
-<p><span class="math display">\[\begin{equation}
-  y_{2}=\frac{A}{1+B\cdot e^{-k\cdot t_{1}}\cdot e^{-k\cdot\Delta}}
-\end{equation}\]</span></p>
-<p>These two equations can be combined to arrive at an expression for
-<span class="math inline">\(y_{2}\)</span> as a function of <span class="math inline">\(y_{1}\)</span>, <span class="math inline">\(\Delta\)</span> and the coefficients <span class="math inline">\(a_{i}\)</span>:</p>
-<p><span class="math display">\[\begin{equation}
-  y_{2}=\frac{A}{1+\left(\frac{A}{y_{1}}-1\right)\cdot
+  y_{2}=\frac{A}{1+e^{-\left(k\cdot t_{1}+B\right)}\cdot
+e^{-k\cdot\Delta}}=\frac{A}{1+\left(\frac{A}{y_{1}}-1\right)\cdot
 e^{-k\cdot\Delta}}
 \end{equation}\]</span></p>
 <p><br></p>
@@ -479,7 +475,7 @@ B
 <p>As above, the offset <span class="math inline">\(B\)</span> has
 vanished from the equation. Then:</p>
 <p><span class="math display">\[\begin{equation}
-  k=\frac{1}{\Delta\cdot\left[\frac{1}{\ln\left(\frac{y_{2}}{A}\right)}-\frac{1}{\ln\left(\frac{y_{1}}{A}\right)}\right]}
+  k=\frac{1}{\Delta}\cdot\left[\frac{1}{\ln\left(\frac{A}{y_{2}}\right)}-\frac{1}{\ln\left(\frac{A}{y_{1}}\right)}\right]
 \end{equation}\]</span></p>
 <p>Therefore:</p>
 <p><span class="math display">\[\begin{equation}
@@ -516,10 +512,14 @@ of Forest Research.</p>
   y=A\cdot \left(1-e^{-\left( k\cdot t+B\right)}\right)
 \end {equation}\]</span></p>
 <p><span class="math display">\[\begin{equation}
-  t=-\frac{1}{k}\cdot \left[\ln\left(\frac{A}{A-y}\right)-B\right]
+  t=\frac{1}{k}\cdot \left[\ln\left(\frac{A}{A-y}\right)-B\right]
 \end {equation}\]</span></p>
 <p><span class="math display">\[\begin{equation}
-  \Delta=-\frac{1}{k}\cdot
+  \Delta=\frac{1}{k}\cdot
+\left[\ln\left(\frac{A-y_{1}}{A-y_{2}}\right)\right]
+\end {equation}\]</span></p>
+<p><span class="math display">\[\begin{equation}
+  k=\frac{1}{\Delta}\cdot
 \left[\ln\left(\frac{A-y_{1}}{A-y_{2}}\right)\right]
 \end {equation}\]</span></p>
 <p><span class="math display">\[\begin{equation}
@@ -544,6 +544,9 @@ easily get:</p>
   k\cdot t=\tan\left[\left(\frac{y}{A}-0.5\right)\cdot\pi\right]-B
 \end{equation}\]</span></p>
 <p>Therefore:</p>
+<p><span class="math display">\[\begin{equation}
+  t=\frac{1}{k}\cdot\tan\left[\left(\frac{y}{A}-0.5\right)\cdot\pi\right]-B
+\end{equation}\]</span></p>
 <p><span class="math display">\[\begin{equation}
   \Delta=\frac{1}{k}\cdot\left[\tan\left(\left(\frac{y_{2}}{A}-0.5\right)\cdot\pi\right)-\tan\left(\left(\frac{y_{1}}{A}-0.5\right)\cdot\pi\right)\right]
 \end{equation}\]</span></p>
