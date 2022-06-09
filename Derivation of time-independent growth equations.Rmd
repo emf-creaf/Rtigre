@@ -23,7 +23,7 @@ Finding a growth function from which a simple time-independent expression can be
 
 Below we will derive time-independent (also known as age-independent) curves for several growth functions. These curves all share the characteristic of having a sigmoid shape, which implies that there is always asymptotic minimum and maximum sizes. This fits well with the general idea that, in most cases, organisms do not grow indefinitely in size, irrespective of the amount of resources at their disposal. Rather, there is always a limit to that size that is set by structural constraints.
 
-Some of the growth curves that are explained below are well-known and widely used (e.g. logistic, Schumacher, Gompertz, monomolecular) whereas others are more rarely employed (e.g. arctangent, hyperbolic tangent). The dependence of growth on explanatory variables like e.g. climatic, landscape, competition, etc. is conveyed through the growth rate parameter $k$, which is defined as a coefficient that explicitely multiplies time (or age) $t$. 
+Some of the growth curves that are explained below are well-known and widely used (e.g. logistic, Schumacher, Gompertz, monomolecular) whereas others are more rarely employed (e.g. arctangent, hyperbolic tangent). The dependence of growth on explanatory variables like e.g. climatic, landscape, competition, etc. is conveyed through the growth rate parameter $k$, which is defined as a coefficient that explicitly multiplies time (or age) $t$. In addition, we allow for a term $B$ which accounts for any offset in the growth curve. As we will see below, this summative offset nevertheless vanishes in all cases when size is expressed as a function of previous size (i.e. time or age-independence).
 
 The obvious non-linearity of the time-independent equations below makes it challenging to devise a regression scheme with which to fit those expressions to a set of observational data. Good starting guesses for the parameters of the fit become a key ingredient for a quick and satisfactory convergence of the regression algorithms. Otherwise, those algorithms may fail to converge, or do so to a local, rather than global, extreme. Therefore, we have extracted simple expressions for the so-called growth rate parameter $k$, which can be fitted in an initial step as linear expressions of the predictors. The coefficients thus calculated can then be used as first guesses for the full non-linear regression to the time-independent growth curves.
 
@@ -143,6 +143,23 @@ B is an offset.
 
 #### Monomolecular growth function
 
+\begin{equation}
+  y=A\cdot \left(1-e^{-\left( k\cdot t+B\right)}\right)
+\end {equation}
+
+
+\begin{equation}
+  t=-\frac{1}{k}\cdot \left[\ln\left(\frac{A}{A-y}\right)-B\right]
+\end {equation}
+
+\begin{equation}
+  \Delta=-\frac{1}{k}\cdot \left[\ln\left(\frac{A-y_{1}}{A-y_{2}}\right)\right]
+\end {equation}
+
+\begin{equation}
+  y_{2}=A-\left(A-y_{1}\right)\cdot e^{-k\cdot \Delta}
+\end {equation}
+
 <br>
 
 #### Arctangent growth function
@@ -187,7 +204,38 @@ y_{2}=A\cdot\left[\frac{1}{\pi}\cdot \arctan\left\{\tan\left(\left(\frac{y_{1}}{
 
 #### Hyperbolic tangent growth function
 
+\begin{equation}
+  y=A\cdot \tanh \left(k\cdot t+B\right)=A\cdot \frac{e^{2\cdot\left(k\cdot t+B\right)}-1}{e^{2\cdot\left(k\cdot t+B\right)}+1}=
+    A\cdot \frac{e^{2\cdot k\cdot t}-e^{2\cdot B}}{e^{2\cdot k\cdot t}+e^{2\cdot B}}
+\end {equation}
 
+
+\begin{equation}
+  e^{2\cdot k\cdot t}=\frac{A+y}{A-y}\cdot e^{2\cdot B}
+\end {equation}
+
+
+\begin{equation}
+  t=\frac{1}{2\cdot k}\cdot\left[\ln\left(\frac{A+y}{A-y}\right)+2\cdot B\right]
+\end {equation}
+
+\begin{equation}
+  \Delta=\frac{1}{2\cdot k}\cdot\ln\left(\frac{A+y_{2}}{A+y_{1}}\cdot\frac{A-y_{1}}{A-y_{2}}\right)
+\end {equation}
+
+\begin{equation}
+  k=\frac{1}{2\cdot \Delta}\cdot\ln\left(\frac{A+y_{2}}{A+y_{1}}\cdot\frac{A-y_{1}}{A-y_{2}}\right)
+\end {equation}
+
+$t_{2}=t_{1}+\Delta$
+
+\begin{equation}
+  y_{2}=A\cdot\frac{e^{2\cdot k\cdot t_{1}}\cdot e^{2\cdot k\cdot\Delta}-e^{2\cdot B}}{e^{2\cdot k\cdot t_{1}}\cdot e^{2\cdot k\cdot\Delta}+e^{2\cdot B}}
+\end {equation}
+
+\begin{equation}
+  y_{2}=A\cdot\frac{\frac{A+y_{1}}{A-y_{1}}\cdot e^{2\cdot k\cdot\Delta}-1}{\frac{A+y_{1}}{A-y_{1}}\cdot e^{2\cdot k\cdot\Delta}+1}
+\end {equation}
 
 
 <br>

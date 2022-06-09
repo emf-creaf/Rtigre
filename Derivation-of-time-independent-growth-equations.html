@@ -11,7 +11,7 @@
 
 <meta name="author" content="R. Molowny-Horas" />
 
-<meta name="date" content="2022-06-08" />
+<meta name="date" content="2022-06-09" />
 
 <title>Derivation of time-independent growth functions</title>
 
@@ -366,7 +366,7 @@ pre code {
 <h1 class="title toc-ignore">Derivation of time-independent growth
 functions</h1>
 <h4 class="author">R. Molowny-Horas</h4>
-<h4 class="date">2022-06-08</h4>
+<h4 class="date">2022-06-09</h4>
 
 </div>
 
@@ -394,7 +394,10 @@ others are more rarely employed (e.g. arctangent, hyperbolic tangent).
 The dependence of growth on explanatory variables like e.g. climatic,
 landscape, competition, etc. is conveyed through the growth rate
 parameter <span class="math inline">\(k\)</span>, which is defined as a
-coefficient that explicitely multiplies time (or age) <span class="math inline">\(t\)</span>.</p>
+coefficient that explicitly multiplies time (or age) <span class="math inline">\(t\)</span>. In addition, we allow for a term <span class="math inline">\(B\)</span> which accounts for any offset in the
+growth curve. As we will see below, this summative offset nevertheless
+vanishes in all cases when size is expressed as a function of previous
+size (i.e. time or age-independence).</p>
 <p>The obvious non-linearity of the time-independent equations below
 makes it challenging to devise a regression scheme with which to fit
 those expressions to a set of observational data. Good starting guesses
@@ -509,6 +512,19 @@ of Forest Research.</p>
 </div>
 <div id="monomolecular-growth-function" class="section level4">
 <h4>Monomolecular growth function</h4>
+<p><span class="math display">\[\begin{equation}
+  y=A\cdot \left(1-e^{-\left( k\cdot t+B\right)}\right)
+\end {equation}\]</span></p>
+<p><span class="math display">\[\begin{equation}
+  t=-\frac{1}{k}\cdot \left[\ln\left(\frac{A}{A-y}\right)-B\right]
+\end {equation}\]</span></p>
+<p><span class="math display">\[\begin{equation}
+  \Delta=-\frac{1}{k}\cdot
+\left[\ln\left(\frac{A-y_{1}}{A-y_{2}}\right)\right]
+\end {equation}\]</span></p>
+<p><span class="math display">\[\begin{equation}
+  y_{2}=A-\left(A-y_{1}\right)\cdot e^{-k\cdot \Delta}
+\end {equation}\]</span></p>
 <p><br></p>
 </div>
 <div id="arctangent-growth-function" class="section level4">
@@ -548,6 +564,38 @@ y_{2}=A\cdot\left[\frac{1}{\pi}\cdot
 </div>
 <div id="hyperbolic-tangent-growth-function" class="section level4">
 <h4>Hyperbolic tangent growth function</h4>
+<p><span class="math display">\[\begin{equation}
+  y=A\cdot \tanh \left(k\cdot t+B\right)=A\cdot
+\frac{e^{2\cdot\left(k\cdot t+B\right)}-1}{e^{2\cdot\left(k\cdot
+t+B\right)}+1}=
+    A\cdot \frac{e^{2\cdot k\cdot t}-e^{2\cdot B}}{e^{2\cdot k\cdot
+t}+e^{2\cdot B}}
+\end {equation}\]</span></p>
+<p><span class="math display">\[\begin{equation}
+  e^{2\cdot k\cdot t}=\frac{A+y}{A-y}\cdot e^{2\cdot B}
+\end {equation}\]</span></p>
+<p><span class="math display">\[\begin{equation}
+  t=\frac{1}{2\cdot k}\cdot\left[\ln\left(\frac{A+y}{A-y}\right)+2\cdot
+B\right]
+\end {equation}\]</span></p>
+<p><span class="math display">\[\begin{equation}
+  \Delta=\frac{1}{2\cdot
+k}\cdot\ln\left(\frac{A+y_{2}}{A+y_{1}}\cdot\frac{A-y_{1}}{A-y_{2}}\right)
+\end {equation}\]</span></p>
+<p><span class="math display">\[\begin{equation}
+  k=\frac{1}{2\cdot
+\Delta}\cdot\ln\left(\frac{A+y_{2}}{A+y_{1}}\cdot\frac{A-y_{1}}{A-y_{2}}\right)
+\end {equation}\]</span></p>
+<p><span class="math inline">\(t_{2}=t_{1}+\Delta\)</span></p>
+<p><span class="math display">\[\begin{equation}
+  y_{2}=A\cdot\frac{e^{2\cdot k\cdot t_{1}}\cdot e^{2\cdot
+k\cdot\Delta}-e^{2\cdot B}}{e^{2\cdot k\cdot t_{1}}\cdot e^{2\cdot
+k\cdot\Delta}+e^{2\cdot B}}
+\end {equation}\]</span></p>
+<p><span class="math display">\[\begin{equation}
+  y_{2}=A\cdot\frac{\frac{A+y_{1}}{A-y_{1}}\cdot e^{2\cdot
+k\cdot\Delta}-1}{\frac{A+y_{1}}{A-y_{1}}\cdot e^{2\cdot k\cdot\Delta}+1}
+\end {equation}\]</span></p>
 <p><br></p>
 </div>
 <div id="growth-rate-parameter" class="section level4">
