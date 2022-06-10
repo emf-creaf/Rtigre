@@ -2,39 +2,35 @@
 #'
 #' This function calculates several growth as a function of time for six growth functions.
 #'
-#' @param dat \code{data.frame} containing at least four columns named 'time', 'k', 'max_y' and 'offset'. See Details
+#' @param dat \code{data.frame} containing at least four columns named 't', 'k', 'max_y' and 'offset'. See Details
 #' and accompanying Vignettes for a description.
 #' @param type string to select which growth function to use. It can be equal to 'logistic',
 #' 'schumacher', 'monomolecular', 'gompertz', 'arctangent' or 'hyperbolic'.
 #'
 #' @details Some of the growth equations are taken from Table 6.2 in
 #' Burkhart and Tomé (2012).
-#' Columns 'y1' and 'y2' in 'dat' correspond to the sizes of the individual at 't1' and 't2', with column 'tdiff'='t2'-'t1'.
-#' Column 'max_y' correspond to maximum size attainable by the individual when time tends to infinite. This must be known a priori
-#' and is not calculated by the function.
+#' Column 'max_y' correspond to maximum size attainable by the individual when time tends to infinite.
+#' This must be known a priori and is not calculated by the function.
 #' Details about the six growth curves are given in the accompanying vignettes.
 #'
-#' @return value of rate parameter for each row in 'dat'.
+#' @return growth value for each 't' value.
 #'
 #' @examples
 #'
-#' # In the examples below we will calculate a time-dependent growth curve and will
-#' # recover the input k-value.
-#'
 #' ## Common parameters.
 #' t <- seq(1,100,by=.1)
-#' max_y <- 5.7
+#' max_y <- 12
 #' k <- .05
 #' offset <- .5
-#' dat <- data.frame(ty=t,k=k,offset=offset,max_y=max_y)
-#' plot(time,growth_curve(dat,type="logistic"),type="l",lty=1,lwd=2,ylim=c(0,max_y))
-#' points(time,growth_curve(dat,"schumacher"),type="l",lty=2,lwd=2)
-#' points(time,growth_curve(dat,type="gompertz"),type="l",lty=3,lwd=2)
-#' points(time,growth_curve(dat,type="monomolecular"),type="l",lty=4,lwd=2)
-#' points(time,growth_curve(dat,type="arctangent"),type="l",lty=5,lwd=2)
-#' points(time,growth_curve(dat,type="hyperbolic"),type="l",lty=6,lwd=2)
+#' dat <- data.frame(t=t,k=k,offset=offset,max_y=max_y)
+#' plot(t,growth_curve(dat,type="logistic"),type="l",lty=1,lwd=2,ylim=c(0,max_y))
+#' points(t,growth_curve(dat,"schumacher"),type="l",lty=2,lwd=2)
+#' points(t,growth_curve(dat,type="gompertz"),type="l",lty=3,lwd=2)
+#' points(t,growth_curve(dat,type="monomolecular"),type="l",lty=4,lwd=2)
+#' points(t,growth_curve(dat,type="arctangent"),type="l",lty=5,lwd=2)
+#' points(t,growth_curve(dat,type="hyperbolic"),type="l",lty=6,lwd=2)
 #' legend("bottomright",lty=1:6,c("logistic","schumacher","gompertz","monomolecular",
-#' "arctangent","hyperbolic"),lwd=2)
+#' "arctangent","hyperbolic"),lwd=2,cex=1.5)
 #'
 #'@references
 #' Burkhart, Harold E., and Margarida Tomé. "Growth functions." In Modeling forest trees and stands,
