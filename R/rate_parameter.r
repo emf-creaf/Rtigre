@@ -11,7 +11,9 @@
 #' @details Some of the growth equations are taken from Table 6.2 in
 #' Burkhart and Tomé (2012).
 #' Columns 'y1' and 'y2' in 'dat' correspond to the sizes of the individual at 't1' and 't2', with column 'tdiff'='t2'-'t1'.
-#' Column 'max_y' correspond to maximum size attainable by the individual when time tends to infinite.
+#' Column 'max_y' correspond to maximum size attainable by the individual when time tends to infinite. This must be known a priori
+#' and is not calculated by the function.
+#' Details about the six growth curves are given in the accompanying vignettes.
 #'
 #' @return value of rate parameter for each row in 'dat'.
 #'

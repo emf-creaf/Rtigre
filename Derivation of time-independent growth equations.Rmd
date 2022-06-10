@@ -19,9 +19,17 @@ vignette: >
 
 ### Introduction
 
+Growth, understood as the increase of the physical dimensions of an organism, characterizes the temporal evolution of a living entity more than almost any other feature. By physical dimensions we mean quantities such as size, height, weight, volume, etc. that are directly related to the spatial space occupied by that organism. For example, we may speak about diameter or height for trees, weight for mamals or volume for ***. 
+
+Although the positive increment of those physical dimensions may slow down, stop or even reverse in some organisms depending on, for example, worsening environmental conditions or fiercer competition (EXAMPLES?), hereby we will concern ourselves only with those cases where a physical dimension increases as time passes. In addition, we assume that, in most cases, organisms do not grow indefinitely, irrespective of the amount of resources at their disposal. Rather, there is always a limit to that growth that is set by structural constraints.
+
+
+
 Finding a growth function from which a simple time-independent expression can be derived is not an easy task. One is seeking for a functional expression where size at a time $t_{2}$ depends on previous size at time $t_{1}$, with $t_{1}<t_{2}$, plus some set of free parameters. Those parameters, if not known beforehand, are usually calculated via a regression scheme.
 
-Below we will derive time-independent (also known as age-independent) curves for several growth functions. These curves all share the characteristic of having a sigmoid shape, which implies that there is always asymptotic minimum and maximum sizes. This fits well with the general idea that, in most cases, organisms do not grow indefinitely in size, irrespective of the amount of resources at their disposal. Rather, there is always a limit to that size that is set by structural constraints.
+Below we will derive time-independent (also known as age-independent) curves for several growth functions. These curves all share the characteristic of having a sigmoid shape, which implies that there is always asymptotic minimum and maximum sizes. This fits well with the general idea that, 
+
+Some of the curves are solutions of ordinary differential equations which have been used ***. Others, whoever, simply have a sigmoid shape which makes them appropriate for our objectives.
 
 Some of the growth curves that are explained below are well-known and widely used (e.g. logistic, Schumacher, Gompertz, monomolecular) whereas others are more rarely employed (e.g. arctangent, hyperbolic tangent). The dependence of growth on explanatory variables like e.g. climatic, landscape, competition, etc. is conveyed through the growth rate parameter $k$, which is defined as a coefficient that explicitly multiplies time (or age) $t$. In addition, we allow for a term $B$ which accounts for any offset in the growth curve. As we will see below, this summative offset nevertheless vanishes in all cases when size is expressed as a function of previous size (i.e. time or age-independence).
 
@@ -256,6 +264,4 @@ k=\frac{C}{1+e^{-\sum_{i=1}^{n} a_{i}\cdot X_{i}}}
 \end{equation}
 
 Using a logistic function for $k$ has the advantage of not letting $k$ reach absurdly low or high values, since $k\in \left[0,C\right]$ always. A new parameter $C$ is, however, necessary to set an upper limit to $k$.
-
-
 
