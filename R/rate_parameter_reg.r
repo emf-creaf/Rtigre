@@ -8,7 +8,7 @@
 #' @param fo an object of class "formula"
 #' @param type string to select which growth function to use. It can be equal to 'logistic',
 #' 'schumacher', 'monomolecular', 'gompertz', 'arctangent' or 'hyperbolic'.
-#' @param sigmoid logical; if set to TRUE, the growth rate 'k' is
+#' @param sigmoid logical; if set to TRUE
 #'
 #' @details Some of the growth equations are taken from Table 6.2 in
 #' Burkhart and Tomé (2012).
