@@ -89,7 +89,7 @@ We have departed from the more standard Schumacher function $y=A\cdot e^{-\frac{
   t=\frac{1}{k}\cdot\frac{1}{\ln\left(\frac{A}{y}\right)}-\frac{1}{k}\cdot B
 \end{equation}
 
-Now, following the same notation as above, we write:
+Now, following the same notation as shown above, we write:
 
 \begin{equation}
   \Delta=\frac{1}{k}\cdot\left[\frac{1}{\ln\left(\frac{A}{y_{2}}\right)}-\frac{1}{\ln\left(\frac{A}{y_{1}}\right)}\right]
