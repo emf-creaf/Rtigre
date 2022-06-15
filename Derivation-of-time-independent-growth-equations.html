@@ -11,7 +11,7 @@
 
 <meta name="author" content="R. Molowny-Horas" />
 
-<meta name="date" content="2022-06-14" />
+<meta name="date" content="2022-06-15" />
 
 <title>Derivation of time-independent growth functions</title>
 
@@ -366,7 +366,7 @@ pre code {
 <h1 class="title toc-ignore">Derivation of time-independent growth
 functions</h1>
 <h4 class="author">R. Molowny-Horas</h4>
-<h4 class="date">2022-06-14</h4>
+<h4 class="date">2022-06-15</h4>
 
 </div>
 
@@ -380,7 +380,12 @@ than almost any other feature. By physical dimensions we mean quantities
 such as size, height, weight, volume, etc. that are directly related to
 the spatial space occupied by that organism. For example, we may speak
 about diameter or height for trees, weight for mamals or volume for
-***.</p>
+<strong><em>. As time passes, then, one expects growth</em></strong> At
+the same time, one expects growth to slow down at older age ***.
+Finally, maximum size is an upper limit to the physical dimensions of
+any individual that is dictated by structural and physiologically
+constraints. That limit is usually unknown but can be guessed by
+checking the observed trends in growth.</p>
 <p>Although the positive increment of those physical dimensions may slow
 down, stop or even reverse in some organisms depending on, for example,
 worsening environmental conditions or fiercer competition (EXAMPLES?),
@@ -412,7 +417,7 @@ parameter <span class="math inline">\(k\)</span>, which is defined as a
 coefficient that explicitly multiplies time (or age) <span class="math inline">\(t\)</span>. In addition, we allow for a term <span class="math inline">\(B\)</span> which accounts for any offset in the
 growth curve. As we will see below, this summative offset nevertheless
 vanishes in all cases when size is expressed as a function of previous
-size (i.e. time or age-independence).</p>
+size (i.e. time or age-independence). Finally, diameter growth <span class="math inline">\(y_{2}-y_{1}=0\)</span> when <span class="math inline">\(t=0\)</span> or <span class="math inline">\(k=0\)</span> in all cases, as expected.</p>
 <p>The obvious non-linearity of the time-independent equations below
 makes it challenging to devise a regression scheme with which to fit
 those expressions to a set of observational data. Good starting guesses
@@ -483,7 +488,7 @@ the exponent. Then, we can express <span class="math inline">\(t\)</span> as:</p
   t=\frac{1}{k}\cdot\frac{1}{\ln\left(\frac{A}{y}\right)}-\frac{1}{k}\cdot
 B
 \end{equation}\]</span></p>
-<p>Now, following the same notation as above, we write:</p>
+<p>Now, following the same notation as shown above, we write:</p>
 <p><span class="math display">\[\begin{equation}
   \Delta=\frac{1}{k}\cdot\left[\frac{1}{\ln\left(\frac{A}{y_{2}}\right)}-\frac{1}{\ln\left(\frac{A}{y_{1}}\right)}\right]
 \end{equation}\]</span></p>
@@ -508,16 +513,16 @@ of Forest Research.</p>
 \end {equation}\]</span></p>
 <p>B is an offset.</p>
 <p><span class="math display">\[\begin{equation}
-  t=-\frac{1}{k}\cdot\left[\ln\left(\ln\left(\frac{A}{y}\right)\right)-B\right]
+  t=\frac{1}{k}\cdot\left[\ln\left(\frac{1}{\ln\left(\frac{A}{y}\right)}\right)-B\right]
 \end{equation}\]</span></p>
 <p><span class="math display">\[\begin{equation}
-  \Delta=\frac{1}{k}\cdot\left[\ln\left(\frac{\ln\left(\frac{A}{y_{1}}\right)}{\ln\left(\frac{A}{y_{2}}\right)}\right)\right]
+  \Delta=\frac{1}{k}\cdot\ln\left(\frac{\ln\left(\frac{A}{y_{1}}\right)}{\ln\left(\frac{A}{y_{2}}\right)}\right)
 \end{equation}\]</span></p>
 <p><span class="math display">\[\begin{equation}
-  k=\frac{1}{\Delta}\cdot\left[\ln\left(\frac{\ln\left(\frac{A}{y_{1}}\right)}{\ln\left(\frac{A}{y_{2}}\right)}\right)\right]
+  k=\frac{1}{\Delta}\cdot\ln\left(\frac{\ln\left(\frac{A}{y_{1}}\right)}{\ln\left(\frac{A}{y_{2}}\right)}\right)
 \end{equation}\]</span></p>
 <p><span class="math display">\[\begin{equation}
-  y_{2}=A\cdot\left(\frac{A}{y_{1}}\right)^{e^{-k\cdot\Delta}}
+  y_{2}=A\cdot\left(\frac{y_{1}}{A}\right)^{e^{-k\cdot\Delta}}
 \end{equation}\]</span></p>
 <p><br></p>
 </div>
@@ -583,17 +588,17 @@ y_{2}=A\cdot\left[\frac{1}{\pi}\cdot
 <div id="hyperbolic-tangent-growth-function" class="section level4">
 <h4>Hyperbolic tangent growth function</h4>
 <p><span class="math display">\[\begin{equation}
-  y=A\cdot \tanh \left(k\cdot t+B\right)=A\cdot
+  y=A\cdot \left[\tanh\left(k\cdot t+B\right)+1\right]\cdot 0.5=A\cdot
 \frac{e^{2\cdot\left(k\cdot t+B\right)}-1}{e^{2\cdot\left(k\cdot
 t+B\right)}+1}=
-    A\cdot \frac{e^{2\cdot k\cdot t}-e^{2\cdot B}}{e^{2\cdot k\cdot
-t}+e^{2\cdot B}}
+    A\cdot \frac{e^{2\cdot k\cdot t}-e^{-2\cdot B}}{e^{2\cdot k\cdot
+t}+e^{-2\cdot B}}
 \end {equation}\]</span></p>
 <p><span class="math display">\[\begin{equation}
-  e^{2\cdot k\cdot t}=\frac{A+y}{A-y}\cdot e^{2\cdot B}
+  e^{2\cdot k\cdot t}=\frac{A+y}{A-y}\cdot e^{-2\cdot B}
 \end {equation}\]</span></p>
 <p><span class="math display">\[\begin{equation}
-  t=\frac{1}{2\cdot k}\cdot\left[\ln\left(\frac{A+y}{A-y}\right)+2\cdot
+  t=\frac{1}{2\cdot k}\cdot\left[\ln\left(\frac{A+y}{A-y}\right)-2\cdot
 B\right]
 \end {equation}\]</span></p>
 <p><span class="math display">\[\begin{equation}
@@ -607,8 +612,8 @@ k}\cdot\ln\left(\frac{A+y_{2}}{A+y_{1}}\cdot\frac{A-y_{1}}{A-y_{2}}\right)
 <p><span class="math inline">\(t_{2}=t_{1}+\Delta\)</span></p>
 <p><span class="math display">\[\begin{equation}
   y_{2}=A\cdot\frac{e^{2\cdot k\cdot t_{1}}\cdot e^{2\cdot
-k\cdot\Delta}-e^{2\cdot B}}{e^{2\cdot k\cdot t_{1}}\cdot e^{2\cdot
-k\cdot\Delta}+e^{2\cdot B}}
+k\cdot\Delta}-e^{-2\cdot B}}{e^{2\cdot k\cdot t_{1}}\cdot e^{2\cdot
+k\cdot\Delta}+e^{-2\cdot B}}
 \end {equation}\]</span></p>
 <p><span class="math display">\[\begin{equation}
   y_{2}=A\cdot\frac{\frac{A+y_{1}}{A-y_{1}}\cdot e^{2\cdot

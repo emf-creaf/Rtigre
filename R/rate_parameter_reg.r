@@ -8,10 +8,9 @@
 #' @param fo an object of class "formula"
 #' @param type string to select which growth function to use. It can be equal to 'logistic',
 #' 'schumacher', 'monomolecular', 'gompertz', 'arctangent' or 'hyperbolic'.
-#' @param sigmoid logical; if set to TRUE
+#' @param sigmoid logical; if set to TRUE, the growth rate 'k' is
 #'
-#' @details Some of the growth equations are taken from Table 6.2 in
-#' Burkhart and Tomé (2012).
+#' @details Some of the growth equations are taken from Table 6.2 in #' Burkhart and Tomé (2012).
 #' Columns 'y1' and 'y2' in 'dat' correspond to the sizes of the individual at 't1' and 't2', with column 'tdiff'='t2'-'t1'.
 #' Column 'max_y' correspond to maximum size attainable by the individual when time tends to infinite.
 #'

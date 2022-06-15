@@ -19,9 +19,9 @@
 #'
 #' ## Common parameters.
 #' t <- seq(1,100,by=.1)
-#' max_y <- 12
-#' k <- .05
-#' offset <- .5
+#' max_y <- 120
+#' k <- .1
+#' offset <- -2
 #' dat <- data.frame(t=t,k=k,offset=offset,max_y=max_y)
 #' plot(t,growth_curve(dat,type="logistic"),type="l",lty=1,lwd=2,ylim=c(0,max_y))
 #' points(t,growth_curve(dat,"schumacher"),type="l",lty=2,lwd=2)
