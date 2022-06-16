@@ -30,7 +30,7 @@
 #' points(t,growth_curve(dat,type="arctangent"),type="l",lty=5,lwd=2)
 #' points(t,growth_curve(dat,type="hyperbolic"),type="l",lty=6,lwd=2)
 #' legend("bottomright",lty=1:6,c("logistic","schumacher","gompertz","monomolecular",
-#' "arctangent","hyperbolic"),lwd=2,cex=1.5)
+#' "arctangent","hyperbolic"),lwd=2,cex=1.1)
 #'
 #'@references
 #' Burkhart, Harold E., and Margarida Tomé. "Growth functions." In Modeling forest trees and stands,
@@ -51,7 +51,7 @@ growth_curve <- function(dat, type = "logistic") {
   } else if (type == "arctangent") {
     k <- with(dat, max_y*(atan(k*t+offset)/pi+0.5))
   } else if (type == "hyperbolic") {
-    k <- with(dat, max_y*((exp(2*(k*t+offset))-1)/(exp(2*(k*t+offset))+1)))
+    k <- with(dat, max_y*(exp(2*k*t)/(exp(2*k*t)+exp(-2*offset))))
   } else stop("Wrong 'type' value")
 
 }

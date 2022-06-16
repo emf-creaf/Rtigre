@@ -63,7 +63,7 @@ rate_parameter <- function(dat, type = "logistic") {
     k <- with(dat, 1/tdiff*(tan((y2/max_y-0.5)*pi)-tan((y1/max_y-0.5)*pi)))
 
   } else if (type == "hyperbolic") {
-    k <- with(dat,1/(2*tdiff)*log(((max_y+y2)/(max_y+y1))*((max_y-y1)/(max_y-y2))))
+    k <- with(dat,1/(2*tdiff)*log((y2/y1)*((max_y-y1)/(max_y-y2))))
 
   } else stop("Wrong 'type' value")
 

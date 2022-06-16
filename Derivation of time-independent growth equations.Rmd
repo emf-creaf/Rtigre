@@ -81,7 +81,7 @@ The Schumacher growth curve can be expressed as:
   y=A\cdot e^{-\frac{1}{k\cdot t+B}}
 \end{equation}
 
-We have departed from the more standard Schumacher function $y=A\cdot e^{-\frac{1}{k\cdot t}}$ to allow for an extra offset parameter $B$ in the exponent. Then, we can express $t$ as:
+For this curve to make ecological sense, $k\cdot t+B>0$ always. We have departed from the more standard Schumacher function $y=A\cdot e^{-\frac{1}{k\cdot t}}$ to allow for an extra offset parameter $B$ in the exponent. Then, we can express $t$ as:
 
 \begin{equation}
   t=\frac{1}{k}\cdot\frac{1}{\ln\left(\frac{A}{y}\right)}-\frac{1}{k}\cdot B
@@ -212,38 +212,45 @@ y_{2}=A\cdot\left[\frac{1}{\pi}\cdot \arctan\left\{\tan\left(\left(\frac{y_{1}}{
 #### Hyperbolic tangent growth function
 
 \begin{equation}
-  y=A\cdot \left[\tanh\left(k\cdot t+B\right)+1\right]\cdot 0.5=A\cdot \frac{e^{2\cdot\left(k\cdot t+B\right)}-1}{e^{2\cdot\left(k\cdot t+B\right)}+1}=
-    A\cdot \frac{e^{2\cdot k\cdot t}-e^{-2\cdot B}}{e^{2\cdot k\cdot t}+e^{-2\cdot B}}
+  y=\frac{A}{2}\cdot\left[\tanh\left(k\cdot t+B\right)+1\right]=\frac{A}{2}\cdot\frac{e^{2\cdot\left(k\cdot t+B\right)}-1}{e^{2\cdot\left(k\cdot t+B\right)}+1}=
+    A\cdot\frac{e^{2\cdot k\cdot t}}{e^{2\cdot k\cdot t}+e^{-2\cdot B}}
+\end{equation}
+
+
+\begin{equation}
+  e^{2\cdot k\cdot t}=\frac{y}{A-y}\cdot e^{-2\cdot B}
 \end {equation}
 
 
 \begin{equation}
-  e^{2\cdot k\cdot t}=\frac{A+y}{A-y}\cdot e^{-2\cdot B}
-\end {equation}
-
-
-\begin{equation}
-  t=\frac{1}{2\cdot k}\cdot\left[\ln\left(\frac{A+y}{A-y}\right)-2\cdot B\right]
-\end {equation}
+  t=\frac{1}{2\cdot k}\cdot\left[\ln\left(\frac{y}{A-y}\right)-2\cdot B\right]
+\end{equation}
 
 \begin{equation}
-  \Delta=\frac{1}{2\cdot k}\cdot\ln\left(\frac{A+y_{2}}{A+y_{1}}\cdot\frac{A-y_{1}}{A-y_{2}}\right)
-\end {equation}
+  \Delta=\frac{1}{2\cdot k}\cdot\ln\left(\frac{y_{2}}{y_{1}}\cdot\frac{A-y_{1}}{A-y_{2}}\right)
+\end{equation}
 
 \begin{equation}
-  k=\frac{1}{2\cdot \Delta}\cdot\ln\left(\frac{A+y_{2}}{A+y_{1}}\cdot\frac{A-y_{1}}{A-y_{2}}\right)
-\end {equation}
+  k=\frac{1}{2\cdot\Delta}\cdot\ln\left(\frac{y_{2}}{y_{1}}\cdot\frac{A-y_{1}}{A-y_{2}}\right)
+\end{equation}
 
-$t_{2}=t_{1}+\Delta$
-
-\begin{equation}
-  y_{2}=A\cdot\frac{e^{2\cdot k\cdot t_{1}}\cdot e^{2\cdot k\cdot\Delta}-e^{-2\cdot B}}{e^{2\cdot k\cdot t_{1}}\cdot e^{2\cdot k\cdot\Delta}+e^{-2\cdot B}}
-\end {equation}
+Since $t_{2}=t_{1}+\Delta$:
 
 \begin{equation}
-  y_{2}=A\cdot\frac{\frac{A+y_{1}}{A-y_{1}}\cdot e^{2\cdot k\cdot\Delta}-1}{\frac{A+y_{1}}{A-y_{1}}\cdot e^{2\cdot k\cdot\Delta}+1}
-\end {equation}
+  y_{2}=A\cdot\frac{e^{2\cdot k\cdot t_{1}}\cdot e^{2\cdot k\cdot\Delta}}{e^{2\cdot k\cdot t_{1}}\cdot e^{2\cdot k\cdot\Delta}+e^{-2\cdot B}}
+\end{equation}
 
+Thus:
+
+\begin{equation}
+  y_{2}=A\cdot\frac{\frac{y_{1}}{A-y_{1}}\cdot e^{2\cdot k\cdot\Delta}}{\frac{y_{1}}{A-y_{1}}\cdot e^{2\cdot k\cdot\Delta}+1}
+\end{equation}
+
+Finally:
+
+\begin{equation}
+  y_{2}=A\cdot\frac{y_{1}}{y_{1}+\left({A-y_{1}}\right)\cdot e^{-2\cdot k\cdot\Delta}}
+\end{equation}
 
 <br>
 
