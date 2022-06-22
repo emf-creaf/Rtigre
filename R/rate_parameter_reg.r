@@ -21,25 +21,36 @@
 #' # In the examples below we will calculate a time-dependent growth curve and will
 #' # recover the input k-value.
 #'
-#' ## Common parameters.
+#' ## Common parameters. Simple example.
 #' tdiff <- 1
 #' t <- seq(1,100,by=tdiff)
 #' max_y <- 5.7
 #' k <- .05
-#' y <- max_y/(1+10*exp(-k*t))+runif(length(t))*.01
-#' temp <- runif(100)
-#' prec <- runif(100)
-#' dat <- data.frame(tdiff=tdiff,max_y=max_y,y1=y[-length(t)],y2=y[-1],temp=temp[1:99],prec=prec[1:99])
+#' y <- max_y/(1+exp(-(k*t-2)))
+#' plot(t,y,xlab="Time",ylab="Size")
+#'
+#' dat <- data.frame(tdiff=tdiff,max_y=max_y,y1=y[-length(t)],y2=y[-1])
+#' r1 <- rate_parameter_reg(dat,~1)
+#'
+#' ## Fake climatic data.
+#' temp <- runif(100,18.6,21.3)
+#' prec <- runif(100,359,514)
+#' t <- c(10,20)
+#' intercept <- .02
+#' coef_temp <- .00061
+#' coef_prec <- .000052
+#' k <- intercept+coef_temp*temp+coef_prec*prec+rnorm(length(temp))*.001
+#' y1 <- max_y/(1+exp(-(k*t[1]-2)))
+#' y2 <- max_y/(1+exp(-(k*t[2]-2)))
+#' dat <- data.frame(tdiff=t[2]-t[1],max_y=max_y,y1=y1,y2=y2,temp=temp,prec=prec)
 #'
 #' ## Logistic growth.
-#' fo <- ~temp+prec
-#' r <- rate_parameter_reg(dat,fo)
+#' r2 <- rate_parameter_reg(dat,~1)
+#' summary(r2)
 #'
-#' k <- .03+.1*temp-.3*prec
-#' y <- max_y/(1+10*exp(-k*t))+runif(length(t))*.01
-#' dat$y1 <- y[-length(t)]
-#' dat$y2 <- y[-1]
-#' r <- rate_parameter_reg(dat,fo)
+#' ## A better model.
+#' r3 <- rate_parameter_reg(dat,~temp+prec)
+#' summary(r3)
 #'
 #' @references
 #' Burkhart, Harold E., and Margarida Tomé. "Growth functions." In Modeling forest trees and stands,
@@ -47,7 +58,7 @@
 #'
 #' @export
 
-rate_parameter_reg <- function(dat, fo, type = "logistic", sigmoid = T) {
+rate_parameter_reg <- function(dat, fo, type = "logistic", sigmoid = F) {
 
   cl <- match.call()
   m <- match(c("dat","fo"),names(cl))
@@ -57,7 +68,7 @@ rate_parameter_reg <- function(dat, fo, type = "logistic", sigmoid = T) {
   is.intercept <- attr(tf,"intercept")
   is.terms <- attr(tf,"term.labels")
   if (length(is.intercept)==0) stop("Expression in formula 'fo' must have an intercept term")
-  if (length(is.terms)==0) stop("Expression in formula 'fo' must have a predictor term")
+  # if (length(is.terms)==0) stop("Expression in formula 'fo' must have a predictor term")
 
   # Transformation to build a linear expression for k.
   dat <- cbind(dat,k=rate_parameter(dat, type = type))

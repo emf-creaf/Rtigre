@@ -31,7 +31,8 @@
 #'
 #' ## Logistic growth.
 #' y <- max_y/(1+10*exp(-k*t))+runif(length(t))*.01
-#' hist(rate_parameter(cbind(dat,y1=y[-length(t)],y2=y[-1]), type = "logistic"),breaks=20)
+#' hist(rate_parameter(cbind(dat,y1=y[-length(t)],y2=y[-1]), type = "logistic"),breaks=20,
+#' xlab="k parameter",main="")
 #'
 #'@references
 #' Burkhart, Harold E., and Margarida Tomé. "Growth functions." In Modeling forest trees and stands,

@@ -1,2 +1,2 @@
 # Rtigre
-Regression of time-independent growth equations
+Regression of Time-Independent GRowth Equations
