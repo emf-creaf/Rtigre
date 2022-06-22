@@ -19,18 +19,19 @@
 #'
 #' @examples
 #'
-#' # In the examples below we will calculate a time-dependent growth curve and will
-#' # recover the input k-value.
+#' # In the examples below we will simulate a time-dependent growth curve and
+#' # then we will recover the input k-value.
 #'
 #' ## Common parameters.
 #' tdiff <- 1
 #' t <- seq(1,100,by=tdiff)
 #' max_y <- 5.7
 #' k <- .05
-#' dat <- data.frame(tdiff=tdiff,max_y=max_y)
+#' y <- max_y/(1+exp(-(k*t-2))) + rnorm(length(t))*.01
+#' plot(t,y,xlab="Time",ylab="Size")
 #'
 #' ## Logistic growth.
-#' y <- max_y/(1+10*exp(-k*t))+runif(length(t))*.01
+#' dat <- data.frame(tdiff=tdiff,max_y=max_y)
 #' hist(rate_parameter(cbind(dat,y1=y[-length(t)],y2=y[-1]), type = "logistic"),breaks=20,
 #' xlab="k parameter",main="")
 #'

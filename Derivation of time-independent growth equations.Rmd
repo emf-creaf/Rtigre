@@ -9,7 +9,7 @@ output:
   html_document: default
   word_document: default
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Derivation of time-independent growth functions}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---

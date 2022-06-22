@@ -1,6 +1,6 @@
 #' Time-dependent growth equations.
 #'
-#' This function calculates several growth as a function of time for six growth functions.
+#' This function calculates growth as a function of time for six growth functions.
 #'
 #' @param dat \code{data.frame} containing at least four columns named 't', 'k', 'max_y' and 'offset'. See Details
 #' and accompanying Vignettes for a description.
