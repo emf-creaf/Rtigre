@@ -32,7 +32,7 @@
 #'
 #' ## Logistic growth.
 #' dat <- data.frame(tdiff=tdiff,max_y=max_y)
-#' hist(rate_parameter(cbind(dat,y1=y[-length(t)],y2=y[-1]), type = "logistic"),breaks=20,
+#' hist(rate_transformation(cbind(dat,y1=y[-length(t)],y2=y[-1]), curve_type = "logistic"),breaks=20,
 #' xlab="k parameter",main="")
 #'
 #'@references
@@ -41,7 +41,7 @@
 #'
 #' @export
 
-rate_parameter <- function(dat, type = "logistic") {
+rate_transformation <- function(dat, curve_type = "logistic") {
 
   cl <- match.call()
   m <- match(c("dat"),names(cl))
@@ -49,25 +49,27 @@ rate_parameter <- function(dat, type = "logistic") {
   if (!is.data.frame(dat)) stop("'dat' must be a data.frame")
   if (any(is.na(match(c("y1","y2","tdiff","max_y"),colnames(dat))))) stop("Wrong column names")
 
-  if (tolower(type) == "logistic") {
-    k <- with(dat, 1/tdiff*log(y2/y1*(max_y-y1)/(max_y-y2)))
+  if (!any(curve_type==c("logistic","schumacher","gompertz","monomolecular","arctangent","hyperbolic")))
+    stop("Wrong 'curve_type' value")
 
-  } else if (type == "schumacher") {
+  if (tolower(curve_type) == "logistic") {
+    k <- with(dat, eval(parse(text = gr_logistic(equation_type = "rate"))))
+
+  } else if (curve_type == "schumacher") {
     k <- with(dat, 1/(tdiff*(1/log(max_y/y2)-1/log(max_y/y1))))
 
-  } else if (type == "gompertz") {
+  } else if (curve_type == "gompertz") {
     k <- with(dat, 1/tdiff*log(log(max_y/y1)/log(max_y/y2)))
 
-  } else if (type == "monomolecular") {
+  } else if (curve_type == "monomolecular") {
     k <- with(dat, 1/tdiff*log((max_y-y1)/(max_y-y2)))
 
-  } else if (type == "arctangent") {
+  } else if (curve_type == "arctangent") {
     k <- with(dat, 1/tdiff*(tan((y2/max_y-0.5)*pi)-tan((y1/max_y-0.5)*pi)))
 
-  } else if (type == "hyperbolic") {
+  } else if (curve_type == "hyperbolic") {
     k <- with(dat,1/(2*tdiff)*log((y2/y1)*((max_y-y1)/(max_y-y2))))
-
-  } else stop("Wrong 'type' value")
+  }
 
   return(k)
 }

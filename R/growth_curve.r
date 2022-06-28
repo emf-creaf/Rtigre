@@ -40,6 +40,9 @@
 
 growth_curve <- function(dat, type = "logistic") {
 
+  if (!any(type==c("logistic","schumacher","gompertz","monomolecular","arctangent","hyperbolic")))
+    stop("Wrong 'type' value")
+
   if (tolower(type) == "logistic") {
     k <- with(dat, max_y/(1+exp(-(k*t+offset))))
   } else if (type == "schumacher") {
@@ -52,6 +55,6 @@ growth_curve <- function(dat, type = "logistic") {
     k <- with(dat, max_y*(atan(k*t+offset)/pi+0.5))
   } else if (type == "hyperbolic") {
     k <- with(dat, max_y*(exp(2*k*t)/(exp(2*k*t)+exp(-2*offset))))
-  } else stop("Wrong 'type' value")
+  }
 
 }

@@ -37,30 +37,33 @@
 #'
 #' @export
 
-ti_growth <- function(dat, type = "logistic") {
+ti_growth <- function(dat, type = "logistic", expression = F) {
 
   if (!is.data.frame(dat)) stop("'dat' must be a data.frame")
+  if (!any(type==c("logistic","schumacher","gompertz","monomolecular","arctangent","hyperbolic")))
+    stop("Wrong 'type' value")
 
   type <- tolower(type)
-  if (type == "logistic") {
-    y2 <- with(dat, max_y/(1+exp(-k*tdiff)*(max_y/y1-1)))
+  if (expression) {
+    y2 <- switch(type,
+                 "logistic"      = with(dat, max_y/(1+exp(-k*tdiff)*(max_y/y1-1))),
+                 "schumacher"    = with(dat, max_y*exp(-(1/(1/log(max_y/y1)+k*tdiff)))),
+                 "gompertz"      = with(dat, max_y*(y1/max_y)^exp(-k*tdiff)),
+                 "monomolecular" = with(dat, max_y-(max_y-y1)*exp(-k*tdiff)),
+                 "arctangent"    = with(dat, max_y*(atan(tan((y1/max_y-0.5)*pi)+k*tdiff)/pi+0.5)),
+                 "hyperbolic"    = with(dat, max_y*(y1/(y1+(max_y-y1)*exp(-2*k*tdiff))))
+    )
 
-  } else if (type == "schumacher") {
-    y2 <- with(dat, max_y*exp(-(1/(1/log(max_y/y1)+k*tdiff))))
-
-  } else if (type == "gompertz") {
-    y2 <- with(dat, max_y*(y1/max_y)^exp(-k*tdiff))
-
-  } else if (type == "monomolecular") {
-    y2 <- with(dat, max_y-(max_y-y1)*exp(-k*tdiff))
-
-  } else if (type == "arctangent") {
-    y2 <- with(dat, max_y*(atan(tan((y1/max_y-0.5)*pi)+k*tdiff)/pi+0.5))
-
-  } else if (type == "hyperbolic") {
-    y2 <- with(dat, max_y*(y1/(y1+(max_y-y1)*exp(-2*k*tdiff))))
-
-  } else stop("Wrong 'type' value")
+  } else {
+    y2 <- switch(type,
+                 "logistic"      = with(dat, max_y/(1+exp(-k*tdiff)*(max_y/y1-1))),
+                 "schumacher"    = with(dat, max_y*exp(-(1/(1/log(max_y/y1)+k*tdiff)))),
+                 "gompertz"      = with(dat, max_y*(y1/max_y)^exp(-k*tdiff)),
+                 "monomolecular" = with(dat, max_y-(max_y-y1)*exp(-k*tdiff)),
+                 "arctangent"    = with(dat, max_y*(atan(tan((y1/max_y-0.5)*pi)+k*tdiff)/pi+0.5)),
+                 "hyperbolic"    = with(dat, max_y*(y1/(y1+(max_y-y1)*exp(-2*k*tdiff))))
+    )
+  }
 
   return(y2-y1)
 

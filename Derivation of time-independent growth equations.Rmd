@@ -268,5 +268,11 @@ where the coefficients $a_{i}$ are unknown and must be calculated. There are cas
 k=\frac{C}{1+e^{-\sum_{i=1}^{n} a_{i}\cdot X_{i}}}
 \end{equation}
 
-Using a logistic function for $k$ has the advantage of not letting $k$ reach absurdly low or high values, since $k\in \left[0,C\right]$ always. A new parameter $C$ is, however, necessary to set an upper limit to $k$.
+A new transformation is thus needed to obtain a linear expression. After some algebra, we get:
+
+\begin{equation}
+\sum_{i=1}^{n} a_{i}\cdot X_{i}=\ln\left(\frac{k}{k_{max}-k}\right)
+\end{equation}
+
+Using a logistic function for $k$ has the advantage of not letting $k$ reach absurdly low or high values, since $k\in \left[0,C\right]$ always. A new parameter $k_{max}$ is, however, necessary to set an upper limit to $k$.
 
