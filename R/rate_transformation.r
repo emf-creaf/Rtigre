@@ -32,8 +32,23 @@
 #'
 #' ## Logistic growth.
 #' dat <- data.frame(tdiff=tdiff,max_y=max_y)
-#' hist(rate_transformation(cbind(dat,y1=y[-length(t)],y2=y[-1]), curve_type = "logistic"),breaks=20,
+#' hist(rate_transformation(cbind(dat,y1=y[-length(t)],y2=y[-1]),
+#' curve_type = "logistic"),breaks=20,
 #' xlab="k parameter",main="")
+#'
+#' ## Actual Pinus uncinata data from the Spanish Forest Inventories.
+#' data("Punci_IFN")
+#'
+#' ## Add time difference between second and third Inventory.
+#' Punci_IFN$tdiff <- 10
+#'
+#' ## Show how growth rate decreases as trees get larger.
+#' k <- rate_transformation(Punci_IFN)
+#' plot(Punci_IFN$y1,k,log="y",xlab="Tree diameter (cm)",ylab="Growth rate")
+#'
+#' # Other plots.
+#' plot(Punci_IFN$prec,k,log="y",xlab="Precipitation (mm)",ylab="Growth rate")
+#' plot(Punci_IFN$temp,k,log="y",xlab="Temperature (ºC)",ylab="Growth rate")
 #'
 #'@references
 #' Burkhart, Harold E., and Margarida Tomé. "Growth functions." In Modeling forest trees and stands,

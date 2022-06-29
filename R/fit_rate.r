@@ -62,6 +62,15 @@
 #' r4 <- fit_rate(dat,~temp+prec, sigmoid=T)
 #' summary(r4)
 #'
+#' ## Actual Pinus uncinata data from the Spanish Forest Inventories.
+#' data("Punci_IFN")
+#'
+#' ## Add time difference between second and third Inventory.
+#' Punci_IFN$tdiff <- 10
+#'
+#' k <- fit_rate(Punci_IFN, ~prec+temp, sigmoid = T)
+#' summary(k)
+#'
 #' @references
 #' Burkhart, Harold E., and Margarida Tomé. "Growth functions." In Modeling forest trees and stands,
 #' pp. 111-130. Springer, Dordrecht, 2012.
@@ -87,7 +96,7 @@ fit_rate <- function(dat, fo, curve_type = "logistic", sigmoid = F, kmax = NULL)
 
   # sigmoid = TRUE only makes sense if there are predictor variables in the formula.
   if (sigmoid) {
-    if (is.null(kmax)) kmax <- max(k)*1.05 # A bit larger.
+    if (is.null(kmax)) kmax <- max(dat$k)*1.05 # A bit larger.
     dat$k <- log(dat$k/(kmax-dat$k))    # Further logit transformation.
   }
 
