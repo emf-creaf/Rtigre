@@ -11,7 +11,7 @@
 
 <meta name="author" content="R. Molowny-Horas" />
 
-<meta name="date" content="2022-06-16" />
+<meta name="date" content="2022-06-30" />
 
 <title>Derivation of time-independent growth functions</title>
 
@@ -366,7 +366,7 @@ pre code {
 <h1 class="title toc-ignore">Derivation of time-independent growth
 functions</h1>
 <h4 class="author">R. Molowny-Horas</h4>
-<h4 class="date">2022-06-16</h4>
+<h4 class="date">2022-06-30</h4>
 
 </div>
 
@@ -374,26 +374,40 @@ functions</h1>
 <p><br> <br></p>
 <div id="introduction" class="section level3">
 <h3>Introduction</h3>
-<p>Growth, understood as the increase of the physical dimensions of an
-organism, characterizes the temporal evolution of a living entity more
-than almost any other feature. By physical dimensions we mean quantities
-such as size, height, weight, volume, etc. that are directly related to
-the spatial space occupied by that organism. For example, we may speak
-about diameter or height for trees, weight for mamals or volume for
-<strong><em>. As time passes, then, one expects growth</em></strong> At
-the same time, one expects growth to slow down at older age ***.
-Finally, maximum size is an upper limit to the physical dimensions of
-any individual that is dictated by structural and physiologically
-constraints. That limit is usually unknown but can be guessed by
-checking the observed trends in growth.</p>
-<p>Although the positive increment of those physical dimensions may slow
-down, stop or even reverse in some organisms depending on, for example,
-worsening environmental conditions or fiercer competition (EXAMPLES?),
-hereby we will concern ourselves only with those cases where a physical
-dimension increases as time passes. In addition, we assume that, in most
-cases, organisms do not grow indefinitely, irrespective of the amount of
-resources at their disposal. Rather, there is always a limit to that
-growth that is set by structural constraints.</p>
+<p>Generally speaking, as time passes one expects the size of an
+organism to also grow. Growth, understood as the increase of the
+physical dimensions, or size, of an organism, characterizes the temporal
+evolution of many living entities more than many other features. By
+physical dimensions we mean quantities such as diameter, height, weight,
+volume, etc. that are directly related to the spatial space occupied by
+that organism. For example, we may speak about diameter or height for
+trees, weight or volume for mammals, etc.</p>
+<p>Even under ideal conditions, growth is hampered by structural and
+physiologically constraints, which set in as the organism gets larger.
+Therefore, it may seem reasonable to assume that, for an organism, there
+is an upper limit to its size which is only reached under the most
+optimum climatic and environmental conditions. That upper limit is thus
+usually unknown but may be guessed by extrapolating observed trends in
+size. The assumption that size cannot attain absurdly high values also
+implies that, beyond some point, growth must slow down as time passes,
+becoming very small at large size.</p>
+<p>Growth in size as time passes may slow down, stop or even reverse in
+some organisms depending on, for example, worsening environmental
+conditions or fiercer competition (EXAMPLES?).</p>
+<p>hereby we will concern ourselves only with those cases where a
+physical dimension increases as time passes. In addition, we assume the
+existence of an upper limit to size.</p>
+<p>Growth is usually measured as the increment in size between two time
+points. The assumption of an upper limit to size suggests that
+sigmoid-like curves may be a good analytical model to describe size as a
+function of time. Let <span class="math inline">\(y(t)\)</span> be that
+analytical curve, which depends on time or age <span class="math inline">\(t\)</span>. Then we can define growth simply as
+<span class="math inline">\(y(t_{2})-y(t_{1})\)</span>, where<span class="math inline">\(t_{1}&lt;t_{2}\)</span>. Although convenient, this
+expression may be impractical most of the time since it also depends on
+time and we are usually not informed about the age of the organism.
+Rather, we seek to be able to express growth as a function only of the
+time difference between observations, <span class="math inline">\(t_{2}-t_{1}\)</span>, a quantity that is much
+easier to obtain.</p>
 <p>Finding a growth function from which a simple time-independent
 expression can be derived is not an easy task. One is seeking for a
 functional expression where size at a time <span class="math inline">\(t_{2}\)</span> depends on previous size at time
@@ -649,11 +663,16 @@ lineal expression from above with the following:</p>
 <p><span class="math display">\[\begin{equation}
 k=\frac{C}{1+e^{-\sum_{i=1}^{n} a_{i}\cdot X_{i}}}
 \end{equation}\]</span></p>
+<p>A new transformation is thus needed to obtain a linear expression.
+After some algebra, we get:</p>
+<p><span class="math display">\[\begin{equation}
+\sum_{i=1}^{n} a_{i}\cdot X_{i}=\ln\left(\frac{k}{k_{max}-k}\right)
+\end{equation}\]</span></p>
 <p>Using a logistic function for <span class="math inline">\(k\)</span>
 has the advantage of not letting <span class="math inline">\(k\)</span>
 reach absurdly low or high values, since <span class="math inline">\(k\in \left[0,C\right]\)</span> always. A new
-parameter <span class="math inline">\(C\)</span> is, however, necessary
-to set an upper limit to <span class="math inline">\(k\)</span>.</p>
+parameter <span class="math inline">\(k_{max}\)</span> is, however,
+necessary to set an upper limit to <span class="math inline">\(k\)</span>.</p>
 </div>
 </div>
 

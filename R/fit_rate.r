@@ -91,8 +91,7 @@ fit_rate <- function(dat, fo, curve_type = "logistic", sigmoid = F, kmax = NULL)
     stop("Wrong 'curve_type' value")
 
   # Transformation to build a linear expression for k.
-  # dat <- cbind(dat,k=rate_parameter(dat, type = type))
-  dat$k <- rate_transformation(dat, curve_type = curve_type)
+  dat$k <- eval_gr(dat, curve_type = curve_type, equation_type = "rate")
 
   # sigmoid = TRUE only makes sense if there are predictor variables in the formula.
   if (sigmoid) {

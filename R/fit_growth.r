@@ -92,7 +92,7 @@ fit_growth <- function(dat, fo, curve_type = "logistic", sigmoid = T, kmax = NUL
   # Next, we build the formula. We leave it as a string in case a log-transformation
   # is required below. It's easy to work with strings in that case.
   x <- paste0("(",x,")")
-  y <- gr_logistic(equation_type = "ti")
+  y <- string_gr(curve_type, "ti")
   z <- gsub("k",x,y)
   fofo <- paste0("y2-y1~",z,"-y1")
 

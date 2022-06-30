@@ -5,8 +5,8 @@ date: "`r Sys.Date()`"
 header-includes:
   - \usepackage{enumerate}
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
   word_document: default
 vignette: >
   %\VignetteIndexEntry{Derivation of time-independent growth functions}
@@ -19,11 +19,16 @@ vignette: >
 
 ### Introduction
 
-Growth, understood as the increase of the physical dimensions of an organism, characterizes the temporal evolution of a living entity more than almost any other feature. By physical dimensions we mean quantities such as size, height, weight, volume, etc. that are directly related to the spatial space occupied by that organism. For example, we may speak about diameter or height for trees, weight for mamals or volume for ***. As time passes, then, one expects growth*** At the same time, one expects growth to slow down at older age ***. Finally, maximum size is an upper limit to the physical dimensions of any individual that is dictated by structural and physiologically constraints. That limit is usually unknown but can be guessed by checking the observed trends in growth.
+Growth, understood as the increase of the physical dimensions of an organism, characterizes the temporal evolution of many living entities better than many other features. By physical dimensions, or size, we mean quantities that are directly related to the spatial space occupied by that organism (e.g. diameter and height for trees, or weight for mammals). However, even under ideal conditions, growth is hampered by structural and physiologically constraints which set in as the organism gets larger. Those constraints make the growth rate (i.e. growth per unit time) to slow down beyond some point, approaching zero as time tends to infinite. Therefore, it may seem reasonable to assume that, for an organism, there is an upper limit to its size which is only reached under the most optimum climatic and environmental conditions. That upper limit is usually unknown but may be guessed by extrapolating observed trends in size. 
 
-Although the positive increment of those physical dimensions may slow down, stop or even reverse in some organisms depending on, for example, worsening environmental conditions or fiercer competition (EXAMPLES?), hereby we will concern ourselves only with those cases where a physical dimension increases as time passes. In addition, we assume that, in most cases, organisms do not grow indefinitely, irrespective of the amount of resources at their disposal. Rather, there is always a limit to that growth that is set by structural constraints.
+In some organism, growth in size may stop or even reverse depending on, for example, worsening environmental conditions or fiercer competition (EXAMPLES?). However, hereby we will concern ourselves only with those cases where a physical dimension increases as time passes. In addition, we assume the existence of an upper limit to size. Growth is usually measured as the increment in size between two time points. The assumption of an upper limit to size suggests that sigmoid-like curves may be a good analytical model to describe size as a function of time. 
 
-Finding a growth function from which a simple time-independent expression can be derived is not an easy task. One is seeking for a functional expression where size at a time $t_{2}$ depends on previous size at time $t_{1}$, with $t_{1}<t_{2}$, plus some set of free parameters. Those parameters, if not known beforehand, are usually calculated via a regression scheme.
+They are continuous and differentiable curves 
+
+characterized by a regime of approximately linear size followed by a gentle bend towards an upper asymptote. 
+
+
+Let $y(t)$ be a sigmoid curve, which depends on time or age $t$. Then we can define growth simply as $g\left(t_{1}, t_{2}\right)=y(t_{2})-y(t_{1})$, where$t_{1}<t_{2}$. This expression may be impractical most of the time since it also depends on time and we are usually not informed about the absolute, or even relative, age of the organism. Rather, we seek to be able to express growth as a function of the time difference between observations, $\Delta=t_{2}-t_{1}$, a quantity that is much easier to obtain. Finding a growth function from which a simple time-independent expression can be derived is not an easy task. One is seeking for a functional expression where size at a time $t_{2}$ depends on previous size at time $t_{1}$, with $t_{1}<t_{2}$, i.e. $g\left(\Delta\right)=y(t_{2})-y(t_{1})$. Those parameters, if not known beforehand, are usually calculated via a regression scheme.
 
 Below we will derive time-independent (also known as age-independent) curves for several growth functions. These curves all share the characteristic of having a sigmoid shape, which implies that there is always asymptotic minimum and maximum sizes. This fits well with the general idea that, 
 
