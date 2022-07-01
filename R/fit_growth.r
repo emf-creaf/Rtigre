@@ -57,13 +57,9 @@ fit_growth <- function(dat, fo, curve_type = "logistic", sigmoid = T, kmax = NUL
   cl <- match.call()
   m <- match(c("dat","fo"),names(cl))
   if (any(is.na(m))) stop("Missing argument")
-
   tf <- terms.formula(fo)
   is.intercept <- attr(tf,"intercept")
   if (length(is.intercept)==0) stop("Expression in formula 'fo' must have an intercept term")
-
-  if (!any(curve_type==c("logistic","schumacher","gompertz","monomolecular","arctangent","hyperbolic")))
-    stop("Wrong 'curve_type' value")
 
   # Get regression parameters.
   r <- fit_rate(dat = dat, fo = fo, curve_type = curve_type, sigmoid = sigmoid, kmax = kmax)

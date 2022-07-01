@@ -9,7 +9,9 @@
 #'
 #' @examples
 #'
-#' print(gr_monomolecular("ti"))
+#' print(gr_hyperbolic("td"))
+#' print(gr_hyperbolic("rate"))
+#' print(gr_hyperbolic("ti"))
 #'
 
 gr_hyperbolic <- function(equation_type = "rate") {

@@ -21,6 +21,8 @@ See accompanying Vignette.
 }
 \examples{
 
-print(gr_schumacher("ti"))
+print(gr_logistic("td"))
+print(gr_logistic("rate"))
+print(gr_logistic("ti"))
 
 }

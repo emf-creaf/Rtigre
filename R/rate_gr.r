@@ -60,17 +60,14 @@
 
 rate_gr <- function(dat, curve_type = "logistic") {
 
+  # Check that 'dat' exists.
   cl <- match.call()
   m <- match(c("dat"),names(cl))
-  if (any(is.na(m))) stop("Missing argument")
+  if (any(is.na(m))) stop("Missing argument 'dat'")
   if (!is.data.frame(dat)) stop("'dat' must be a data.frame")
   if (nrow(dat) == 0) stop("'dat' must have at least one row")
-  if (any(is.na(match(c("y1","y2","tdiff","max_y"),colnames(dat))))) stop("Wrong column names")
 
-  if (!any(curve_type==c("logistic","schumacher","gompertz","monomolecular","arctangent","hyperbolic", "user")))
-    stop("Wrong 'curve_type' value")
-
-  k <- eval_gr(dat = dat, curve_type = curve_type, equation_type = equation_type)
+  k <- eval_gr(dat = dat, curve_type = curve_type, equation_type = "rate")
 
   return(k)
 }

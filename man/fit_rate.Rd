@@ -14,10 +14,10 @@ and accompanying Vignettes for a description.}
 
 \item{sigmoid}{logical. If TRUE, the growth rate 'k' is further modelled as a logistic function.}
 
-\item{kmax}{numeric. If NULL, it will be estimated from the data.}
+\item{kmax}{numeric. If NULL, \cdot{kmax} will be estimated from the data.}
 
 \item{type}{string to select which growth function to use. It can be equal to 'logistic',
-'schumacher', 'monomolecular', 'gompertz', 'arctangent' or 'hyperbolic'.}
+'schumacher', 'monomolecular', 'gompertz', 'arctangent', 'hyperbolic' or 'user'.}
 }
 \value{
 value of rate parameter for each row in 'dat'.
@@ -46,7 +46,8 @@ t <- seq(1,100,by=tdiff)
 max_y <- 120
 k <- .1
 
-y <- max_y/(1+exp(-(k*t-2))) + rnorm(length(t))*.01
+dat <- data.frame(t=t,max_y=max_y,offset=2,k=.05)
+y <- td_size(dat,"logistic") + rnorm(length(t))*.01
 plot(t,y,xlab="Time",ylab="Size")
 
 dat <- data.frame(tdiff=tdiff,max_y=max_y,y1=y[-length(t)],y2=y[-1])

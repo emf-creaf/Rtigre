@@ -21,6 +21,8 @@ See accompanying Vignette.
 }
 \examples{
 
-print(gr_monomolecular("ti"))
+print(gr_hyperbolic("td"))
+print(gr_hyperbolic("rate"))
+print(gr_hyperbolic("ti"))
 
 }

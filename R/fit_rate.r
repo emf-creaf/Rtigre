@@ -7,9 +7,9 @@
 #' and accompanying Vignettes for a description.
 #' @param fo an object of class "formula"
 #' @param type string to select which growth function to use. It can be equal to 'logistic',
-#' 'schumacher', 'monomolecular', 'gompertz', 'arctangent' or 'hyperbolic'.
+#' 'schumacher', 'monomolecular', 'gompertz', 'arctangent', 'hyperbolic' or 'user'.
 #' @param sigmoid logical. If TRUE, the growth rate 'k' is further modelled as a logistic function.
-#' @param kmax numeric. If NULL, it will be estimated from the data.
+#' @param kmax numeric. If NULL, \cdot{kmax} will be estimated from the data.
 #'
 #' @details Some of the growth equations are taken from Table 6.2 in #' Burkhart and Tomé (2012).
 #' Columns 'y1' and 'y2' in 'dat' correspond to the sizes of the individual at 't1' and 't2', with column 'tdiff'='t2'-'t1'.
@@ -32,7 +32,8 @@
 #' max_y <- 120
 #' k <- .1
 #'
-#' y <- max_y/(1+exp(-(k*t-2))) + rnorm(length(t))*.01
+#' dat <- data.frame(t=t,max_y=max_y,offset=2,k=.05)
+#' y <- td_size(dat,"logistic") + rnorm(length(t))*.01
 #' plot(t,y,xlab="Time",ylab="Size")
 #'
 #' dat <- data.frame(tdiff=tdiff,max_y=max_y,y1=y[-length(t)],y2=y[-1])
@@ -82,16 +83,12 @@ fit_rate <- function(dat, fo, curve_type = "logistic", sigmoid = F, kmax = NULL)
   cl <- match.call()
   m <- match(c("dat","fo"),names(cl))
   if (any(is.na(m))) stop("Missing argument")
-
   tf <- terms.formula(fo)
   is.intercept <- attr(tf,"intercept")
   if (length(is.intercept)==0) stop("Expression in formula 'fo' must have an intercept term")
 
-  if (!any(curve_type==c("logistic","schumacher","gompertz","monomolecular","arctangent","hyperbolic")))
-    stop("Wrong 'curve_type' value")
-
   # Transformation to build a linear expression for k.
-  dat$k <- eval_gr(dat, curve_type = curve_type, equation_type = "rate")
+  dat$k <- rate_gr(dat, curve_type = curve_type)
 
   # sigmoid = TRUE only makes sense if there are predictor variables in the formula.
   if (sigmoid) {

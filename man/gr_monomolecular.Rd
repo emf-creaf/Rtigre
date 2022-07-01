@@ -21,6 +21,8 @@ See accompanying Vignette.
 }
 \examples{
 
+print(gr_monomolecular("td"))
+print(gr_monomolecular("rate"))
 print(gr_monomolecular("ti"))
 
 }

@@ -9,6 +9,8 @@
 #'
 #' @examples
 #'
+#' print(gr_gompertz("td"))
+#' print(gr_gompertz("rate"))
 #' print(gr_gompertz("ti"))
 #'
 

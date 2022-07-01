@@ -39,16 +39,6 @@
 
 ti_size <- function(dat, curve_type = "logistic") {
 
-  cl <- match.call()
-  m <- match(c("dat"),names(cl))
-  if (any(is.na(m))) stop("Missing argument")
-  if (!is.data.frame(dat)) stop("'dat' must be a data.frame")
-  if (nrow(dat) == 0) stop("'dat' must have at least one row")
-  if (any(is.na(match(c("y1","tdiff","max_y","k"),colnames(dat))))) stop("Wrong column names")
-
-  if (!any(curve_type==c("logistic","schumacher","gompertz","monomolecular","arctangent","hyperbolic", "user")))
-    stop("Wrong 'curve_type' value")
-
   y <- eval_gr(dat = dat, curve_type = curve_type, equation_type = "ti")
 
   return(y)

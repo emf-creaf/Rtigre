@@ -9,7 +9,9 @@
 #'
 #' @examples
 #'
-#' print(gr_monomolecular("ti"))
+#' print(gr_arctangent("td"))
+#' print(gr_arctangent("rate"))
+#' print(gr_arctangent("ti"))
 #'
 
 gr_arctangent <- function(equation_type = "rate") {

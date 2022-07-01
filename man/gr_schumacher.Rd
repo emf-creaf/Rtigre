@@ -21,6 +21,8 @@ See accompanying Vignette.
 }
 \examples{
 
+print(gr_schumacher("td"))
+print(gr_schumacher("rate"))
 print(gr_schumacher("ti"))
 
 }
