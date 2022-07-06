@@ -19,24 +19,23 @@ vignette: >
 
 ### Introduction
 
-Growth, understood as the increase of the physical dimensions of an organism, characterizes the temporal evolution of many living entities better than many other features. By physical dimensions, or size, we mean quantities that are directly related to the spatial space occupied by that organism (e.g. diameter and height for trees, or weight for mammals). However, even under ideal conditions, growth is hampered by structural and physiologically constraints which set in as the organism gets larger. Those constraints make the growth rate (i.e. growth per unit time) to slow down beyond some point, approaching zero as time tends to infinite. Therefore, it may seem reasonable to assume that, for an organism, there is an upper limit to its size which is only reached under the most optimum climatic and environmental conditions. That upper limit is usually unknown but may be guessed by extrapolating observed trends in size. 
+Growth, understood as the increase of the physical dimensions of an organism, characterizes the temporal evolution of many living entities better than many other features. By physical dimensions or size, terms that will be used indistinctly hereafter, we mean quantities that are directly related to the spatial space occupied by an organism (e.g. diameter and height for trees, or weight for mammals). As a matter of fact, size is usually easier to determine experimentally than age. Only under controlled conditions in a laboratory or field experiment can we manipulate variables that are directly related to age (e.g. seed germination). However, in natural experiments like e.g. forest inventories, observers do not have control over experimental conditions and, therefore, the age of an individual is seldom precisely quantifiable.
 
-In some organism, growth in size may stop or even reverse depending on, for example, worsening environmental conditions or fiercer competition (EXAMPLES?). However, hereby we will concern ourselves only with those cases where a physical dimension increases as time passes. In addition, we assume the existence of an upper limit to size. Growth is usually measured as the increment in size between two time points. The assumption of an upper limit to size suggests that sigmoid-like curves may be a good analytical model to describe size as a function of time. 
+Even under ideal conditions, growth is hampered by structural and physiologically constraints, which set in as an organism gets larger. Those constraints make its growth rate (i.e. increment in size per unit time) to slow down beyond some point, approaching zero as time tends to infinite. We will hereby discard those cases in which growth in size may stop or even reverse (i.e. size reduction) due to, for example, worsening environmental conditions or fiercer competition. Therefore, it may seem reasonable to assume that, for an organism, there is an upper limit which is only reached under the most optimum climatic and environmental conditions. That upper limit is usually unknown but may be guessed by extrapolating observed trends. In addition, the upper limit assumption suggests that sigmoid-like curves may be a good analytical model to describe size as a function of time.
 
-They are continuous and differentiable curves 
+We will concern ourselves only with those cases where size increases monotonically with time. Thus, we will look for continuous and differentiable sigmoid curves, characterized by a regime of approximately linear growth followed by a gentle bend towards an upper asymptote. Let $y(t)$ be such a sigmoid curve, which depends on time or age $t$. Then, we can define growth simply as:
 
-characterized by a regime of approximately linear size followed by a gentle bend towards an upper asymptote. 
+\begin{equation}
+y(t_{2})-y(t_{1})=g\left(t_{1}, t_{2}\right)
+\end{equation}
 
+where $t_{1}<t_{2}$. Expressed this way, the new growth function $g\left(t_{1}, t_{2}\right)$ may often be difficult to apply since it depends on absolute age/time, which is usually an unknown quantity in natural experiments. Rather, we seek to express growth as a function of the time difference between observations, $\Delta=t_{2}-t_{1}$, a relative quantity that is much easier to obtain. That is, we want to write instead:
 
-Let $y(t)$ be a sigmoid curve, which depends on time or age $t$. Then we can define growth simply as $g\left(t_{1}, t_{2}\right)=y(t_{2})-y(t_{1})$, where$t_{1}<t_{2}$. This expression may be impractical most of the time since it also depends on time and we are usually not informed about the absolute, or even relative, age of the organism. Rather, we seek to be able to express growth as a function of the time difference between observations, $\Delta=t_{2}-t_{1}$, a quantity that is much easier to obtain. Finding a growth function from which a simple time-independent expression can be derived is not an easy task. One is seeking for a functional expression where size at a time $t_{2}$ depends on previous size at time $t_{1}$, with $t_{1}<t_{2}$, i.e. $g\left(\Delta\right)=y(t_{2})-y(t_{1})$. Those parameters, if not known beforehand, are usually calculated via a regression scheme.
+\begin{equation}
+y(t_{2})-y(t_{1})=g\left(\Delta\right)
+\end{equation}
 
-Below we will derive time-independent (also known as age-independent) curves for several growth functions. These curves all share the characteristic of having a sigmoid shape, which implies that there is always asymptotic minimum and maximum sizes. This fits well with the general idea that, 
-
-Some of the curves are solutions of ordinary differential equations which have been used ***. Others, whoever, simply have a sigmoid shape which makes them appropriate for our objectives.
-
-Some of the growth curves that are explained below are well-known and widely used (e.g. logistic, Schumacher, Gompertz, monomolecular) whereas others are more rarely employed (e.g. arctangent, hyperbolic tangent). The dependence of growth on explanatory variables like e.g. climatic, landscape, competition, etc. is conveyed through the growth rate parameter $k$, which is defined as a coefficient that explicitly multiplies time (or age) $t$. In addition, we allow for a term $B$ which accounts for any offset in the growth curve. As we will see below, this summative offset nevertheless vanishes in all cases when size is expressed as a function of previous size (i.e. time or age-independence). Finally, diameter growth $y_{2}-y_{1}=0$ when $t=0$ or $k=0$ in all cases, as expected.
-
-The obvious non-linearity of the time-independent equations below makes it challenging to devise a regression scheme with which to fit those expressions to a set of observational data. Good starting guesses for the parameters of the fit become a key ingredient for a quick and satisfactory convergence of the regression algorithms. Otherwise, those algorithms may fail to converge, or do so to a local, rather than global, extreme. Therefore, we have extracted simple expressions for the so-called growth rate parameter $k$, which can be fitted in an initial step as linear expressions of the predictors. The coefficients thus calculated can then be used as first guesses for the full non-linear regression to the time-independent growth curves.
+Below we will derive time-independent (also known as age-independent) curves for several growth $g\left(\Delta\right)$ functions. These curves have all been derived from sigmoid age-dependent size curves, which implies that there is always an asymptotic maximum size, denoted as $A$ in all cases. Some curves are well-known and widely used (e.g. logistic, Schumacher, Gompertz, monomolecular) whereas others are more rarely employed (e.g. arctangent, hyperbolic tangent). The dependence of growth on explanatory variables like e.g. climate, landscape structure, competition, etc. is conveyed through a growth rate parameter $k$, which is defined as a coefficient that directly multiplies age/time $t$. The existence of an explicit expression for the growth rate parameter $k$ has been a further requirement in developing those growth curves. In addition, we have allowed for a term $B$ which accounts for an (a priori unknown) offset in the growth curve. Nevertheless, as we will see below, this summative offset $B$ conveniently vanishes in all cases when $g$ or $k$ are expressed as a function of $\Delta$. Finally, $g\left(\Delta\right)=0$ when $\Delta=0$ or $k=0$ in all cases, as assumed.
 
 <br>
 
@@ -48,7 +47,7 @@ The logistic curve is one of the most widely used functions to determine the gro
   y=\frac{A}{1+e^{-\left(k\cdot t+B\right)}}
 \end{equation}
 
-where $A$ indicates the asymptotic value of $y$ when $t\to \infty$, $B$ is an offset parameter and $k$ is the growth rate parameter. To obtain a time-independent growth equation that determines growth between two time points $t_{1}$ and $t_{2}$, $t_{1}<t_{2}$, we start by rewriting $t$ as:
+To obtain a time-independent growth equation that determines growth between two time points $t_{1}$ and $t_{2}$, $t_{1}<t_{2}$, we start by writing:
 
 \begin{equation}
   e^{-\left(k\cdot t+B\right)}=\frac{A}{y}-1
@@ -76,6 +75,12 @@ Since $t_{2}=t_{1}+\Delta$, we can arrive at an expression for $y_{2}$ as a func
   y_{2}=\frac{A}{1+e^{-\left(k\cdot t_{1}+B\right)}\cdot e^{-k\cdot\Delta}}=\frac{A}{1+\left(\frac{A}{y_{1}}-1\right)\cdot e^{-k\cdot\Delta}}
 \end{equation}
 
+Finally, growth can be expressed as:
+
+\begin{equation}
+  g\left(\Delta\right)=\frac{A}{1+e^{-\left(k\cdot t_{1}+B\right)}\cdot e^{-k\cdot\Delta}}=\frac{A}{1+\left(\frac{A}{y_{1}}-1\right)\cdot e^{-k\cdot\Delta}}-y_{1}
+\end{equation}
+
 <br>
 
 #### Schumacher growth function
@@ -86,7 +91,7 @@ The Schumacher growth curve can be expressed as:
   y=A\cdot e^{-\frac{1}{k\cdot t+B}}
 \end{equation}
 
-For this curve to make ecological sense, $k\cdot t+B>0$ always. We have departed from the more standard Schumacher function $y=A\cdot e^{-\frac{1}{k\cdot t}}$ to allow for an extra offset parameter $B$ in the exponent. Then, we can express $t$ as:
+For this curve to make ecological sense, $k\cdot t+B>0$ always. Then, we can express $t$ as:
 
 \begin{equation}
   t=\frac{1}{k}\cdot\frac{1}{\ln\left(\frac{A}{y}\right)}-\frac{1}{k}\cdot B
