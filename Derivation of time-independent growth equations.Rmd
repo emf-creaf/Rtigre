@@ -54,7 +54,7 @@ To obtain a time-independent growth equation that determines growth between two 
 \end{equation}
 
 \begin{equation}
-  t=\frac{1}{k}\cdot \ln\left(\frac{A-y}{y}-B\right)
+  t=\frac{1}{k}\cdot \ln\left(\frac{y}{A-y}\right)-B
 \end{equation}
 
 Let us define a subscript notation whereby $t_{1}$ and $t_{2}$ indicate time points separated by $\Delta$ years, where $\Delta=t_{2}-t_{1}$. Likewise, $y_{1}$ and $y_{2}$ will denote sizes at those time points, respectively. Then:
@@ -91,13 +91,13 @@ The Schumacher growth curve can be expressed as:
   y=A\cdot e^{-\frac{1}{k\cdot t+B}}
 \end{equation}
 
-For this curve to make ecological sense, $k\cdot t+B>0$ always. Then, we can express $t$ as:
+For this curve to make ecological sense, $k\cdot t+B>0$ always. Otherwise, $y$ would grow exponentially. Then, we can express $t$ as:
 
 \begin{equation}
   t=\frac{1}{k}\cdot\frac{1}{\ln\left(\frac{A}{y}\right)}-\frac{1}{k}\cdot B
 \end{equation}
 
-Now, following the same notation as shown above, we write:
+Now, following the same procedure as above, we write:
 
 \begin{equation}
   \Delta=\frac{1}{k}\cdot\left[\frac{1}{\ln\left(\frac{A}{y_{2}}\right)}-\frac{1}{\ln\left(\frac{A}{y_{1}}\right)}\right]
@@ -109,13 +109,17 @@ As above, the offset $B$ has vanished from the equation. Then:
   k=\frac{1}{\Delta}\cdot\left[\frac{1}{\ln\left(\frac{A}{y_{2}}\right)}-\frac{1}{\ln\left(\frac{A}{y_{1}}\right)}\right]
 \end{equation}
 
-Therefore:
+Solving the equation for $ y_{2}$:
 
 \begin{equation}
   y_{2}=A\cdot e^{-\left[\frac{1}{\frac{1}{\ln\left(\frac{A}{y_{1}}\right)}+k\cdot\Delta}\right]}
 \end{equation}
 
-This is exactly Equation [9] in Tomé et al. (2006), Canadian Journal of Forest Research.
+This is exactly Equation [9] in Tomé et al. (2006). Then, the Schumacher time-independent growth function is:
+
+\begin{equation}
+g\left(\Delta\right)=A\cdot e^{-\left[\frac{1}{\frac{1}{\ln\left(\frac{A}{y_{1}}\right)}+k\cdot\Delta}\right]}-y_{1}
+\end{equation}
 
 <br>
 
