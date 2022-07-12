@@ -9,7 +9,7 @@
 #' @param type string to select which growth function to use. It can be equal to 'logistic',
 #' 'schumacher', 'monomolecular', 'gompertz', 'arctangent', 'hyperbolic' or 'user'.
 #' @param sigmoid logical. If TRUE, the growth rate 'k' is further modelled as a logistic function.
-#' @param kmax numeric. If NULL, \cdot{kmax} will be estimated from the data.
+#' @param kmax numeric. If NULL, \code{kmax} will be estimated from the data.
 #'
 #' @details Some of the growth equations are taken from Table 6.2 in #' Burkhart and Tomé (2012).
 #' Columns 'y1' and 'y2' in 'dat' correspond to the sizes of the individual at 't1' and 't2', with column 'tdiff'='t2'-'t1'.

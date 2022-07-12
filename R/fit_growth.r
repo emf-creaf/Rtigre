@@ -9,6 +9,7 @@
 #' data.
 #' @param log_transf logical. If TRUE, a log-transformation will be applied to
 #' the diameter increment.
+#' @param verbose logical. If TRUE, information on the progress of the regression is produced.
 #'
 #' @return a \code{nls} object. See ?minpack.lm::nlsLM for details.
 #'
@@ -52,7 +53,7 @@
 #' summary(r)
 #'
 #'
-fit_growth <- function(dat, fo, curve_type = "logistic", sigmoid = T, kmax = NULL, log_transf = T) {
+fit_growth <- function(dat, fo, curve_type = "logistic", sigmoid = T, kmax = NULL, log_transf = T, verbose = T) {
 
   cl <- match.call()
   m <- match(c("dat","fo"),names(cl))
@@ -60,8 +61,17 @@ fit_growth <- function(dat, fo, curve_type = "logistic", sigmoid = T, kmax = NUL
   tf <- terms.formula(fo)
   is.intercept <- attr(tf,"intercept")
   if (length(is.intercept)==0) stop("Expression in formula 'fo' must have an intercept term")
+  if (!is.logical(verbose)) stop("Input 'verbose' must be logical")
+
+  if (verbose) {
+    out <- paste0("Growth regression - ", curve_type, " curve")
+    if (sigmoid) out <- paste0(out," - sigmoid rate")
+    if (log_transf) out <- paste0(out, " - log-transformation")
+    cat(paste0(out,"\n"))
+  }
 
   # Get regression parameters.
+  if (verbose) cat("   Regressing growth rate parameter against predictors\n")
   r <- fit_rate(dat = dat, fo = fo, curve_type = curve_type, sigmoid = sigmoid, kmax = kmax)
   coef_start <- coef(r)
 
@@ -78,7 +88,7 @@ fit_growth <- function(dat, fo, curve_type = "logistic", sigmoid = T, kmax = NUL
   }
   names(coef_start) <- names_start
 
-  # If we opted for a sigmoid formula.
+  # If we opted for a sigmoid formula...
   if (sigmoid) {
     x <- paste0("kmax/(1+exp(-(",x,")))")
     coef_start <- c(r$kmax, coef_start)
@@ -93,10 +103,12 @@ fit_growth <- function(dat, fo, curve_type = "logistic", sigmoid = T, kmax = NUL
   fofo <- paste0("y2-y1~",z,"-y1")
 
   # The non-linear fit.
+  if (verbose) cat("   Non-linear LM fit\n")
   r <- minpack.lm::nlsLM(formula(fofo), data = dat, start = coef_start, control=list(maxiter=1000))
 
   # If a log-transformed regression is sought.
   if (log_transf) {
+    if (verbose) cat("   Non-linear LM fit of log-transformed data\n")
     fofo <- paste0("log(y2-y1)~log(",z,"-y1)")
     r <- minpack.lm::nlsLM(formula(fofo), data = dat, start = coef(r), control=list(maxiter=1000))
   }
