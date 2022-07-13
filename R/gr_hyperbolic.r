@@ -16,14 +16,11 @@
 
 gr_hyperbolic <- function(equation_type = "rate") {
 
-  if (!any(equation_type==c("rate","ti","td")))
-    stop("Wrong 'equation_type' value")
-
   # Chooses equation.
   z <- switch(equation_type,
-              td   = "max_y*(exp(2*k*t)/(exp(2*k*t)+exp(-2*offset)))",
-              rate = "1/(2*tdiff)*log((y2/y1)*((max_y-y1)/(max_y-y2)))",
-              ti   = "max_y*(y1/(y1+(max_y-y1)*exp(-2*k*tdiff)))"
+              td   = "max_y/(1+exp(-(2*k*t+offset)))",
+              rate = "1/(2*tdiff)*log(y2/y1*(max_y-y1)/(max_y-y2))",
+              ti   = "max_y/(1+exp(-2*k*tdiff)*(max_y/y1-1))"
   )
 
   return(z)

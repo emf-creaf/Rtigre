@@ -13,7 +13,7 @@
 #' @details The user is not supposed to call this function directly.
 #' Use \code{\link{growth_rate}}, \code{\link{ti_size}} or \code{\link{td_size}} instead.
 #'
-#' @seealso [rate_transformation]
+#' @seealso [rate_gr]
 #'
 #' @export
 #'

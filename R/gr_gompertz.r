@@ -16,9 +16,6 @@
 
 gr_gompertz <- function(equation_type = "rate") {
 
-  if (!any(equation_type==c("rate","ti","td")))
-    stop("Wrong 'equation_type' value")
-
   # Chooses equation.
   z <- switch(equation_type,
               td   = "max_y*exp(-exp(-(k*t+offset)))",
