@@ -7,10 +7,12 @@
 fit_growth(
   dat,
   fo,
-  curve_type = "logistic",
+  curve_type = c("logistic", "schumacher", "gompertz", "monomolecular", "arctangent",
+    "hyperbolic", "user"),
   sigmoid = T,
   kmax = NULL,
-  log_transf = T
+  log_transf = T,
+  verbose = T
 )
 }
 \arguments{
@@ -28,6 +30,8 @@ data.}
 
 \item{log_transf}{logical. If TRUE, a log-transformation will be applied to
 the diameter increment.}
+
+\item{verbose}{logical. If TRUE, information on the progress of the regression is produced.}
 }
 \value{
 a \code{nls} object. See ?minpack.lm::nlsLM for details.

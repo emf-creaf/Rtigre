@@ -2,9 +2,16 @@
 % Please edit documentation in R/fit_rate.r
 \name{fit_rate}
 \alias{fit_rate}
-\title{Regression of rate parameter}
+\title{Regression on rate parameter}
 \usage{
-fit_rate(dat, fo, curve_type = "logistic", sigmoid = F, kmax = NULL)
+fit_rate(
+  dat,
+  fo,
+  curve_type = c("logistic", "schumacher", "gompertz", "monomolecular", "arctangent",
+    "hyperbolic", "user"),
+  sigmoid = F,
+  kmax = NULL
+)
 }
 \arguments{
 \item{dat}{\code{data.frame} containing at least four columns named 'y1', 'y2', 'tdiff' and 'max_y'. See Details
@@ -14,7 +21,7 @@ and accompanying Vignettes for a description.}
 
 \item{sigmoid}{logical. If TRUE, the growth rate 'k' is further modelled as a logistic function.}
 
-\item{kmax}{numeric. If NULL, \cdot{kmax} will be estimated from the data.}
+\item{kmax}{numeric. If NULL, \code{kmax} will be estimated from the data.}
 
 \item{type}{string to select which growth function to use. It can be equal to 'logistic',
 'schumacher', 'monomolecular', 'gompertz', 'arctangent', 'hyperbolic' or 'user'.}
@@ -23,7 +30,7 @@ and accompanying Vignettes for a description.}
 value of rate parameter for each row in 'dat'.
 }
 \description{
-This function computes a regression of the rate parameters against a set of predictor variables.
+\code{fit_rate} computes a regression of the rate parameters against a set of predictor variables.
 obtained at two different times.
 }
 \details{
@@ -31,8 +38,9 @@ Some of the growth equations are taken from Table 6.2 in #' Burkhart and Tomé (
 Columns 'y1' and 'y2' in 'dat' correspond to the sizes of the individual at 't1' and 't2', with column 'tdiff'='t2'-'t1'.
 Column 'max_y' correspond to maximum size attainable by the individual when time tends to infinite.
 
-The 'sigmoid' option allows us to guarantee that \code{k} is never negative and it has an upper limit,
-some that is ecologically sound in most cases. Negative \code{k} values may happen when growth curves
+The 'sigmoid' option allows us to guarantee that \code{k} is ecologically sound.
+That implies that it is never negative and has an upper limit,
+Negative \code{k} values may happen when growth curves
 are used to calculate growth under conditions much different from the initial ones.
 }
 \examples{

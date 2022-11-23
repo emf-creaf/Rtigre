@@ -1,5 +1,6 @@
 #' Time-independent size calculation
 #'
+#' @description
 #' Calculation of a time-independent size curve from parameters.
 #'
 #' @param dat \code{data.frame} containing at least four columns named 'y1', 'tdiff', 'max_y' and 'k'. See Details

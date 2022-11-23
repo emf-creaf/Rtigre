@@ -4,7 +4,12 @@
 \alias{eval_gr}
 \title{Computation of growth curves}
 \usage{
-eval_gr(dat, curve_type = "logistic", equation_type = "rate")
+eval_gr(
+  dat,
+  curve_type = c("logistic", "schumacher", "gompertz", "monomolecular", "arctangent",
+    "hyperbolic", "user"),
+  equation_type = c("td", "rate", "ti")
+)
 }
 \arguments{
 \item{dat}{data.frame. See}
@@ -33,7 +38,4 @@ eval_gr(dat, "logistic", "td")
 eval_gr(dat, "logistic", "rate")
 eval_gr(dat, "logistic", "ti")
 
-}
-\seealso{
-\link{rate_transformation}
 }

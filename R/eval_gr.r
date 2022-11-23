@@ -1,5 +1,8 @@
 #' Computation of growth curves
 #'
+#' @description
+#'
+#'
 #' @param dat data.frame. See
 #' @param curve_type character string. It determines which curve to use: 'logistic' (default),
 #' 'schumacher', 'gompertz', 'monomolecular', 'arctangent', 'hyperbolic' or 'user'.
@@ -13,8 +16,6 @@
 #' @details The user is not supposed to call this function directly.
 #' Use \code{\link{growth_rate}}, \code{\link{ti_size}} or \code{\link{td_size}} instead.
 #'
-#' @seealso [rate_gr]
-#'
 #' @export
 #'
 #' @examples
@@ -23,18 +24,25 @@
 #' eval_gr(dat, "logistic", "rate")
 #' eval_gr(dat, "logistic", "ti")
 #'
-eval_gr <- function(dat, curve_type = "logistic", equation_type = "rate") {
+eval_gr <- function(dat,
+                    curve_type = c("logistic","schumacher","gompertz","monomolecular","arctangent","hyperbolic", "user"),
+                    equation_type = c("td", "rate", "ti")) {
+
+  # Check data.frame.
+  if (!is.data.frame(dat)) stop("Input 'dat' must be of 'data.frame' class")
+
+  # Check curve and equation types.
+  curve_type <- match.arg(curve_type)
+  equation_type <- match.arg(equation_type)
 
   # Check inputs.
   col_names <- switch(equation_type,
                       td   = c("t","k","offset","max_y"),
                       rate = c("y1","y2","tdiff","max_y"),
                       ti   = c("y1","k","tdiff","max_y"))
-  if (any(is.na(match(col_names,colnames(dat))))) stop("Wrong column names in 'dat'")
-  if (!any(curve_type==c("logistic","schumacher","gompertz","monomolecular","arctangent","hyperbolic", "user")))
-    stop("Wrong 'curve_type' value")
-  if (!any(equation_type == c("td", "rate", "ti"))) stop("Wrong 'equation_type' value")
+  if (any(is.na(col_names %in% colnames(dat)))) stop("Wrong column names in 'dat'")
 
+  # Evaluate expression.
   x <- with(dat, eval(parse(text = string_gr(curve_type, equation_type))))
 
   return(x)

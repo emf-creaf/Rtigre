@@ -1,6 +1,7 @@
-#' Regression of rate parameter
+#' Regression on rate parameter
 #'
-#' This function computes a regression of the rate parameters against a set of predictor variables.
+#' @description
+#' \code{fit_rate} computes a regression of the rate parameters against a set of predictor variables.
 #' obtained at two different times.
 #'
 #' @param dat \code{data.frame} containing at least four columns named 'y1', 'y2', 'tdiff' and 'max_y'. See Details
@@ -15,8 +16,9 @@
 #' Columns 'y1' and 'y2' in 'dat' correspond to the sizes of the individual at 't1' and 't2', with column 'tdiff'='t2'-'t1'.
 #' Column 'max_y' correspond to maximum size attainable by the individual when time tends to infinite.
 #'
-#' The 'sigmoid' option allows us to guarantee that \code{k} is never negative and it has an upper limit,
-#' some that is ecologically sound in most cases. Negative \code{k} values may happen when growth curves
+#' The 'sigmoid' option allows us to guarantee that \code{k} is ecologically sound.
+#' That implies that it is never negative and has an upper limit,
+#' Negative \code{k} values may happen when growth curves
 #' are used to calculate growth under conditions much different from the initial ones.
 #'
 #' @return value of rate parameter for each row in 'dat'.
@@ -78,14 +80,20 @@
 #'
 #' @export
 
-fit_rate <- function(dat, fo, curve_type = "logistic", sigmoid = F, kmax = NULL) {
+fit_rate <- function(dat, fo,
+                     curve_type = c("logistic","schumacher","gompertz","monomolecular","arctangent","hyperbolic", "user"),
+                     sigmoid = F, kmax = NULL) {
 
+  # Check inputs.
   cl <- match.call()
   m <- match(c("dat","fo"),names(cl))
   if (any(is.na(m))) stop("Missing argument")
   tf <- terms.formula(fo)
   is.intercept <- attr(tf,"intercept")
   if (length(is.intercept)==0) stop("Expression in formula 'fo' must have an intercept term")
+
+  # Check curve type.
+  curve_type <- match.arg(curve_type)
 
   # Transformation to build a linear expression for k.
   dat$k <- rate_gr(dat, curve_type = curve_type)
@@ -96,6 +104,7 @@ fit_rate <- function(dat, fo, curve_type = "logistic", sigmoid = F, kmax = NULL)
     dat$k <- log(dat$k/(kmax-dat$k))    # Further logit transformation.
   }
 
+  # Linear regression.
   r <- lm(update(fo,k~.),data=dat)
   if (sigmoid) r$kmax <- kmax
 

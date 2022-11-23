@@ -1,5 +1,8 @@
 #' Non-linear fit to a time-independent growth curve.
 #'
+#' @description
+#'
+#'
 #' @param dat data.frame containing data to be used in the fit.
 #' @param fo formula describing the right-hand-side of the dependence of the
 #' growth rate on the predictors.
@@ -53,7 +56,9 @@
 #' summary(r)
 #'
 #'
-fit_growth <- function(dat, fo, curve_type = "logistic", sigmoid = T, kmax = NULL, log_transf = T, verbose = T) {
+fit_growth <- function(dat, fo,
+                       curve_type = c("logistic","schumacher","gompertz","monomolecular","arctangent","hyperbolic", "user"),
+                       sigmoid = T, kmax = NULL, log_transf = T, verbose = T) {
 
   cl <- match.call()
   m <- match(c("dat","fo"),names(cl))
@@ -63,6 +68,10 @@ fit_growth <- function(dat, fo, curve_type = "logistic", sigmoid = T, kmax = NUL
   if (length(is.intercept)==0) stop("Expression in formula 'fo' must have an intercept term")
   if (!is.logical(verbose)) stop("Input 'verbose' must be logical")
 
+  # Check curve type.
+  curve_type <- match.arg(curve_type)
+
+  # Need info on the screen?
   if (verbose) {
     out <- paste0("Growth regression - ", curve_type, " curve")
     if (sigmoid) out <- paste0(out," - sigmoid rate")
