@@ -1,7 +1,7 @@
 #' Non-linear fit to a time-independent growth curve.
 #'
 #' @description
-#'
+#' Non-linear least-squares fit of growth data to a time-independent growth curve.
 #'
 #' @param dat data.frame containing data to be used in the fit.
 #' @param fo formula describing the right-hand-side of the dependence of the

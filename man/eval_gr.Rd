@@ -4,12 +4,7 @@
 \alias{eval_gr}
 \title{Computation of growth curves}
 \usage{
-eval_gr(
-  dat,
-  curve_type = c("logistic", "schumacher", "gompertz", "monomolecular", "arctangent",
-    "hyperbolic", "user"),
-  equation_type = c("td", "rate", "ti")
-)
+eval_gr(dat, curve_type, equation_type)
 }
 \arguments{
 \item{dat}{data.frame. See}
@@ -26,7 +21,7 @@ vector with length equal to the number of rows in \code{dat}, containing
 either the growth rate parameter or size.
 }
 \description{
-Computation of growth curves
+Numerical evaluation of growth curves
 }
 \details{
 The user is not supposed to call this function directly.

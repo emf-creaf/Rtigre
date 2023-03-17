@@ -37,7 +37,7 @@ the diameter increment.}
 a \code{nls} object. See ?minpack.lm::nlsLM for details.
 }
 \description{
-Non-linear fit to a time-independent growth curve.
+Non-linear least-squares fit of growth data to a time-independent growth curve.
 }
 \examples{
 

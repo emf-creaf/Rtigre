@@ -1,0 +1,42 @@
+---
+title: "Regression of time-independent growth equations"
+author: "Roberto Molowny-Horas"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+### Growth rate parameter
+
+We assume that the dependence of the growth rate parameter on a given set of predictors $X_{i}$ is linear. Then, $k$ can then be expressed as:
+
+\begin{equation}
+  k=\sum_{i=1}^{n} a_{i}\cdot X_{i}
+\end{equation}
+
+where the coefficients $a_{i}$ are unknown and must be calculated. There are cases where we wish to impose a strict positivity on $k$. At the same time, we prefer an expression that does not lead to unrealistically high values for $k$. Examples of this behaviour may come about, for example, when computing projections for $X_{i}$ values that are very different from the ones used during calibration. In those instances, we can force $k$ to be strictly positive by expressing it as a logistic function of the variables $X_{i}$. In this case, we replace the lineal expression from above with the following:
+
+\begin{equation}
+k=\frac{C}{1+e^{-\sum_{i=1}^{n} a_{i}\cdot X_{i}}}
+\end{equation}
+
+A new transformation is thus needed to obtain a linear expression. After some algebra, we get:
+
+\begin{equation}
+\sum_{i=1}^{n} a_{i}\cdot X_{i}=\ln\left(\frac{k}{k_{max}-k}\right)
+\end{equation}
+
+Using a logistic function for $k$ has the advantage of not letting $k$ reach absurdly low or high values, since $k\in \left[0,C\right]$ always. A new parameter $k_{max}$ is, however, necessary to set an upper limit to $k$.
+
+
+
+The time-independent growth equations described in this package are intrinsically nonlinear in the $k$ parameter. Regressing growth $y_{2}-y_{1}$ against a linear function of a set of parameters through the $k$ parameter may quickly become problematic. Non-linear regressions usually require a good set of initial parameters for the algorithm to converge to a global minimum, lest we end up in a local minimum or without convergence at all. Therefore, guaranteeing convergence implies finding a good set of starting values to feed the regression function.
+
+
+The obvious non-linearity of the time-independent equations below makes it challenging to devise a regression scheme with which to fit those expressions to a set of observational data. Good starting guesses for the parameters of the fit become a key ingredient for a quick and satisfactory convergence of the regression algorithms. Otherwise, those algorithms may fail to converge, or do so to a local, rather than global, extreme. Therefore, we have extracted simple expressions for the so-called growth rate parameter $k$, which can be fitted in an initial step as linear expressions of the predictors. The coefficients thus calculated can then be used as first guesses for the full non-linear regression to the time-independent growth curves.

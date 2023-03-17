@@ -1,7 +1,7 @@
 #' Computation of growth curves
 #'
 #' @description
-#'
+#' Numerical evaluation of growth curves
 #'
 #' @param dat data.frame. See
 #' @param curve_type character string. It determines which curve to use: 'logistic' (default),
@@ -24,16 +24,14 @@
 #' eval_gr(dat, "logistic", "rate")
 #' eval_gr(dat, "logistic", "ti")
 #'
-eval_gr <- function(dat,
-                    curve_type = c("logistic","schumacher","gompertz","monomolecular","arctangent","hyperbolic", "user"),
-                    equation_type = c("td", "rate", "ti")) {
+eval_gr <- function(dat, curve_type, equation_type) {
 
   # Check data.frame.
   if (!is.data.frame(dat)) stop("Input 'dat' must be of 'data.frame' class")
 
   # Check curve and equation types.
-  curve_type <- match.arg(curve_type)
-  equation_type <- match.arg(equation_type)
+  curve_type <- match.arg(curve_type, c("logistic","schumacher","gompertz","monomolecular","arctangent","hyperbolic", "user"))
+  equation_type <- match.arg(equation_type, c("td", "rate", "ti"))
 
   # Check inputs.
   col_names <- switch(equation_type,

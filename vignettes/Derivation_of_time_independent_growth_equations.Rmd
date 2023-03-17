@@ -1,0 +1,349 @@
+---
+title: "Derivation of time-independent growth functions"
+author: "R. Molowny-Horas"
+date: "`r Sys.Date()`"
+header-includes:
+  - \usepackage{enumerate}
+output:
+  html_document: default
+  pdf_document: default
+  word_document: default
+vignette: >
+  %\VignetteIndexEntry{Derivation of time-independent growth functions}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+<br>
+<br>
+
+## Introduction
+
+Growth, understood as an increment along the physical dimensions of an organism, characterizes the temporal dynamics of many living entities better than many other features. By physical dimensions or size, terms that will be used indistinctly hereafter, we mean quantities that are directly related to the spatial space occupied by an organism (e.g. diameter and height for trees, or weight for mammals). As a matter of fact, size is often easier to determine experimentally than other characteristics like e.g. age. Only under controlled conditions in a laboratory or field experiment can we observe the birth or germination of animals or plants, and follow each single organism continuously and methodically to determine exactly their life span. However, in natural experiments like e.g. forest inventories, observers do not have control over experimental conditions and, therefore, the age of an individual is seldom precisely quantifiable.
+
+Even under ideal conditions, growth of an organism is hampered by structural and physiologically constraints, which gradually set in as it gets larger. Those constraints usually make its growth rate (i.e. increment in size per unit time) to slow down beyond some point, approaching zero as time tends to infinite. We will hereby discard those cases in which growth rate in size may become zero or even negative (i.e. size reduction) due to, for example, worsening environmental conditions or fiercer competition.
+
+It may thus seem reasonable to assume that, for an organism, there is an upper limit which is only reached under the most optimum climatic and environmental conditions. That upper limit is usually unknown but may be guessed by extrapolating observed trends. In addition, the upper-limit assumption suggests that sigmoid curves may be a good analytical model to describe size as a function of time, since sigmoid curves are monotonically increasing and are also constrained by a lower and an upper asymptote.
+
+Let $y(t)$ be a continuous and differentiable sigmoid curve, which depends on time or age $t$. Given two time points $t_{1}$ and $t_{2}$, where $t_{1}<t_{2}$, we can define a time interval $\Delta=t_{2}-t_{1}$. Then, growth during that interval $\Delta$ will simply be:
+
+\begin{equation}
+y(t_{2})-y(t_{1})=g\left(t_{1}, t_{2}\right)
+\end{equation}
+
+Expressed this way, the new growth function $g\left(t_{1}, t_{2}\right)$ still depends on absolute age/time, which is usually an unknown quantity in natural experiments. To determine growth independent of age/time, we seek an analytical expression that is instead a function of the time interval $\Delta$, a relative quantity that is much easier to obtain. That is, we want to be able to write:
+
+\begin{equation}
+y(t_{2})-y(t_{1})=g\left(\Delta\right)
+\end{equation}
+
+Arriving at such functional expression requires some algebraic manipulation of the original, age-dependent sigmoid functions. Below we will derive time-independent (also known as age-independent) curves for several growth $g\left(\Delta\right)$ functions. These curves have all been derived from sigmoid age-dependent size curves, which implies that there is always an asymptotic maximum size, denoted as $A$ in all cases. Some curves are well-known and widely used (e.g. logistic, Schumacher, Gompertz, monomolecular) whereas others are more rarely employed (e.g. arctangent, hyperbolic tangent). The dependence of growth on explanatory variables like e.g. climate, landscape structure, competition, etc. is conveyed through a growth rate parameter $k$, which is defined as a coefficient that directly multiplies age/time $t$. The existence of an explicit expression for the growth rate parameter $k$ has been a further requirement in developing those growth curves. In addition, we have allowed for a term $B$ which accounts for an (a priori unknown) offset in the growth curve. Nevertheless, as we will see below, this summative offset $B$ conveniently vanishes in all cases when $g$ or $k$ are expressed as a function of $\Delta$. Finally, $g\left(\Delta\right)=0$ when $\Delta=0$ or $k=0$ always, as expected.
+
+<br>
+
+### Logistic growth function
+
+The logistic curve is one of the most widely used functions to determine the growth of an individual plant or animal. In a general case, in which size depends on time $t$ as well as on a set of predictors (e.g. climatic, topographic), the size $y$ of an organism that obeys the logistic rule can be written:
+
+\begin{equation}
+  y=\frac{A}{1+e^{-\left(k\cdot t+B\right)}}
+\end{equation}
+
+To obtain a time-independent growth equation that determines growth between two time points $t_{1}$ and $t_{2}$, $t_{1}<t_{2}$, we start by writing:
+
+\begin{equation}
+  e^{-\left(k\cdot t+B\right)}=\frac{A}{y}-1
+\end{equation}
+
+and:
+
+\begin{equation}
+  t=\frac{1}{k}\cdot \ln\left(\frac{y}{A-y}\right)-B
+\end{equation}
+
+Let us define a subscript notation whereby $t_{1}$ and $t_{2}$ indicate time points separated by $\Delta$ years, where $\Delta=t_{2}-t_{1}$. Likewise, $y_{1}$ and $y_{2}$ will denote sizes at those time points, respectively. Then:
+
+\begin{equation}
+\Delta =t_{2}-t_{1}=\frac{1}{k}\cdot\left[\ln\left(\frac{y_{2}}{y_{1}}\cdot\frac{A-y_{1}}{A-y_{2}}\right)\right]
+\end{equation}
+
+The $B$ coefficient has conveniently disappeared from the equation. Now we can easily deduce the following expression for $k$:
+
+\begin{equation}
+  k=\frac{1}{\Delta}\cdot\left[\ln\left(\frac{y_{2}}{y_{1}}\cdot\frac{A-y_{1}}{A-y_{2}}\right)\right]
+\end{equation}
+
+Since $t_{2}=t_{1}+\Delta$, we can arrive at an expression for $y_{2}$ as a function of $y_{1}$, $\Delta$ and the coefficients $a_{i}$:
+
+\begin{equation}
+  y_{2}=\frac{A}{1+e^{-\left(k\cdot t_{1}+B\right)}\cdot e^{-k\cdot\Delta}}=\frac{A}{1+\left(\frac{A}{y_{1}}-1\right)\cdot e^{-k\cdot\Delta}}
+\end{equation}
+
+Finally, growth can be expressed as:
+
+\begin{equation}
+  g\left(\Delta\right)=\frac{A}{1+e^{-\left(k\cdot t_{1}+B\right)}\cdot e^{-k\cdot\Delta}}=\frac{A}{1+\left(\frac{A}{y_{1}}-1\right)\cdot e^{-k\cdot\Delta}}-y_{1}
+\end{equation}
+
+<br>
+
+### Schumacher growth function
+
+The Schumacher growth curve can be expressed as:
+
+\begin{equation}
+  y=A\cdot e^{-\frac{1}{k\cdot t+B}}
+\end{equation}
+
+For this curve to make ecological sense, $k\cdot t+B\geq 0$ always. Otherwise, $y$ would grow exponentially when $k\cdot t+B< 0$. Then, we can express $t$ as:
+
+\begin{equation}
+  t=\frac{1}{k}\cdot\frac{1}{\ln\left(\frac{A}{y}\right)}-\frac{1}{k}\cdot B
+\end{equation}
+
+Now, following the same procedure as above, we write:
+
+\begin{equation}
+  \Delta=\frac{1}{k}\cdot\left[\frac{1}{\ln\left(\frac{A}{y_{2}}\right)}-\frac{1}{\ln\left(\frac{A}{y_{1}}\right)}\right]
+\end{equation}
+
+As above, the offset $B$ has vanished from the equation. Then:
+
+\begin{equation}
+  k=\frac{1}{\Delta}\cdot\left[\frac{1}{\ln\left(\frac{A}{y_{2}}\right)}-\frac{1}{\ln\left(\frac{A}{y_{1}}\right)}\right]
+\end{equation}
+
+Solving the equation for $y_{2}$:
+
+\begin{equation}
+  y_{2}=A\cdot e^{-\left[\frac{1}{\frac{1}{\ln\left(\frac{A}{y_{1}}\right)}+k\cdot\Delta}\right]}
+\end{equation}
+
+This is exactly Equation [9] in Tomé et al. (2006). Then, the Schumacher time-independent growth function is:
+
+\begin{equation}
+g\left(\Delta\right)=A\cdot e^{-\left[\frac{1}{\frac{1}{\ln\left(\frac{A}{y_{1}}\right)}+k\cdot\Delta}\right]}-y_{1}
+\end{equation}
+
+<br>
+
+
+### Gompertz growth function
+
+The Gompertz function has long been used by the actuarial sciences to build life-tables. It is expressed as:
+
+\begin{equation}
+  y=A\cdot e^{-e^{-\left(k\cdot t+B\right)}}
+\end {equation}
+
+where B is an offset. Again, we can extract $t$ to get:
+
+\begin{equation}
+  t=\frac{1}{k}\cdot\left[\ln\left(\frac{1}{\ln\left(\frac{A}{y}\right)}\right)-B\right]
+\end{equation}
+
+Defining, as before, $\Delta=t_{2}-t_{1}$ we obtain:
+
+\begin{equation}
+  \Delta=\frac{1}{k}\cdot\ln\left(\frac{\ln\left(\frac{A}{y_{1}}\right)}{\ln\left(\frac{A}{y_{2}}\right)}\right)
+\end{equation}
+
+Thus:
+
+\begin{equation}
+  k=\frac{1}{\Delta}\cdot\ln\left(\frac{\ln\left(\frac{A}{y_{1}}\right)}{\ln\left(\frac{A}{y_{2}}\right)}\right)
+\end{equation}
+
+Finally, we arrive at:
+
+\begin{equation}
+  y_{2}=A\cdot\left(\frac{y_{1}}{A}\right)^{e^{-k\cdot\Delta}}
+\end{equation}
+
+and:
+
+\begin{equation}
+  g\left(\Delta\right)=A\cdot\left(\frac{y_{1}}{A}\right)^{e^{-k\cdot\Delta}}-y_{1}
+\end{equation}
+
+
+
+<br>
+
+### Monomolecular growth function
+
+The monomolecular growth function does not have a smooth initial growth, as other curves discussed in this document. It grows very fast at $t=0$ and gradually slows down until towards an asymptotic value. Its functional expression is as follows:
+
+\begin{equation}
+  y=A\cdot \left(1-e^{-\left( k\cdot t+B\right)}\right)
+\end {equation}
+
+If we extract $t$ we get:
+
+\begin{equation}
+  t=\frac{1}{k}\cdot \left[\ln\left(\frac{A}{A-y}\right)-B\right]
+\end {equation}
+
+and then:
+
+\begin{equation}
+  \Delta=\frac{1}{k}\cdot \left[\ln\left(\frac{A-y_{1}}{A-y_{2}}\right)\right]
+\end {equation}
+
+The growth rate parameter is:
+
+\begin{equation}
+  k=\frac{1}{\Delta}\cdot \left[\ln\left(\frac{A-y_{1}}{A-y_{2}}\right)\right]
+\end {equation}
+
+Then, size at $t_{2}$ is:
+
+\begin{equation}
+  y_{2}=A-\left(A-y_{1}\right)\cdot e^{-k\cdot \Delta}
+\end {equation}
+
+and, finally, age/time-independent growth can be written as:
+
+\begin{equation}
+  g\left(\Delta\right)=\left(A-y_{1}\right)\cdot\left(1-e^{-k\cdot \Delta}\right)
+\end {equation}
+
+<br>
+
+### Arctangent growth function
+
+The arctangent is another sigmoid curve from which a time-independent growth function can be derived relatively easily. We start by expressing growth as a function of time:
+
+\begin{equation}
+  y=A\cdot \left(\frac{1}{\pi}\cdot \arctan\left(k\cdot t+B\right)+0.5\right)
+\end {equation}
+
+Thus, growth $y\in \left[0,A\right]$ and $B$ has been included to allow for any possible offset in the curve. We can easily get:
+
+\begin{equation}
+  k\cdot t=\tan\left[\left(\frac{y}{A}-0.5\right)\cdot\pi\right]-B
+\end{equation}
+
+Therefore:
+
+\begin{equation}
+  t=\frac{1}{k}\cdot\tan\left[\left(\frac{y}{A}-0.5\right)\cdot\pi\right]-B
+\end{equation}
+
+and, thus:
+
+\begin{equation}
+  \Delta=\frac{1}{k}\cdot\left[\tan\left(\left(\frac{y_{2}}{A}-0.5\right)\cdot\pi\right)-\tan\left(\left(\frac{y_{1}}{A}-0.5\right)\cdot\pi\right)\right]
+\end{equation}
+
+Thus, the offset term $B$ has vanished from the equation. An equivalent expression for $k$ is:
+
+\begin{equation}
+  k=\frac{1}{\Delta}\cdot\left[\tan\left(\left(\frac{y_{2}}{A}-0.5\right)\cdot\pi\right)-\tan\left(\left(\frac{y_{1}}{A}-0.5\right)\cdot\pi\right)\right]
+\end{equation}
+
+Finally, we derive:
+
+\begin{equation}
+\tan\left(\left(\frac{y_{2}}{A}-0.5\right)\cdot\pi\right)=\tan\left(\left(\frac{y_{1}}{A}-0.5\right)\cdot\pi\right)+k\cdot\Delta
+\end{equation}
+
+and then:
+
+\begin{equation}
+y_{2}=A\cdot\left[\frac{1}{\pi}\cdot \arctan\left\{\tan\left(\left(\frac{y_{1}}{A}-0.5\right)\cdot\pi\right)+k\Delta\right\}+0.5\right]
+\end{equation}
+
+The growth function is, then:
+
+\begin{equation}
+g\left(\Delta\right)=A\cdot\left[\frac{1}{\pi}\cdot \arctan\left\{\tan\left(\left(\frac{y_{1}}{A}-0.5\right)\cdot\pi\right)+k\Delta\right\}+0.5\right]-y_{2}
+\end{equation}
+
+
+<br>
+
+### Hyperbolic tangent growth function
+
+The hyperbolic tangent growth function is seldom used in growth studies. We start by expressing size $y$ as a function of $t$ as follows:
+
+\begin{equation}
+  y\left(t\right)=A\cdot\left[\tanh\left(k\cdot t+B\right)+1\right]=
+  \frac{A}{2}\left[\cdot\frac{e^{2\cdot\left(k\cdot t+B\right)}-1}{e^{2\cdot\left(k\cdot t+B\right)}+1}+1\right]
+\end{equation}
+
+We can then write:
+
+\begin{equation}
+  y=A\cdot\frac{e^{2\cdot\left(k\cdot t+B\right)}}{e^{2\cdot\left(k\cdot t+B\right)}+1}=A\cdot\frac{1}{1+e^{-2\cdot\left(k\cdot t+B\right)}}
+\end {equation}
+
+This is exactly the same as the logistic function above if we substitute $2\cdot k=k'$. Therefore, it is straightforward to arrive at the following expressions:
+
+\begin{equation}
+\Delta=\frac{1}{2\cdot k}\cdot\left[\ln\left(\frac{y_{2}}{y_{1}}\cdot\frac{A-y_{1}}{A-y_{2}}\right)\right]
+\end{equation}
+
+and:
+
+\begin{equation}
+k=\frac{1}{2\cdot\Delta}\cdot\left[\ln\left(\frac{y_{2}}{y_{1}}\cdot\frac{A-y_{1}}{A-y_{2}}\right)\right]
+\end{equation}
+
+Finally, we obtain:
+
+\begin{equation}
+  y_{2}=\frac{A}{1+\left(\frac{A}{y_{1}}-1\right)\cdot e^{-2\cdot k\cdot\Delta}}
+\end{equation}
+
+Growth can thus be expressed as:
+
+\begin{equation}
+  g\left(\Delta\right)=\frac{A}{1+\left(\frac{A}{y_{1}}-1\right)\cdot e^{-2\cdot k\cdot\Delta}}-y_{1}
+\end{equation}
+
+
+<br>
+
+
+### Comparison of curves.
+
+```{r fig.align="center", width=8}
+t <- seq(1,100,by=.1)
+max_y <- 120
+k <- .1
+offset <- -2
+dat <- data.frame(t=t,k=k,offset=offset,max_y=max_y)
+plot(t,Rtigre::td_size(dat,curve_type="logistic"),type="l",lwd=2,ylim=c(0,max_y),col=1,
+     xlab="Time",ylab="Size",main="Age/time-dependent size")
+points(t,Rtigre::td_size(dat,curve_type="schumacher"),type="l",lwd=2,col=2)
+points(t,Rtigre::td_size(dat,curve_type="gompertz"),type="l",lwd=2,col=3)
+points(t,Rtigre::td_size(dat,curve_type="monomolecular"),type="l",lwd=2,col=4,)
+points(t,Rtigre::td_size(dat,curve_type="arctangent"),type="l",lwd=2,col=5)
+points(t,Rtigre::td_size(dat,curve_type="hyperbolic"),type="l",lwd=2,col=6)
+
+legend("bottomright",lty=1,c("logistic","schumacher","gompertz","monomolecular",
+"arctangent","hyperbolic"),lwd=2,cex=1.1,col=1:6)
+```
+
+
+
+```{r fig.align="center", width=8}
+tdiff <- 5
+max_y <- 120
+y1 <- seq(1,110)
+k <- .1
+dat <- data.frame(tdiff=tdiff,max_y=max_y,k=k,y1=y1)
+plot(y1,Rtigre::ti_size(dat)-dat$y1,xlab="Size at t1",
+     ylab="Size at t2 - size at t1",type="l",lwd=2,col=1,ylim=c(0,100))
+points(y1,Rtigre::ti_size(dat,"schumacher")-dat$y1,type="l",lwd=2,col=2)
+points(y1,Rtigre::ti_size(dat,"gompertz")-dat$y1,type="l",lwd=2,col=3)
+points(y1,Rtigre::ti_size(dat,"monomolecular")-dat$y1,type="l",lwd=2,col=4)
+points(y1,Rtigre::ti_size(dat,"arctangent")-dat$y1,type="l",lwd=2,col=5)
+points(y1,Rtigre::ti_size(dat,"hyperbolic")-dat$y1,type="l",lwd=2,col=6)
+legend("topright",lty=1,c("logistic","schumacher","gompertz","monomolecular",
+  "arctangent","hyperbolic"),lwd=2,cex=1.1,col=1:6)
+```
+
+
+

@@ -33,17 +33,26 @@ tdiff <- 5
 max_y <- 120
 y1 <- seq(1,110)
 k <- .1
-
-## Logistic growth.
 dat <- data.frame(tdiff=tdiff,max_y=max_y,k=k,y1=y1)
-plot(y1,ti_size(dat),xlab="Size at t1",ylab="Growth at t2",type="l",ylim=c(0,50))
-points(y1,ti_size(dat,"schumacher"),type="l",lty=2)
-points(y1,ti_size(dat,"gompertz"),type="l",lty=3)
-points(y1,ti_size(dat,"monomolecular"),type="l",lty=4)
-points(y1,ti_size(dat,"arctangent"),type="l",lty=5)
-points(y1,ti_size(dat,"hyperbolic"),type="l",lty=6)
-legend("topright",lty=1:6,c("logistic","schumacher","gompertz","monomolecular",
-"arctangent","hyperbolic"),lwd=2,cex=1.1)
+plot(y1,Rtigre::ti_size(dat),xlab="Size at t1",ylab="Size at t2",type="l",lwd=2,col=1,
+  ylim=c(0,max_y))
+points(y1,Rtigre::ti_size(dat,"schumacher"),type="l",lwd=2,col=2)
+points(y1,Rtigre::ti_size(dat,"gompertz"),type="l",lwd=2,col=3)
+points(y1,Rtigre::ti_size(dat,"monomolecular"),type="l",lwd=2,col=4)
+points(y1,Rtigre::ti_size(dat,"arctangent"),type="l",lwd=2,col=5)
+points(y1,Rtigre::ti_size(dat,"hyperbolic"),type="l",lwd=2,col=6)
+legend("topright",lty=1,c("logistic","schumacher","gompertz","monomolecular",
+"arctangent","hyperbolic"),lwd=2,cex=1.1,col=1:6)
 
+# To plot growth as y2-y1.
+plot(y1,Rtigre::ti_size(dat)-dat$y1,xlab="Size at t1",ylab="Growth at t2",type="l",lwd=2,col=1,
+  ylim=c(0,max_y))
+points(y1,Rtigre::ti_size(dat,"schumacher")-dat$y1,type="l",lwd=2,col=2)
+points(y1,Rtigre::ti_size(dat,"gompertz")-dat$y1,type="l",lwd=2,col=3)
+points(y1,Rtigre::ti_size(dat,"monomolecular")-dat$y1,type="l",lwd=2,col=4)
+points(y1,Rtigre::ti_size(dat,"arctangent")-dat$y1,type="l",lwd=2,col=5)
+points(y1,Rtigre::ti_size(dat,"hyperbolic")-dat$y1,type="l",lwd=2,col=6)
+legend("topright",lty=1,c("logistic","schumacher","gompertz","monomolecular",
+"arctangent","hyperbolic"),lwd=2,cex=1.1,col=1:6)
 
 }
