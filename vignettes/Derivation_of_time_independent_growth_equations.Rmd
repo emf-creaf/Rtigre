@@ -5,8 +5,8 @@ date: "`r Sys.Date()`"
 header-includes:
   - \usepackage{enumerate}
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
   word_document: default
 vignette: >
   %\VignetteIndexEntry{Derivation of time-independent growth functions}
