@@ -21,27 +21,64 @@ vignette: >
 
 Growth, understood as an increment along the physical dimensions of an organism, characterizes the temporal dynamics of many living entities better than many other features. By physical dimensions or size, terms that will be used indistinctly hereafter, we mean quantities that are directly related to the spatial space occupied by an organism (e.g. diameter and height for trees, or weight for mammals). As a matter of fact, size is often easier to determine experimentally than other characteristics like e.g. age. Only under controlled conditions in a laboratory or field experiment can we observe the birth or germination of animals or plants, and follow each single organism continuously and methodically to determine exactly their life span. However, in natural experiments like e.g. forest inventories, observers do not have control over experimental conditions and, therefore, the age of an individual is seldom precisely quantifiable.
 
-Even under ideal conditions, growth of an organism is hampered by structural and physiologically constraints, which gradually set in as it gets larger. Those constraints usually make its growth rate (i.e. increment in size per unit time) to slow down beyond some point, approaching zero as time tends to infinite. We will hereby discard those cases in which growth rate in size may become zero or even negative (i.e. size reduction) due to, for example, worsening environmental conditions or fiercer competition.
+Even under ideal conditions, growth of an organism is hampered by structural and physiologically constraints, which gradually set in as the organism gets larger. Those constraints usually make its growth rate (i.e. increment in size per unit time) to slow down beyond some point, approaching zero as time tends to infinite. We will hereby discard those cases in which growth rate in size may become zero or even negative (i.e. size reduction) due to, for example, worsening environmental conditions or fiercer competition.
 
-It may thus seem reasonable to assume that, for an organism, there is an upper limit for size which is only reached at advanced age and under the most optimum climatic and environmental conditions. That upper limit is usually unknown but may be guessed by extrapolating observed trends. In addition, the upper-limit assumption suggests that sigmoid curves may be a good analytical model to describe size as a function of time, since sigmoid curves are monotonically increasing and are also constrained by lower and upper asymptotes.
+It may thus seem reasonable to assume that, for an organism, there is an upper limit for size which is only reached at an advanced age and under the most optimum climatic and environmental conditions. That upper limit is usually unknown but may be guessed by extrapolating observed trends. In addition, the upper-limit assumption suggests that sigmoid curves may be a good analytical model to describe size as a function of time, since sigmoid curves are monotonically increasing and are also constrained by lower and upper asymptotes.
 
-Let $y(t)$ be a continuous and differentiable sigmoid curve, which depends on time or age $t$. Given two time points $t_{1}$ and $t_{2}$, where $t_{1}<t_{2}$, we can define a time interval $\Delta=t_{2}-t_{1}$. Then, growth during that interval $\Delta$ will simply be:
-
-\begin{equation}
-y(t_{2})-y(t_{1})=g\left(t_{1}, t_{2}\right)
-\end{equation}
-
-Expressed this way, the new growth function $g\left(t_{1}, t_{2}\right)$ still depends on absolute age/time, which is usually an unknown quantity in natural experiments. To determine growth independent of age/time, we seek an analytical expression that is instead a function of the time interval $\Delta$, a relative quantity that is much easier to obtain. That is, we want to be able to write:
+Let $y(t)$ be a continuous and differentiable sigmoid curve, which depends on time or age $t$. Given two time points $t_{1}$ and $t_{2}$, where $t_{1}<t_{2}$, then growth in $y$, $\Delta_{y}=y(t_{2})-y(t_{1})$, will simply be:
 
 \begin{equation}
-y(t_{2})-y(t_{1})=g\left(\Delta\right)
+\Delta_{y}=y(t_{2})-y(t_{1})=g\left(t_{1}, t_{2}\right)
 \end{equation}
 
-Arriving at such functional expression requires some algebraic manipulation of the original, age-dependent sigmoid functions. Below we will derive time-independent (also known as age-independent) curves for several growth $g\left(\Delta\right)$ functions. These curves have all been derived from sigmoid age-dependent size curves, which implies that there is always an asymptotic maximum size, denoted as $A$ in all cases. Some curves are well-known and widely used (e.g. logistic, Schumacher, Gompertz, monomolecular) whereas others are more rarely employed (e.g. arctangent, hyperbolic tangent). The dependence of growth on explanatory variables like e.g. climate, landscape structure, competition, etc. is conveyed through a growth rate parameter $k$, which is defined as a coefficient that directly multiplies age/time $t$. The existence of an explicit expression for the growth rate parameter $k$ has been a further requirement in developing those growth curves, such that the dependence on a set of $n$ predictors $\mathcal{X}_{i}, i=1...n$, can be expressed as follows:
+Expressed this way, the new growth function $g\left(t_{1}, t_{2}\right)$ still depends explicitly on absolute age/time at $t_{1}$ and $t_{2}$, which are usually unknown quantities in natural experiments. To determine growth independent of age/time, we will seek an analytic expression that is instead a function of the time interval $\Delta_{t}=t_{2}-t_{1}$, a relative quantity that is much easier to obtain. That is, we want to be able to write:
+
+\begin{equation}
+\Delta_{y}=g\left(\Delta_{t}\right)
+\end{equation}
+
+Arriving at such functional expression requires some algebraic manipulation of the original, age-dependent sigmoid functions, as shown below. However, function $g\left(\Delta\right)$ will usually be very non-linear
+
+
+Our objective, throughout this work, will be to derive age/time-independent expressions for growth rate of the form $g\left(\Delta\right)$ for the following six sigmoid functions:
+
+1. Logistic
+2. Schumacher
+3. Gompertz
+4. Monomolecular
+5. Arc tangent
+6. Hyperbolic tangent
+
+Those expressions should also incorporate a specific way to determine their dependence on a given set of explanatory variables, $\mathcal{X}$, like e.g. climate, landscape, competition, etc.
+
+<br>
+<br>
+
+## Methodology
+
+We will derive time-independent (also known as age-independent) curves for several growth $g\left(\Delta\right)$ functions. These curves have all been derived from sigmoid age-dependent size curves, which implies that there is always an asymptotic maximum size, denoted hereafter as $A$. Some curves are well-known and widely used (e.g. logistic, Schumacher, Gompertz, monomolecular) whereas others are more rarely employed (e.g. arctangent, hyperbolic tangent).
+
+To specify the dependence of growth on a given set of explanatory variables, $\mathcal{X}$, like e.g. climate, landscape, competition, we will implement an implicit growth rate parameter $k$:
 
 \begin{equation}
   k=\sum_{i=1}^{n} a_{i}\cdot \mathcal{X}_{i}
 \end{equation}
+
+which, in turn, multiplies age/time $t$. Many age-dependent size curves, and their corresponding age-independent expressions, are highly non-linear in $k$. Thus, a successful fitting strategy requires the implementation of a non-linear regression algorithm to calculate the coefficients $a_{i}$ that determine the effect of the corresponding explanatory variable.
+
+
+
+
+
+The existence of an explicit expression for the growth rate parameter $k$ has been a further requirement in developing those growth curves, such that the dependence on a set of $n$ predictors $\mathcal{X}_{i}, i=1...n$, can be expressed as follows:
+
+\begin{equation}
+  k=\sum_{i=1}^{n} a_{i}\cdot \mathcal{X}_{i}
+\end{equation}
+
+
+
+
 
 In addition, we have allowed for a term $B$ which accounts for an (a priori unknown) offset in the growth curve. Nevertheless, as we will see below, this summative offset $B$ conveniently vanishes in all cases when $g$ or $k$ are expressed as a function of $\Delta$. Finally, $g\left(\Delta\right)=0$ when $\Delta=0$ or $k=0$ always, as expected.
 
