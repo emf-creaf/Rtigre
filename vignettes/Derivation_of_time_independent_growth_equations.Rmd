@@ -19,13 +19,13 @@ vignette: >
 
 ## Introduction
 
-Growth, understood as an increment along the physical dimensions of an organism, characterizes the temporal dynamics of many living entities better than many other features. By physical dimensions or size, terms that will be used indistinctly hereafter, we mean quantities that are directly related to the spatial space occupied by an organism (e.g. diameter and height for trees, or weight for mammals). As a matter of fact, size is often easier to determine experimentally than other characteristics like e.g. age. Only under controlled conditions in a laboratory or field experiment can we observe the birth or germination of animals or plants, and follow each single organism continuously and methodically to determine exactly their life span. However, in natural experiments like e.g. forest inventories, observers do not have control over experimental conditions and, therefore, the age of an individual is seldom precisely quantifiable.
+Growth, understood as an increment along the physical dimensions of an organism, characterizes the temporal dynamics of many living entities better than many other features. By physical dimensions or size, terms that will be used indistinctly hereafter, we mean quantities that are directly related to the spatial space occupied by an organism (e.g. diameter and height for trees). Notice, nevertheless, that other physical characteristics, like weight, may be convenient when dealing with animals.
 
-Even under ideal conditions, growth of an organism is hampered by structural and physiologically constraints, which gradually set in as the organism gets larger. Those constraints usually make its growth rate (i.e. increment in size per unit time) to slow down beyond some point, approaching zero as time tends to infinite. We will hereby discard those cases in which growth rate in size may become zero or even negative (i.e. size reduction) due to, for example, worsening environmental conditions or fiercer competition.
+Size is often easier to determine experimentally than age. Only under controlled conditions in a laboratory or field experiment can we observe the birth or germination of animals or plants, and follow each single organism continuously and methodically to determine exactly their life span. However, in natural experiments like forest inventories, observers do not have control over experimental conditions and, therefore, the age of an individual is seldom precisely quantifiable.
 
-It may thus seem reasonable to assume that, for an organism, there is an upper limit for size which is only reached at an advanced age and under the most optimum climatic and environmental conditions. That upper limit is usually unknown but may be guessed by extrapolating observed trends. In addition, the upper-limit assumption suggests that sigmoid curves may be a good analytical model to describe size as a function of time, since sigmoid curves are monotonically increasing and are also constrained by lower and upper asymptotes.
+Even under ideal conditions, growth of an organism is hampered by structural and physiologically constraints, which gradually set in as the organism gets larger. Those constraints usually make its growth rate (i.e. increment in size per unit time) to slow down beyond some point, approaching zero as time tends to infinite. We will hereby discard those cases in which growth rate in size may become zero or even negative (i.e. size reduction) due to, for example, worsening environmental conditions or fiercer competition. It may thus seem reasonable to assume that, for an organism, there is an upper limit for size which is only reached at an advanced age and under the most optimum climatic and environmental conditions. That upper limit is usually unknown but may be guessed by extrapolating observed trends. In addition, the upper-limit assumption suggests that sigmoid curves may be a good analytic model to describe size as a function of time, since sigmoid curves are monotonically increasing and are also constrained by lower and upper asymptote.
 
-Let $y(t)$ be a continuous and differentiable sigmoid curve, which depends on time or age $t$. Given two time points $t_{1}$ and $t_{2}$, where $t_{1}<t_{2}$, then growth in $y$, $\Delta_{y}=y(t_{2})-y(t_{1})$, will simply be:
+Let $y(t)$ be a continuous and differentiable sigmoid-like curve, which depends on time or age $t$. Given two time points $t_{1}$ and $t_{2}$, where $t_{1}<t_{2}$, then growth $\Delta_{y}$, defined as $\Delta_{y}=y(t_{2})-y(t_{1})$, will simply be:
 
 \begin{equation}
 \Delta_{y}=y(t_{2})-y(t_{1})=g\left(t_{1}, t_{2}\right)
@@ -37,10 +37,7 @@ Expressed this way, the new growth function $g\left(t_{1}, t_{2}\right)$ still d
 \Delta_{y}=g\left(\Delta_{t}\right)
 \end{equation}
 
-Arriving at such functional expression requires some algebraic manipulation of the original, age-dependent sigmoid functions, as shown below. However, function $g\left(\Delta\right)$ will usually be very non-linear
-
-
-Our objective, throughout this work, will be to derive age/time-independent expressions for growth rate of the form $g\left(\Delta\right)$ for the following six sigmoid functions:
+Arriving at such functional expression requires some algebraic manipulation of the original, age-dependent sigmoid functions, as shown below. Our objective, throughout this work, will be to derive age/time-independent expressions for growth rate of the form $g\left(\Delta\right)$ for the following six sigmoid functions:
 
 1. Logistic
 2. Schumacher
