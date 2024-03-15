@@ -10,10 +10,9 @@ points(t,Rtigre::td_size(dat,curve_type="schumacher"),type="l",lwd=2,col=2)
 points(t,Rtigre::td_size(dat,curve_type="gompertz"),type="l",lwd=2,col=3)
 points(t,Rtigre::td_size(dat,curve_type="monomolecular"),type="l",lwd=2,col=4,)
 points(t,Rtigre::td_size(dat,curve_type="arctangent"),type="l",lwd=2,col=5)
-points(t,Rtigre::td_size(dat,curve_type="hyperbolic"),type="l",lwd=2,col=6)
 
 legend("bottomright",lty=1,c("logistic","schumacher","gompertz","monomolecular",
-"arctangent","hyperbolic"),lwd=2,cex=1.1,col=1:6)
+"arctangent"),lwd=2,cex=1.1,col=1:6)
 
 ## ----fig.align="center", width=8----------------------------------------------
 tdiff <- 5
@@ -27,7 +26,6 @@ points(y1,Rtigre::ti_size(dat,"schumacher")-dat$y1,type="l",lwd=2,col=2)
 points(y1,Rtigre::ti_size(dat,"gompertz")-dat$y1,type="l",lwd=2,col=3)
 points(y1,Rtigre::ti_size(dat,"monomolecular")-dat$y1,type="l",lwd=2,col=4)
 points(y1,Rtigre::ti_size(dat,"arctangent")-dat$y1,type="l",lwd=2,col=5)
-points(y1,Rtigre::ti_size(dat,"hyperbolic")-dat$y1,type="l",lwd=2,col=6)
 legend("topright",lty=1,c("logistic","schumacher","gompertz","monomolecular",
-  "arctangent","hyperbolic"),lwd=2,cex=1.1,col=1:6)
+  "arctangent"),lwd=2,cex=1.1,col=1:6)
 

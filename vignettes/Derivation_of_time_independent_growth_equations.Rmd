@@ -19,7 +19,7 @@ vignette: >
 
 ## Introduction
 
-Growth, understood as an increment along the physical dimensions of an organism, characterizes the temporal dynamics of many living entities better than many other features. By physical dimensions or size, terms that will be used indistinctly hereafter, we mean quantities that are directly related to the spatial space occupied by an organism (e.g. diameter and height for trees). Notice, nevertheless, that other physical characteristics, like weight, may be convenient when dealing with animals.
+Growth, understood as an increment along the physical dimensions of an organism, characterizes the temporal dynamics of many living entities better than many other features. By physical dimensions or size, terms that will be used indistinctly hereafter, we mean quantities that are directly related to the spatial space occupied by an organism (e.g. diameter and height for trees, length or weight for animals). Thus, those physical dimensions will increase at varying rate as the organism ages.
 
 Size is often easier to determine experimentally than age. Only under controlled conditions in a laboratory or field experiment can we observe the birth or germination of animals or plants, and follow each single organism continuously and methodically to determine exactly their life span. However, in natural experiments like forest inventories, observers do not have control over experimental conditions and, therefore, the age of an individual is seldom precisely quantifiable.
 
@@ -46,7 +46,7 @@ Arriving at such functional expression requires some algebraic manipulation of t
 5. Arc tangent
 6. Hyperbolic tangent
 
-Those expressions should also incorporate a specific way to determine their dependence on a given set of explanatory variables, $\mathcal{X}$, like e.g. climate, landscape, competition, etc.
+Those expressions should also incorporate a specific way to determine their dependence on a given set of explanatory variables like e.g. climate, landscape, competition, etc.
 
 <br>
 <br>
@@ -55,7 +55,7 @@ Those expressions should also incorporate a specific way to determine their depe
 
 We will derive time-independent (also known as age-independent) curves for several growth $g\left(\Delta\right)$ functions. These curves have all been derived from sigmoid age-dependent size curves, which implies that there is always an asymptotic maximum size, denoted hereafter as $A$. Some curves are well-known and widely used (e.g. logistic, Schumacher, Gompertz, monomolecular) whereas others are more rarely employed (e.g. arctangent, hyperbolic tangent).
 
-To specify the dependence of growth on a given set of explanatory variables, $\mathcal{X}$, like e.g. climate, landscape, competition, we will implement an implicit growth rate parameter $k$:
+To specify the dependence of growth on a given set of explanatory variables, which we will hereafter denote as $\mathcal{X}$, like e.g. climate, landscape, competition, we will implement an implicit growth rate parameter $k$:
 
 \begin{equation}
   k=\sum_{i=1}^{n} a_{i}\cdot \mathcal{X}_{i}
@@ -94,13 +94,13 @@ Below we will derive the time-independent expressions for the following six sigm
 
 #### 1. Logistic growth function
 
-The logistic curve is one of the most widely used sigmoid functions to determine the growth of an individual plant or animal. In a general case, in which size depends on time $t$ as well as on a set of predictors (e.g. climatic, topographic), the size $y$ of an organism that obeys the logistic rule can be written:
+The logistic curve, labelled *Autocatalytic* in Richards' original article, is one of the most widely used sigmoid functions to determine the growth of an individual plant or animal. In a general case, in which size depends on time $t$ as well as on a set of predictors (e.g. climatic, topographic), the size $y$ of an organism that obeys the logistic rule can be written:
 
 \begin{equation}
   y=\frac{A}{1+e^{-\left(k\cdot t+B\right)}}
 \end{equation}
 
-As mentioned above, the dependence on predictors is done through $k$. To obtain a time-independent growth equation that determines growth between two time points $t_{1}$ and $t_{2}$, $t_{1}<t_{2}$, we start by writing:
+As mentioned above, the dependence on predictors is done through $k$. To obtain a time-independent equation that determines growth between two time points $t_{1}$ and $t_{2}$, $t_{1}<t_{2}$, we start by writing:
 
 \begin{equation}
   e^{-\left(k\cdot t+B\right)}=\frac{A}{y}-1
@@ -133,7 +133,7 @@ Since $t_{2}=t_{1}+\Delta$, we can arrive at an expression for $y_{2}$ as a func
 Finally, growth can be expressed as:
 
 \begin{equation}
-  g\left(\Delta\right)=\frac{A}{1+e^{-\left(k\cdot t_{1}+B\right)}\cdot e^{-k\cdot\Delta}}=\frac{A}{1+\left(\frac{A}{y_{1}}-1\right)\cdot e^{-k\cdot\Delta}}-y_{1}
+  g\left(\Delta\right)=\frac{A}{1+e^{-\left(k\cdot t_{1}+B\right)}\cdot e^{-k\cdot\Delta}}-y_{1}=\frac{A}{1+\left(\frac{A}{y_{1}}-1\right)\cdot e^{-k\cdot\Delta}}-y_{1}
 \end{equation}
 
 <br>

@@ -1,4 +1,4 @@
-test_that("sdf", {
+test_that("Evaluation of growth", {
 
    dat <- data.frame(y1 = 10, y2 = 43, tdiff = 10, max_y = 80, t = 25, k = .025, offset = -.1)
    eval_gr(dat, "logistic", "td")
