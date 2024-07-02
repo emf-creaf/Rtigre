@@ -89,8 +89,6 @@ fit_rate <- function(dat, fo,
   stopifnot("Input 'dat' must be a 'data.frame'" = is.data.frame(dat))
   stopifnot("Input 'fo' must be a 'formula'" = inherits(fo, "formula"))
   curve_type = match.arg(curve_type, c("logistic","schumacher","gompertz","monomolecular","arctangent","hyperbolic", "user"))
-  algorithm <- match.arg(algorithm, c("nlsLM", "nls", "nlsr"))
-  if (!is.logical(verbose)) stop("Input 'verbose' must be logical")
 
 
   # Check formula.
@@ -105,14 +103,16 @@ fit_rate <- function(dat, fo,
   # Transformation to build a linear expression for k.
   dat$k <- rate_gr(dat, curve_type = curve_type)
 
+
   # sigmoid_rate = TRUE only makes sense if there are predictor variables in the formula.
   if (sigmoid_rate) {
     if (is.null(kmax)) kmax <- max(dat$k)*1.05 # A bit larger.
     dat$k <- log(dat$k/(kmax-dat$k))    # Further logit transformation.
   }
 
+
   # Linear regression.
-  r <- lm(update(fo,k~.),data=dat)
+  r <- lm(update(fo, k ~ .),data = dat)
   if (sigmoid_rate) r$kmax <- kmax
 
   return(r)
