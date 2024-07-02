@@ -137,18 +137,20 @@ fit_growth <- function(dat, fo, curve_type = "logistic", sigmoid_rate = F, kmax 
   z <- gsub("k",x,y)
   fofo <- paste0("y2-y1~",z,"-y1")
 
+
   # The non-linear fit.
   if (verbose) cat("   Non-linear fit\n")
   r <- switch(algorithm,
-              nlsLM = minpack.lm::nlsLM(formula(fofo), data = dat, start = coef_start, control = list(maxiter = 10000)),
-              nls = nls(formula(fofo), data = dat, start = coef_start, control = list(maxiter = 10000)),
+              nlsLM = minpack.lm::nlsLM(formula(fofo), data = dat, start = coef_start, control = list(maxiter = 1000)),
+              nls = nls(formula(fofo), data = dat, start = coef_start, control = list(maxiter = 1000)),
               nlsr = nlsr::nlsr(formula(fofo), data = dat, start = coef_start)
   )
+
 
   # If a log-transformed regression is sought.
   if (log_transf) {
     if (verbose) cat("   Non-linear fit of log-transformed data\n")
-    fofo <- paste0("log(y2-y1)~log(",z,"-y1)")
+    fofo <- paste0("log(y2-y1)~log(", z, "-y1)")
     r <- switch(algorithm,
                 nlsLM = minpack.lm::nlsLM(formula(fofo), data = dat, start = coef_start, control = list(maxiter = 10000)),
                 nls = nls(formula(fofo), data = dat, start = coef_start, control = list(maxiter = 10000)),
