@@ -9,14 +9,14 @@
 #' @param fo an object of class "formula"
 #' @param type string to select which growth function to use. It can be equal to 'logistic',
 #' 'schumacher', 'monomolecular', 'gompertz', 'arctangent', 'hyperbolic' or 'user'.
-#' @param sigmoid logical. If TRUE, the growth rate 'k' is further modelled as a logistic function.
+#' @param sigmoid_rate logical. If TRUE, the growth rate 'k' is further modelled as a logistic function.
 #' @param kmax numeric. If NULL, \code{kmax} will be estimated from the data.
 #'
 #' @details Some of the growth equations are taken from Table 6.2 in #' Burkhart and Tomé (2012).
 #' Columns 'y1' and 'y2' in 'dat' correspond to the sizes of the individual at 't1' and 't2', with column 'tdiff'='t2'-'t1'.
 #' Column 'max_y' correspond to maximum size attainable by the individual when time tends to infinite.
 #'
-#' The 'sigmoid' option allows us to guarantee that \code{k} is ecologically sound.
+#' The 'sigmoid_rate' option allows us to guarantee that \code{k} is ecologically sound.
 #' That implies that it is never negative and has an upper limit,
 #' Negative \code{k} values may happen when growth curves
 #' are used to calculate growth under conditions much different from the initial ones.
@@ -62,7 +62,7 @@
 #' summary(r3)
 #'
 #' ## Assuming a sigmoid expression for k.
-#' r4 <- fit_rate(dat,~temp+prec, sigmoid=T)
+#' r4 <- fit_rate(dat,~temp+prec, sigmoid_rate = T)
 #' summary(r4)
 #'
 #' ## Actual Pinus uncinata data from the Spanish Forest Inventories.
@@ -71,7 +71,7 @@
 #' ## Add time difference between second and third Inventory.
 #' Punci_IFN$tdiff <- 10
 #'
-#' k <- fit_rate(Punci_IFN, ~prec+temp, sigmoid = T)
+#' k <- fit_rate(Punci_IFN, ~prec + temp, sigmoid_rate = T)
 #' summary(k)
 #'
 #' @references
@@ -81,32 +81,39 @@
 #' @export
 
 fit_rate <- function(dat, fo,
-                     curve_type = c("logistic","schumacher","gompertz","monomolecular","arctangent","hyperbolic", "user"),
-                     sigmoid = F, kmax = NULL) {
+                     curve_type = curve_type,
+                     sigmoid_rate = F, kmax = NULL) {
 
-  # Check inputs.
+
+  # Checks.
+  stopifnot("Input 'dat' must be a 'data.frame'" = is.data.frame(dat))
+  stopifnot("Input 'fo' must be a 'formula'" = inherits(fo, "formula"))
+  curve_type = match.arg(curve_type, c("logistic","schumacher","gompertz","monomolecular","arctangent","hyperbolic", "user"))
+  algorithm <- match.arg(algorithm, c("nlsLM", "nls", "nlsr"))
+  if (!is.logical(verbose)) stop("Input 'verbose' must be logical")
+
+
+  # Check formula.
   cl <- match.call()
-  m <- match(c("dat","fo"),names(cl))
+  m <- match(c("dat", "fo"), names(cl))
   if (any(is.na(m))) stop("Missing argument")
   tf <- terms.formula(fo)
-  is.intercept <- attr(tf,"intercept")
-  if (length(is.intercept)==0) stop("Expression in formula 'fo' must have an intercept term")
+  is.intercept <- attr(tf, "intercept")
+  if (length(is.intercept) == 0) stop("Expression in formula 'fo' must have an intercept term")
 
-  # Check curve type.
-  curve_type <- match.arg(curve_type)
 
   # Transformation to build a linear expression for k.
   dat$k <- rate_gr(dat, curve_type = curve_type)
 
-  # sigmoid = TRUE only makes sense if there are predictor variables in the formula.
-  if (sigmoid) {
+  # sigmoid_rate = TRUE only makes sense if there are predictor variables in the formula.
+  if (sigmoid_rate) {
     if (is.null(kmax)) kmax <- max(dat$k)*1.05 # A bit larger.
     dat$k <- log(dat$k/(kmax-dat$k))    # Further logit transformation.
   }
 
   # Linear regression.
   r <- lm(update(fo,k~.),data=dat)
-  if (sigmoid) r$kmax <- kmax
+  if (sigmoid_rate) r$kmax <- kmax
 
   return(r)
 }

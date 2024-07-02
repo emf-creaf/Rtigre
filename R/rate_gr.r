@@ -1,5 +1,6 @@
 #' Rate parameter values in time-independent growth equations.
 #'
+#' @description
 #' This function calculates the rate parameter value of several time-independent growth equations from two size values
 #' obtained at two different times.
 #'
@@ -58,15 +59,15 @@
 #'
 #' @export
 
-rate_gr <- function(dat, curve_type = "logistic") {
+rate_gr <- function(dat, curve_type = curve_type) {
 
-  # Check that 'dat' exists.
-  cl <- match.call()
-  m <- match(c("dat"),names(cl))
-  if (any(is.na(m))) stop("Missing argument 'dat'")
-  if (!is.data.frame(dat)) stop("'dat' must be a data.frame")
-  if (nrow(dat) == 0) stop("'dat' must have at least one row")
 
+  # Checks.
+  stopifnot("Input 'dat' must be a 'data.frame'" = is.data.frame(dat))
+  curve_type = match.arg(curve_type, c("logistic","schumacher","gompertz","monomolecular","arctangent","hyperbolic", "user"))
+
+
+  # Evaluate curve.
   k <- eval_gr(dat = dat, curve_type = curve_type, equation_type = "rate")
 
   return(k)

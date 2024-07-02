@@ -3,7 +3,7 @@
 #' @description
 #' Numerical evaluation of growth curves
 #'
-#' @param dat data.frame. See
+#' @param dat \code{data.frame} containing data to evaluate the curves.
 #' @param curve_type character string. It determines which curve to use: 'logistic' (default),
 #' 'schumacher', 'gompertz', 'monomolecular', 'arctangent', 'hyperbolic' or 'user'.
 #' @param equation_type character string. It can be equal to 'td', 'rate' or 'ti',
@@ -13,8 +13,13 @@
 #' @return vector with length equal to the number of rows in \code{dat}, containing
 #' either the growth rate parameter or size.
 #'
-#' @details The user is not supposed to call this function directly.
-#' Use \code{\link{growth_rate}}, \code{\link{ti_size}} or \code{\link{td_size}} instead.
+#' @details
+#' Depending on the value of the "equation_type" parameter the "dat" \code{data.frame}
+#' must have the following columns: "t", "k", "offset" and "max_y" (equation_type = "td"),
+#' "y1", "y2", "tdiff" and "max_y" (equation_type = "rate") and
+#' "y1", "k", "tdiff" and "max_y" (equation_type = "ti").
+#'
+#' The user is not supposed to call this function directly.
 #'
 #' @export
 #'
@@ -26,19 +31,19 @@
 #'
 eval_gr <- function(dat, curve_type, equation_type) {
 
-  # Check data.frame.
-  if (!is.data.frame(dat)) stop("Input 'dat' must be of 'data.frame' class")
-
-  # Check curve and equation types.
-  curve_type <- match.arg(curve_type, c("logistic","schumacher","gompertz","monomolecular","arctangent","hyperbolic", "user"))
+  # Checks.
+  stopifnot("Input 'dat' must be a 'data.frame'" = is.data.frame(dat))
+  curve_type = match.arg(curve_type, c("logistic","schumacher","gompertz","monomolecular","arctangent","hyperbolic", "user"))
   equation_type <- match.arg(equation_type, c("td", "rate", "ti"))
 
-  # Check inputs.
+
+  # Check column names.
   col_names <- switch(equation_type,
-                      td   = c("t","k","offset","max_y"),
-                      rate = c("y1","y2","tdiff","max_y"),
-                      ti   = c("y1","k","tdiff","max_y"))
-  if (any(is.na(col_names %in% colnames(dat)))) stop("Wrong column names in 'dat'")
+                      td   = c("t", "k", "offset", "max_y"),
+                      rate = c("y1", "y2", "tdiff", "max_y"),
+                      ti   = c("y1", "k", "tdiff", "max_y"))
+  stopifnot("Wrong column names in 'dat'" = all(col_names %in% colnames(dat)))
+
 
   # Evaluate expression.
   x <- with(dat, eval(parse(text = string_gr(curve_type, equation_type))))

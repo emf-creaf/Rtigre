@@ -12,7 +12,8 @@ fit_growth(
   sigmoid = T,
   kmax = NULL,
   log_transf = T,
-  verbose = T
+  verbose = T,
+  algorithm = "nlsLM"
 )
 }
 \arguments{
@@ -32,12 +33,19 @@ data.}
 the diameter increment.}
 
 \item{verbose}{logical. If TRUE, information on the progress of the regression is produced.}
+
+\item{algorithm}{character, the algorithm to be sed. See 'Details'.}
 }
 \value{
-a \code{nls} object. See ?minpack.lm::nlsLM for details.
+a \code{nls} object. See ?nls for details.
 }
 \description{
 Non-linear least-squares fit of growth data to a time-independent growth curve.
+}
+\details{
+The default algorithm is "nlsLM", which implements the "nlsLM" function in package
+\code{minpack}. Other allowed values are "nls", which used the built-in \code{nls}
+function and "nlsr" from package \code{nlsr}.
 }
 \examples{
 

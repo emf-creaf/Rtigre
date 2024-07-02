@@ -1,10 +1,17 @@
 #' Arc-tangent equations for growth
 #'
-#' @param equation_type character. It indicates which equation will be
-#' calculated, namely growth rate, time-independent or time-dependent growth.
+#' @description
+#' \code{gr_arctangent} returns a character string containing the expression for
+#' the selected equation type.
 #'
-#' @return R expression of equation.
+#' @param equation_type character. It indicates which expression will be
+#' returned, namely growth rate ("rate"), time-independent ("ti")
+#' or time-dependent ("td") growth.
+#'
+#' @return R string containing the selected equation.
+#'
 #' @details See accompanying Vignette.
+#'
 #' @export
 #'
 #' @examples
@@ -15,6 +22,11 @@
 #'
 
 gr_arctangent <- function(equation_type = "rate") {
+
+  # Checks.
+  equation_type <- tolower(equation_type)
+  equation_type <- match.arg(equation_type, c("rate", "ti", "td"))
+
 
   # Chooses equation.
   z <- switch(equation_type,

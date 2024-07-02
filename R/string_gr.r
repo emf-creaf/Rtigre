@@ -1,14 +1,19 @@
 #' Choice of growth curve
 #'
-#' @description Yields a character string for one of seven growth curves.
+#' @description
+#' \code{string_gr} returns a character string for the selected curve type.
+#'
 #' @param curve_type string. It indicates which curve type to provide. Possible
 #' values are: "logistic", "schumacher", "gompertz", "monomolecular", "arctangent",
 #' "hyperbolic" or "user".
-#' @param equation_type
+#' @param equation_type string, can be equal to "rate", "ti" or "td". See Details.
 #'
-#' @return a character string containing an expression for growth rate parameter,
-#' age/time-independent or age/time-dependent growth functions. For a detailed
-#' definition of those expressions, see accompanying vignette.
+#' @return a character string containing an expression for the growth rate parameter
+#' (\code{equation_type="rate"}),
+#' age/time-independent (\code{equation_type="ti"})
+#' or age/time-dependent (\code{equation_type="td"}) growth functions.
+#' For a detailed definition of those expressions, see accompanying vignette.
+#'
 #' @export
 #'
 #' @examples
@@ -17,12 +22,15 @@
 
 string_gr <- function(curve_type = "logistic", equation_type = "rate") {
 
-  curve_type <- tolower(curve_type)
-  if (!any(curve_type == c("logistic","schumacher","gompertz","monomolecular","arctangent","hyperbolic","user")))
-    stop("Wrong 'curve_type' value")
-  equation_type <- tolower(equation_type)
-  if (!any(equation_type==c("rate","ti","td"))) stop("Wrong 'equation_type' value")
 
+  # Checks.
+  curve_type <- tolower(curve_type)
+  curve_type <- match.arg(curve_type, c("logistic","schumacher","gompertz","monomolecular","arctangent","hyperbolic","user"))
+  equation_type <- tolower(equation_type)
+  equation_type <- match.arg(equation_type, c("rate", "ti", "td"))
+
+
+  # Equation type.
   x <- switch(curve_type,
               logistic      = gr_logistic(equation_type),
               schumacher    = gr_schumacher(equation_type),
