@@ -2,19 +2,21 @@
 % Please edit documentation in R/gr_schumacher.r
 \name{gr_schumacher}
 \alias{gr_schumacher}
-\title{Schumacher equations for growth}
+\title{Schumacher equation for growth}
 \usage{
 gr_schumacher(equation_type = "rate")
 }
 \arguments{
-\item{equation_type}{character. It indicates which equation will be
-calculated, namely growth rate, time-independent or time-dependent growth.}
+\item{equation_type}{character. It indicates which expression will be
+returned, namely growth rate ("rate"), time-independent ("ti")
+or time-dependent ("td") growth.}
 }
 \value{
-R expression of equation.
+R string containing the selected equation.
 }
 \description{
-Schumacher equations for growth
+\code{gr_schumacher} returns a character string containing the expression for
+the selected equation type.
 }
 \details{
 See accompanying Vignette.

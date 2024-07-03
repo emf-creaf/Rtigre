@@ -7,12 +7,12 @@
 eval_gr(dat, curve_type, equation_type)
 }
 \arguments{
-\item{dat}{data.frame. See}
+\item{dat}{\code{data.frame} containing data to evaluate the curves.}
 
-\item{curve_type}{character string. It determines which curve to use: 'logistic' (default),
+\item{curve_type}{\code{character} string. It determines which curve to use: 'logistic' (default),
 'schumacher', 'gompertz', 'monomolecular', 'arctangent', 'hyperbolic' or 'user'.}
 
-\item{equation_type}{character string. It can be equal to 'td', 'rate' or 'ti',
+\item{equation_type}{\code{character} string. It should be equal to 'td', 'rate' or 'ti',
 indicating whether to calculate growth time-dependent size, rate parameter or
 time-independent size, respectively.}
 }
@@ -21,11 +21,17 @@ vector with length equal to the number of rows in \code{dat}, containing
 either the growth rate parameter or size.
 }
 \description{
-Numerical evaluation of growth curves
+\code{eval_gr} Numerical evaluation of growth curves
 }
 \details{
-The user is not supposed to call this function directly.
-Use \code{\link{growth_rate}}, \code{\link{ti_size}} or \code{\link{td_size}} instead.
+Depending on the value of the \code{equation_type} parameter \code{dat}
+must have the following columns: "t", "k", "offset" and "max_y" (\code{equation_type = "td"}),
+"y1", "y2", "tdiff" and "max_y" (\code{equation_type = "rate"}) and
+"y1", "k", "tdiff" and "max_y" (\code{equation_type = "ti"}).
+Notice that subindices 1 and 2 refer to time points \eqn{t_{2}}.
+See Vignettes for details.
+
+Although exported, the user is not supposed to call this function directly.
 }
 \examples{
 dat <- data.frame(y1 = 10, y2 = 43, tdiff = 10, max_y = 80, t = 25, k = .025, offset = -.1)

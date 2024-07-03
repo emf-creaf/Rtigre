@@ -51,33 +51,46 @@ Those expressions should also incorporate a specific way to determine their depe
 <br>
 <br>
 
+
+## Notation followed throughout the package
+
+Package functions follow a notation convention that is very similar to the one followed in the equations of this Vignette.
+The table below will identify variables and their
+
+* $t$, $t_{1}$ and $t_{2}$: time points, where $t_{1}\leq t_{2}$.
+* $\Delta$: time difference, $\Delta = t_{2} - t_{1}$
+* $y_{1}$ and $y_{2}$: size at time points $t_{1}$ and $t_{2}$, respectively.
+It is assumed throughout that $y_{1}\leq y_{2}$.
+* $k$: growth rate parameter. The dependence of growth on a set of explanatory 
+variables is conveyed through this parameter.
+* $\mathcal{X}$: set of explanatory variables on which growth will depend on through $k$.
+* $a_{i}$: coefficients that multiply variables in the set $\mathcal{X}$.
+* $A$: asymptotic maximum size.
+* $B$: offset term.
+* $g\left(\Delta\right)$: growth function such that $y_{2}=y_{1}+g\left(\Delta\right)$.
+
+
+
+
+
+
+<br>
+<br>
+
 ## Methodology
 
-We will derive time-independent (also known as age-independent) curves for several growth $g\left(\Delta\right)$ functions. These curves have all been derived from sigmoid age-dependent size curves, which implies that there is always an asymptotic maximum size, denoted hereafter as $A$. Some curves are well-known and widely used (e.g. logistic, Schumacher, Gompertz, monomolecular) whereas others are more rarely employed (e.g. arctangent, hyperbolic tangent).
+We will derive time-independent (also known as age-independent) curves for several $g\left(\Delta\right)$ functions. These curves have all been derived from sigmoid age-dependent size curves, which implies that there is always an asymptotic maximum size $A$. Some curves are well-known and widely used (e.g. logistic, Schumacher, Gompertz, monomolecular) whereas others are more rarely employed (e.g. arctangent, hyperbolic tangent).
 
-To specify the dependence of growth on a given set of explanatory variables, which we will hereafter denote as $\mathcal{X}$, like e.g. climate, landscape, competition, we will implement an implicit growth rate parameter $k$:
-
-\begin{equation}
-  k=\sum_{i=1}^{n} a_{i}\cdot \mathcal{X}_{i}
-\end{equation}
-
-which, in turn, multiplies age/time $t$. Many age-dependent size curves, and their corresponding age-independent expressions, are highly non-linear in $k$. Thus, a successful fitting strategy requires the implementation of a non-linear regression algorithm to calculate the coefficients $a_{i}$ that determine the effect of the corresponding explanatory variable.
-
-
-
-
-
-The existence of an explicit expression for the growth rate parameter $k$ has been a further requirement in developing those growth curves, such that the dependence on a set of $n$ predictors $\mathcal{X}_{i}, i=1...n$, can be expressed as follows:
+To convey the dependence of growth on a given set of explanatory variables $\mathcal{X}$ like e.g. climate, landscape, competition, we will use the aforementioned parameter $k$ as a linear function:
 
 \begin{equation}
   k=\sum_{i=1}^{n} a_{i}\cdot \mathcal{X}_{i}
 \end{equation}
 
+which, in turn, multiplies age/time $t$. Many age-dependent size curves, and their corresponding age-independent expressions, are highly non-linear in $k$. Thus, a successful fitting strategy requires the implementation of a non-linear regression algorithm to calculate the coefficients $a_{i}$ that determine the effect of the corresponding explanatory variable. As we will see below, this strategy yields relatively simple expressions that can readily be implemented as time-independent growth functions.
 
 
-
-
-In addition, we have allowed for a term $B$ which accounts for an (a priori unknown) offset in the growth curve. Nevertheless, as we will see below, this summative offset $B$ conveniently vanishes in all cases when $g$ or $k$ are expressed as a function of $\Delta$. Finally, $g\left(\Delta\right)=0$ when $\Delta=0$ or $k=0$ always, as expected.
+In addition, term $B$ represents an (a priori unknown) offset in the growth curve. Nevertheless, as we will see below, this summative offset $B$ conveniently vanishes in all cases when $g\left(\Delta\right)$ or $k$ are expressed as a function of $\Delta$. Finally, in all expressions it is easy to check that $g\left(\Delta\right)=0$ when $\Delta=0$ or $k=0$ always, as expected.
 
 Below we will derive the time-independent expressions for the following six sigmoid functions:
 

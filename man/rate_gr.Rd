@@ -4,7 +4,7 @@
 \alias{rate_gr}
 \title{Rate parameter values in time-independent growth equations.}
 \usage{
-rate_gr(dat, curve_type = "logistic")
+rate_gr(dat, curve_type = curve_type)
 }
 \arguments{
 \item{dat}{\code{data.frame} containing at least four columns named 'y1', 'y2', 'tdiff' and 'max_y'. See Details

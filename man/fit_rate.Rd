@@ -4,14 +4,7 @@
 \alias{fit_rate}
 \title{Regression on rate parameter}
 \usage{
-fit_rate(
-  dat,
-  fo,
-  curve_type = c("logistic", "schumacher", "gompertz", "monomolecular", "arctangent",
-    "hyperbolic", "user"),
-  sigmoid = F,
-  kmax = NULL
-)
+fit_rate(dat, fo, curve_type = curve_type, sigmoid_rate = F, kmax = NULL)
 }
 \arguments{
 \item{dat}{\code{data.frame} containing at least four columns named 'y1', 'y2', 'tdiff' and 'max_y'. See Details
@@ -19,7 +12,7 @@ and accompanying Vignettes for a description.}
 
 \item{fo}{an object of class "formula"}
 
-\item{sigmoid}{logical. If TRUE, the growth rate 'k' is further modelled as a logistic function.}
+\item{sigmoid_rate}{logical. If TRUE, the growth rate 'k' is further modelled as a logistic function.}
 
 \item{kmax}{numeric. If NULL, \code{kmax} will be estimated from the data.}
 
@@ -38,7 +31,7 @@ Some of the growth equations are taken from Table 6.2 in #' Burkhart and Tomé (
 Columns 'y1' and 'y2' in 'dat' correspond to the sizes of the individual at 't1' and 't2', with column 'tdiff'='t2'-'t1'.
 Column 'max_y' correspond to maximum size attainable by the individual when time tends to infinite.
 
-The 'sigmoid' option allows us to guarantee that \code{k} is ecologically sound.
+The 'sigmoid_rate' option allows us to guarantee that \code{k} is ecologically sound.
 That implies that it is never negative and has an upper limit,
 Negative \code{k} values may happen when growth curves
 are used to calculate growth under conditions much different from the initial ones.
@@ -82,7 +75,7 @@ r3 <- fit_rate(dat,~temp+prec)
 summary(r3)
 
 ## Assuming a sigmoid expression for k.
-r4 <- fit_rate(dat,~temp+prec, sigmoid=T)
+r4 <- fit_rate(dat,~temp+prec, sigmoid_rate = T)
 summary(r4)
 
 ## Actual Pinus uncinata data from the Spanish Forest Inventories.
@@ -91,7 +84,7 @@ data("Punci_IFN")
 ## Add time difference between second and third Inventory.
 Punci_IFN$tdiff <- 10
 
-k <- fit_rate(Punci_IFN, ~prec+temp, sigmoid = T)
+k <- fit_rate(Punci_IFN, ~prec + temp, sigmoid_rate = T)
 summary(k)
 
 }

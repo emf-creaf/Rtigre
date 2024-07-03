@@ -7,45 +7,55 @@
 fit_growth(
   dat,
   fo,
-  curve_type = c("logistic", "schumacher", "gompertz", "monomolecular", "arctangent",
-    "hyperbolic", "user"),
-  sigmoid = T,
+  curve_type = "logistic",
+  sigmoid_rate = F,
   kmax = NULL,
+  algorithm = "nlsLM",
   log_transf = T,
-  verbose = T,
-  algorithm = "nlsLM"
+  verbose = T
 )
 }
 \arguments{
-\item{dat}{data.frame containing data to be used in the fit.}
+\item{dat}{\code{data.frame} containing all data to be used in the fit.}
 
-\item{fo}{formula describing the right-hand-side of the dependence of the
+\item{fo}{\code{formula} describing the right-hand-side of the dependence of the
 growth rate on the predictors.}
 
 \item{curve_type}{character. It indicates the type of growth curve to be used.}
 
-\item{sigmoid}{logical. If TRUE, growth rate will be a sigmoid (i.e. logistic).}
+\item{sigmoid_rate}{logical. If TRUE, growth rate will also be represented by a logistic.}
 
 \item{kmax}{NULL or numeric. If NULL, its value will be calculated from the
 data.}
 
+\item{algorithm}{character, the algorithm to be used. See 'Details'.}
+
 \item{log_transf}{logical. If TRUE, a log-transformation will be applied to
-the diameter increment.}
+the dependent variable.}
 
 \item{verbose}{logical. If TRUE, information on the progress of the regression is produced.}
-
-\item{algorithm}{character, the algorithm to be sed. See 'Details'.}
 }
 \value{
-a \code{nls} object. See ?nls for details.
+a \code{nls} object. See \link[stats]{nls} for details.
 }
 \description{
 Non-linear least-squares fit of growth data to a time-independent growth curve.
 }
 \details{
+It is challenging to figure good starting values for a non-linear fit. When the algorithm implemented
+in e.g. \link[stats]{nls} does not work (which is often the case), one can then turn to using a
+slower but safer method like e.g. "Nelder-Mead", or  of the \link[stats]{nls}
+
+The algorithm first fits an explicit expression of the growth rate as a function of the
+explanatory variables. The resulting coefficients will be the starting values for the
+final non-linear regression.
+Be aware that, in some cases, \code{sigmoid = T} may give rise to "singular gradient" error messages in
+\link[stats]{nls} or some other error and/or warning messages for \link[minpack.lm]{nlsLM}
+or \link[nlsr]{nlsr}.
 The default algorithm is "nlsLM", which implements the "nlsLM" function in package
 \code{minpack}. Other allowed values are "nls", which used the built-in \code{nls}
-function and "nlsr" from package \code{nlsr}.
+function and "nlsr" from package \code{nlsr}. The Levenberg-Marquardt in \link[minpack.lm]{nlsLM}
+is very fast and stable and should work fine most of the time.
 }
 \examples{
 

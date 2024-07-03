@@ -1,12 +1,12 @@
 #' Computation of growth curves
 #'
 #' @description
-#' Numerical evaluation of growth curves
+#' \code{eval_gr} Numerical evaluation of growth curves
 #'
 #' @param dat \code{data.frame} containing data to evaluate the curves.
-#' @param curve_type character string. It determines which curve to use: 'logistic' (default),
+#' @param curve_type \code{character} string. It determines which curve to use: 'logistic' (default),
 #' 'schumacher', 'gompertz', 'monomolecular', 'arctangent', 'hyperbolic' or 'user'.
-#' @param equation_type character string. It can be equal to 'td', 'rate' or 'ti',
+#' @param equation_type \code{character} string. It should be equal to 'td', 'rate' or 'ti',
 #' indicating whether to calculate growth time-dependent size, rate parameter or
 #' time-independent size, respectively.
 #'
@@ -14,12 +14,16 @@
 #' either the growth rate parameter or size.
 #'
 #' @details
-#' Depending on the value of the "equation_type" parameter the "dat" \code{data.frame}
-#' must have the following columns: "t", "k", "offset" and "max_y" (equation_type = "td"),
-#' "y1", "y2", "tdiff" and "max_y" (equation_type = "rate") and
-#' "y1", "k", "tdiff" and "max_y" (equation_type = "ti").
+#' Depending on the value of the \code{equation_type} parameter \code{dat}
+#' must have the following columns: "t", "k", "offset" and "max_y" (\code{equation_type = "td"}),
+#' "y1", "y2", "tdiff" and "max_y" (\code{equation_type = "rate"}) and
+#' "y1", "k", "tdiff" and "max_y" (\code{equation_type = "ti"}).
 #'
-#' The user is not supposed to call this function directly.
+#' Notice that subindices 1 and 2 refer to time points, so that
+#' "y1" and "y2" are the quantities of interests at \eqn{t_{1}} and \eqn{t_{2}}, respectively.
+#' See Vignettes for details.
+#'
+#' Although exported, the user is not supposed to call this function directly.
 #'
 #' @export
 #'

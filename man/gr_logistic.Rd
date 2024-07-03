@@ -7,14 +7,16 @@
 gr_logistic(equation_type = "rate")
 }
 \arguments{
-\item{equation_type}{character. It indicates which equation will be
-calculated, namely growth rate, time-independent or time-dependent growth.}
+\item{equation_type}{character. It indicates which expression will be
+returned, namely growth rate ("rate"), time-independent ("ti")
+or time-dependent ("td") growth.}
 }
 \value{
-R expression of equation.
+R string containing the selected equation.
 }
 \description{
-Logistic equations for growth
+\code{gr_logistic} returns a character string containing the expression for
+the selected equation type.
 }
 \details{
 See accompanying Vignette.

@@ -11,15 +11,17 @@ string_gr(curve_type = "logistic", equation_type = "rate")
 values are: "logistic", "schumacher", "gompertz", "monomolecular", "arctangent",
 "hyperbolic" or "user".}
 
-\item{equation_type}{}
+\item{equation_type}{string, can be equal to "rate", "ti" or "td". See Details.}
 }
 \value{
-a character string containing an expression for growth rate parameter,
-age/time-independent or age/time-dependent growth functions. For a detailed
-definition of those expressions, see accompanying vignette.
+a character string containing an expression for the growth rate parameter
+(\code{equation_type="rate"}),
+age/time-independent (\code{equation_type="ti"})
+or age/time-dependent (\code{equation_type="td"}) growth functions.
+For a detailed definition of those expressions, see accompanying vignette.
 }
 \description{
-Yields a character string for one of seven growth curves.
+\code{string_gr} returns a character string for the selected curve type.
 }
 \examples{
 string_gr("hyperbolic", "td")
