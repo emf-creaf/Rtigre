@@ -28,7 +28,9 @@ Depending on the value of the \code{equation_type} parameter \code{dat}
 must have the following columns: "t", "k", "offset" and "max_y" (\code{equation_type = "td"}),
 "y1", "y2", "tdiff" and "max_y" (\code{equation_type = "rate"}) and
 "y1", "k", "tdiff" and "max_y" (\code{equation_type = "ti"}).
-Notice that subindices 1 and 2 refer to time points \eqn{t_{2}}.
+
+Notice that subindices 1 and 2 refer to time points, so that
+"y1" and "y2" are the quantities of interests at \eqn{t_{1}} and \eqn{t_{2}}, respectively.
 See Vignettes for details.
 
 Although exported, the user is not supposed to call this function directly.
