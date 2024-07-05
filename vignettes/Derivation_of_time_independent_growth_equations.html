@@ -11,7 +11,7 @@
 
 <meta name="author" content="R. Molowny-Horas" />
 
-<meta name="date" content="2023-11-17" />
+<meta name="date" content="2024-07-04" />
 
 <title>Derivation of time-independent growth functions</title>
 
@@ -353,7 +353,7 @@ display: none;
 <h1 class="title toc-ignore">Derivation of time-independent growth
 functions</h1>
 <h4 class="author">R. Molowny-Horas</h4>
-<h4 class="date">2023-11-17</h4>
+<h4 class="date">2024-07-04</h4>
 
 </div>
 
@@ -365,10 +365,10 @@ functions</h1>
 an organism, characterizes the temporal dynamics of many living entities
 better than many other features. By physical dimensions or size, terms
 that will be used indistinctly hereafter, we mean quantities that are
-directly related to the spatial space occupied by an organism
-(e.g. diameter and height for trees, length or weight for animals).
-Thus, those physical dimensions will increase at varying rate as the
-organism ages.</p>
+directly related to the spatial space occupied by an organism (e.g.
+diameter and height for trees, length or weight for animals). Thus,
+those physical dimensions will increase at varying rate as the organism
+ages.</p>
 <p>Size is often easier to determine experimentally than age. Only under
 controlled conditions in a laboratory or field experiment can we observe
 the birth or germination of animals or plants, and follow each single
@@ -395,9 +395,9 @@ asymptote.</p>
 <p>Let <span class="math inline">\(y(t)\)</span> be a continuous and
 differentiable sigmoid-like curve, which depends on time or age <span class="math inline">\(t\)</span>. Given two time points <span class="math inline">\(t_{1}\)</span> and <span class="math inline">\(t_{2}\)</span>, where <span class="math inline">\(t_{1}&lt;t_{2}\)</span>, then growth <span class="math inline">\(\Delta_{y}\)</span>, defined as <span class="math inline">\(\Delta_{y}=y(t_{2})-y(t_{1})\)</span>, will simply
 be:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
 \Delta_{y}=y(t_{2})-y(t_{1})=g\left(t_{1}, t_{2}\right)
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>Expressed this way, the new growth function <span class="math inline">\(g\left(t_{1}, t_{2}\right)\)</span> still depends
 explicitly on absolute age/time at <span class="math inline">\(t_{1}\)</span> and <span class="math inline">\(t_{2}\)</span>, which are usually unknown
 quantities in natural experiments. To determine growth independent of
@@ -405,9 +405,9 @@ age/time, we will seek an analytic expression that is instead a function
 of the time interval <span class="math inline">\(\Delta_{t}=t_{2}-t_{1}\)</span>, a relative
 quantity that is much easier to obtain. That is, we want to be able to
 write:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
 \Delta_{y}=g\left(\Delta_{t}\right)
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>Arriving at such functional expression requires some algebraic
 manipulation of the original, age-dependent sigmoid functions, as shown
 below. Our objective, throughout this work, will be to derive
@@ -422,45 +422,65 @@ six sigmoid functions:</p>
 <li>Hyperbolic tangent</li>
 </ol>
 <p>Those expressions should also incorporate a specific way to determine
-their dependence on a given set of explanatory variables like
-e.g. climate, landscape, competition, etc.</p>
+their dependence on a given set of explanatory variables like e.g.
+climate, landscape, competition, etc.</p>
+<p><br> <br></p>
+</div>
+<div id="notation-followed-throughout-the-package" class="section level2">
+<h2>Notation followed throughout the package</h2>
+<p>Package functions follow a notation convention that is very similar
+to the one followed in the equations of this Vignette. The table below
+will identify variables and their</p>
+<ul>
+<li><span class="math inline">\(t\)</span>, <span class="math inline">\(t_{1}\)</span> and <span class="math inline">\(t_{2}\)</span>: time points, where <span class="math inline">\(t_{1}\leq t_{2}\)</span>.</li>
+<li><span class="math inline">\(\Delta\)</span>: time difference, <span class="math inline">\(\Delta = t_{2} - t_{1}\)</span></li>
+<li><span class="math inline">\(y_{1}\)</span> and <span class="math inline">\(y_{2}\)</span>: size at time points <span class="math inline">\(t_{1}\)</span> and <span class="math inline">\(t_{2}\)</span>, respectively. It is assumed
+throughout that <span class="math inline">\(y_{1}\leq
+y_{2}\)</span>.</li>
+<li><span class="math inline">\(k\)</span>: growth rate parameter. The
+dependence of growth on a set of explanatory variables is conveyed
+through this parameter.</li>
+<li><span class="math inline">\(\mathcal{X}\)</span>: set of explanatory
+variables on which growth will depend on through <span class="math inline">\(k\)</span>.</li>
+<li><span class="math inline">\(a_{i}\)</span>: coefficients that
+multiply variables in the set <span class="math inline">\(\mathcal{X}\)</span>.</li>
+<li><span class="math inline">\(A\)</span>: asymptotic maximum
+size.</li>
+<li><span class="math inline">\(B\)</span>: offset term.</li>
+<li><span class="math inline">\(g\left(\Delta\right)\)</span>: growth
+function such that <span class="math inline">\(y_{2}=y_{1}+g\left(\Delta\right)\)</span>.</li>
+</ul>
 <p><br> <br></p>
 </div>
 <div id="methodology" class="section level2">
 <h2>Methodology</h2>
 <p>We will derive time-independent (also known as age-independent)
-curves for several growth <span class="math inline">\(g\left(\Delta\right)\)</span> functions. These
+curves for several <span class="math inline">\(g\left(\Delta\right)\)</span> functions. These
 curves have all been derived from sigmoid age-dependent size curves,
-which implies that there is always an asymptotic maximum size, denoted
-hereafter as <span class="math inline">\(A\)</span>. Some curves are
-well-known and widely used (e.g. logistic, Schumacher, Gompertz,
-monomolecular) whereas others are more rarely employed (e.g. arctangent,
-hyperbolic tangent).</p>
-<p>To specify the dependence of growth on a given set of explanatory
-variables, which we will hereafter denote as <span class="math inline">\(\mathcal{X}\)</span>, like e.g. climate,
-landscape, competition, we will implement an implicit growth rate
-parameter <span class="math inline">\(k\)</span>:</p>
-<p><span class="math display">\[\begin{equation}
+which implies that there is always an asymptotic maximum size <span class="math inline">\(A\)</span>. Some curves are well-known and widely
+used (e.g. logistic, Schumacher, Gompertz, monomolecular) whereas others
+are more rarely employed (e.g. arctangent, hyperbolic tangent).</p>
+<p>To convey the dependence of growth on a given set of explanatory
+variables <span class="math inline">\(\mathcal{X}\)</span> like
+e.g. climate, landscape, competition, we will use the aforementioned
+parameter <span class="math inline">\(k\)</span> as a linear
+function:</p>
+<span class="math display">\[\begin{equation}
   k=\sum_{i=1}^{n} a_{i}\cdot \mathcal{X}_{i}
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>which, in turn, multiplies age/time <span class="math inline">\(t\)</span>. Many age-dependent size curves, and
 their corresponding age-independent expressions, are highly non-linear
 in <span class="math inline">\(k\)</span>. Thus, a successful fitting
 strategy requires the implementation of a non-linear regression
 algorithm to calculate the coefficients <span class="math inline">\(a_{i}\)</span> that determine the effect of the
-corresponding explanatory variable.</p>
-<p>The existence of an explicit expression for the growth rate parameter
-<span class="math inline">\(k\)</span> has been a further requirement in
-developing those growth curves, such that the dependence on a set of
-<span class="math inline">\(n\)</span> predictors <span class="math inline">\(\mathcal{X}_{i}, i=1...n\)</span>, can be
-expressed as follows:</p>
-<p><span class="math display">\[\begin{equation}
-  k=\sum_{i=1}^{n} a_{i}\cdot \mathcal{X}_{i}
-\end{equation}\]</span></p>
-<p>In addition, we have allowed for a term <span class="math inline">\(B\)</span> which accounts for an (a priori
-unknown) offset in the growth curve. Nevertheless, as we will see below,
-this summative offset <span class="math inline">\(B\)</span>
-conveniently vanishes in all cases when <span class="math inline">\(g\)</span> or <span class="math inline">\(k\)</span> are expressed as a function of <span class="math inline">\(\Delta\)</span>. Finally, <span class="math inline">\(g\left(\Delta\right)=0\)</span> when <span class="math inline">\(\Delta=0\)</span> or <span class="math inline">\(k=0\)</span> always, as expected.</p>
+corresponding explanatory variable. As we will see below, this strategy
+yields relatively simple expressions that can readily be implemented as
+time-independent growth functions.</p>
+<p>In addition, term <span class="math inline">\(B\)</span> represents
+an (a priori unknown) offset in the growth curve. Nevertheless, as we
+will see below, this summative offset <span class="math inline">\(B\)</span> conveniently vanishes in all cases when
+<span class="math inline">\(g\left(\Delta\right)\)</span> or <span class="math inline">\(k\)</span> are expressed as a function of <span class="math inline">\(\Delta\)</span>. Finally, in all expressions it is
+easy to check that <span class="math inline">\(g\left(\Delta\right)=0\)</span> when <span class="math inline">\(\Delta=0\)</span> or <span class="math inline">\(k=0\)</span> always, as expected.</p>
 <p>Below we will derive the time-independent expressions for the
 following six sigmoid functions:</p>
 <ol style="list-style-type: decimal">
@@ -477,113 +497,113 @@ following six sigmoid functions:</p>
 <p>The logistic curve, labelled <em>Autocatalytic</em> in Richards’
 original article, is one of the most widely used sigmoid functions to
 determine the growth of an individual plant or animal. In a general
-case, in which size depends on time <span class="math inline">\(t\)</span> as well as on a set of predictors
-(e.g. climatic, topographic), the size <span class="math inline">\(y\)</span> of an organism that obeys the logistic
-rule can be written:</p>
-<p><span class="math display">\[\begin{equation}
+case, in which size depends on time <span class="math inline">\(t\)</span> as well as on a set of predictors (e.g.
+climatic, topographic), the size <span class="math inline">\(y\)</span>
+of an organism that obeys the logistic rule can be written:</p>
+<span class="math display">\[\begin{equation}
   y=\frac{A}{1+e^{-\left(k\cdot t+B\right)}}
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>As mentioned above, the dependence on predictors is done through
 <span class="math inline">\(k\)</span>. To obtain a time-independent
 equation that determines growth between two time points <span class="math inline">\(t_{1}\)</span> and <span class="math inline">\(t_{2}\)</span>, <span class="math inline">\(t_{1}&lt;t_{2}\)</span>, we start by writing:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   e^{-\left(k\cdot t+B\right)}=\frac{A}{y}-1
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>and:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   t=\frac{1}{k}\cdot \ln\left(\frac{y}{A-y}\right)-B
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>Let us define a subscript notation whereby <span class="math inline">\(t_{1}\)</span> and <span class="math inline">\(t_{2}\)</span> indicate time points separated by
 <span class="math inline">\(\Delta\)</span> years, where <span class="math inline">\(\Delta=t_{2}-t_{1}\)</span>. Likewise, <span class="math inline">\(y_{1}\)</span> and <span class="math inline">\(y_{2}\)</span> will denote sizes at those time
 points, respectively. Then:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
 \Delta
 =t_{2}-t_{1}=\frac{1}{k}\cdot\left[\ln\left(\frac{y_{2}}{y_{1}}\cdot\frac{A-y_{1}}{A-y_{2}}\right)\right]
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>The <span class="math inline">\(B\)</span> coefficient has
 conveniently disappeared from the equation. Now we can easily deduce the
 following expression for <span class="math inline">\(k\)</span>:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   k=\frac{1}{\Delta}\cdot\left[\ln\left(\frac{y_{2}}{y_{1}}\cdot\frac{A-y_{1}}{A-y_{2}}\right)\right]
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>Since <span class="math inline">\(t_{2}=t_{1}+\Delta\)</span>, we can
 arrive at an expression for <span class="math inline">\(y_{2}\)</span>
 as a function of <span class="math inline">\(y_{1}\)</span>, <span class="math inline">\(\Delta\)</span> and the coefficients <span class="math inline">\(a_{i}\)</span>:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   y_{2}=\frac{A}{1+e^{-\left(k\cdot t_{1}+B\right)}\cdot
 e^{-k\cdot\Delta}}=\frac{A}{1+\left(\frac{A}{y_{1}}-1\right)\cdot
 e^{-k\cdot\Delta}}
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>Finally, growth can be expressed as:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   g\left(\Delta\right)=\frac{A}{1+e^{-\left(k\cdot t_{1}+B\right)}\cdot
 e^{-k\cdot\Delta}}-y_{1}=\frac{A}{1+\left(\frac{A}{y_{1}}-1\right)\cdot
 e^{-k\cdot\Delta}}-y_{1}
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p><br></p>
 </div>
 <div id="schumacher-growth-function" class="section level4">
 <h4>2. Schumacher growth function</h4>
 <p>The Schumacher growth curve can be expressed as:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   y=A\cdot e^{-\frac{1}{k\cdot t+B}}
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>For this curve to make ecological sense, <span class="math inline">\(k\cdot t+B\geq 0\)</span> always. Otherwise, <span class="math inline">\(y\)</span> would grow exponentially when <span class="math inline">\(k\cdot t+B&lt; 0\)</span>. Then, we can express
 <span class="math inline">\(t\)</span> as:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   t=\frac{1}{k}\cdot\frac{1}{\ln\left(\frac{A}{y}\right)}-\frac{1}{k}\cdot
 B
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>Now, following the same procedure as above, we write:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   \Delta=\frac{1}{k}\cdot\left[\frac{1}{\ln\left(\frac{A}{y_{2}}\right)}-\frac{1}{\ln\left(\frac{A}{y_{1}}\right)}\right]
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>As above, the offset <span class="math inline">\(B\)</span> has
 vanished from the equation. Then:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   k=\frac{1}{\Delta}\cdot\left[\frac{1}{\ln\left(\frac{A}{y_{2}}\right)}-\frac{1}{\ln\left(\frac{A}{y_{1}}\right)}\right]
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>Solving the equation for <span class="math inline">\(y_{2}\)</span>:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   y_{2}=A\cdot
 e^{-\left[\frac{1}{\frac{1}{\ln\left(\frac{A}{y_{1}}\right)}+k\cdot\Delta}\right]}
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>This is exactly Equation [9] in Tomé et al. (2006). Then, the
 Schumacher time-independent growth function becomes:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
 g\left(\Delta\right)=A\cdot
 e^{-\left[\frac{1}{\frac{1}{\ln\left(\frac{A}{y_{1}}\right)}+k\cdot\Delta}\right]}-y_{1}
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p><br></p>
 </div>
 <div id="gompertz-growth-function" class="section level4">
 <h4>3. Gompertz growth function</h4>
 <p>The Gompertz function has long been used by the actuarial sciences to
 build life-tables. It is expressed as:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   y=A\cdot e^{-e^{-\left(k\cdot t+B\right)}}
-\end {equation}\]</span></p>
+\end {equation}\]</span>
 <p>where B is an offset. Again, we can manipulate that equation to
 extract <span class="math inline">\(t\)</span>:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   t=\frac{1}{k}\cdot\left[\ln\left(\frac{1}{\ln\left(\frac{A}{y}\right)}\right)-B\right]
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>Defining, as before, <span class="math inline">\(\Delta=t_{2}-t_{1}\)</span> we obtain:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   \Delta=\frac{1}{k}\cdot\ln\left(\frac{\ln\left(\frac{A}{y_{1}}\right)}{\ln\left(\frac{A}{y_{2}}\right)}\right)
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>Thus:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   k=\frac{1}{\Delta}\cdot\ln\left(\frac{\ln\left(\frac{A}{y_{1}}\right)}{\ln\left(\frac{A}{y_{2}}\right)}\right)
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>Finally, we arrive at:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   y_{2}=A\cdot\left(\frac{y_{1}}{A}\right)^{e^{-k\cdot\Delta}}
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>and:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   g\left(\Delta\right)=A\cdot\left(\frac{y_{1}}{A}\right)^{e^{-k\cdot\Delta}}-y_{1}
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p><br></p>
 </div>
 <div id="monomolecular-growth-function" class="section level4">
@@ -593,32 +613,32 @@ growth, as other curves discussed in this document. It grows very fast
 at <span class="math inline">\(t=0\)</span> and gradually slows down
 until towards an asymptotic value. Its functional expression is as
 follows:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   y=A\cdot \left(1-e^{-\left( k\cdot t+B\right)}\right)
-\end {equation}\]</span></p>
+\end {equation}\]</span>
 <p>If we extract <span class="math inline">\(t\)</span> we get:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   t=\frac{1}{k}\cdot \left[\ln\left(\frac{A}{A-y}\right)-B\right]
-\end {equation}\]</span></p>
+\end {equation}\]</span>
 <p>and then:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   \Delta=\frac{1}{k}\cdot
 \left[\ln\left(\frac{A-y_{1}}{A-y_{2}}\right)\right]
-\end {equation}\]</span></p>
+\end {equation}\]</span>
 <p>The growth rate parameter is:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   k=\frac{1}{\Delta}\cdot
 \left[\ln\left(\frac{A-y_{1}}{A-y_{2}}\right)\right]
-\end {equation}\]</span></p>
+\end {equation}\]</span>
 <p>Then, size at <span class="math inline">\(t_{2}\)</span> is:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   y_{2}=A-\left(A-y_{1}\right)\cdot e^{-k\cdot \Delta}
-\end {equation}\]</span></p>
+\end {equation}\]</span>
 <p>and, finally, age/time-independent growth can be written as:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   g\left(\Delta\right)=\left(A-y_{1}\right)\cdot\left(1-e^{-k\cdot
 \Delta}\right)
-\end {equation}\]</span></p>
+\end {equation}\]</span>
 <p><br></p>
 </div>
 <div id="arctangent-growth-function" class="section level4">
@@ -626,82 +646,82 @@ follows:</p>
 <p>The arctangent is another sigmoid curve from which a time-independent
 growth function can be derived relatively easily. We start by expressing
 growth as a function of time:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   y=A\cdot \left(\frac{1}{\pi}\cdot \arctan\left(k\cdot
 t+B\right)+0.5\right)
-\end {equation}\]</span></p>
+\end {equation}\]</span>
 <p>Thus, growth <span class="math inline">\(y\in
 \left[0,A\right]\)</span> and <span class="math inline">\(B\)</span> has
 been included to allow for any possible offset in the curve, as before.
 We can easily get:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   k\cdot t=\tan\left[\left(\frac{y}{A}-0.5\right)\cdot\pi\right]-B
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>Therefore:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   t=\frac{1}{k}\cdot\tan\left[\left(\frac{y}{A}-0.5\right)\cdot\pi\right]-B
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>and, thus:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   \Delta=\frac{1}{k}\cdot\left[\tan\left(\left(\frac{y_{2}}{A}-0.5\right)\cdot\pi\right)-\tan\left(\left(\frac{y_{1}}{A}-0.5\right)\cdot\pi\right)\right]
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>Thus, the offset term <span class="math inline">\(B\)</span> has
 vanished from the equation. An equivalent expression for <span class="math inline">\(k\)</span> is:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   k=\frac{1}{\Delta}\cdot\left[\tan\left(\left(\frac{y_{2}}{A}-0.5\right)\cdot\pi\right)-\tan\left(\left(\frac{y_{1}}{A}-0.5\right)\cdot\pi\right)\right]
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>Finally, we derive:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
 \tan\left(\left(\frac{y_{2}}{A}-0.5\right)\cdot\pi\right)=\tan\left(\left(\frac{y_{1}}{A}-0.5\right)\cdot\pi\right)+k\cdot\Delta
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>and then:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
 y_{2}=A\cdot\left[\frac{1}{\pi}\cdot
 \arctan\left\{\tan\left(\left(\frac{y_{1}}{A}-0.5\right)\cdot\pi\right)+k\Delta\right\}+0.5\right]
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>The growth function is, then:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
 g\left(\Delta\right)=A\cdot\left[\frac{1}{\pi}\cdot
 \arctan\left\{\tan\left(\left(\frac{y_{1}}{A}-0.5\right)\cdot\pi\right)+k\Delta\right\}+0.5\right]-y_{2}
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p><br></p>
 </div>
 <div id="hyperbolic-tangent-growth-function" class="section level4">
 <h4>6. Hyperbolic tangent growth function</h4>
 <p>The hyperbolic tangent growth function is seldom used in growth
 studies. We start by expressing size <span class="math inline">\(y\)</span> as a function of <span class="math inline">\(t\)</span> as follows:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   y\left(t\right)=A\cdot\left[\tanh\left(k\cdot t+B\right)+1\right]=
   \frac{A}{2}\left[\cdot\frac{e^{2\cdot\left(k\cdot
 t+B\right)}-1}{e^{2\cdot\left(k\cdot t+B\right)}+1}+1\right]
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>We can then write:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   y=A\cdot\frac{e^{2\cdot\left(k\cdot t+B\right)}}{e^{2\cdot\left(k\cdot
 t+B\right)}+1}=A\cdot\frac{1}{1+e^{-2\cdot\left(k\cdot t+B\right)}}
-\end {equation}\]</span></p>
+\end {equation}\]</span>
 <p>This is exactly the same as the logistic function above if we
 substitute <span class="math inline">\(2\cdot k=k&#39;\)</span>.
 Therefore, it is straightforward to arrive at the following
 expressions:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
 \Delta=\frac{1}{2\cdot
 k}\cdot\left[\ln\left(\frac{y_{2}}{y_{1}}\cdot\frac{A-y_{1}}{A-y_{2}}\right)\right]
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>and:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
 k=\frac{1}{2\cdot\Delta}\cdot\left[\ln\left(\frac{y_{2}}{y_{1}}\cdot\frac{A-y_{1}}{A-y_{2}}\right)\right]
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>Finally, we obtain:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   y_{2}=\frac{A}{1+\left(\frac{A}{y_{1}}-1\right)\cdot e^{-2\cdot
 k\cdot\Delta}}
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>Growth can thus be expressed as:</p>
-<p><span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation}
   g\left(\Delta\right)=\frac{A}{1+\left(\frac{A}{y_{1}}-1\right)\cdot
 e^{-2\cdot k\cdot\Delta}}-y_{1}
-\end{equation}\]</span></p>
+\end{equation}\]</span>
 <p>Thus, the hyperbolic tangent growth function is simply a rescaled
 version of the logistic growth function, o vice versa.</p>
 <p><br></p>

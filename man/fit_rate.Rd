@@ -17,7 +17,7 @@ and accompanying Vignettes for a description.}
 \item{kmax}{numeric. If NULL, \code{kmax} will be estimated from the data.}
 
 \item{type}{string to select which growth function to use. It can be equal to 'logistic',
-'schumacher', 'monomolecular', 'gompertz', 'arctangent', 'hyperbolic' or 'user'.}
+'schumacher', 'monomolecular', 'gompertz', 'arctangent', 'hyperbolic', 'gr_arctangent_exp', 'gr_rational' or 'user'.}
 }
 \value{
 value of rate parameter for each row in 'dat'.
@@ -28,7 +28,7 @@ obtained at two different times.
 }
 \details{
 Some of the growth equations are taken from Table 6.2 in #' Burkhart and Tomé (2012).
-Columns 'y1' and 'y2' in 'dat' correspond to the sizes of the individual at 't1' and 't2', with column 'tdiff'='t2'-'t1'.
+Columns  'y1' and 'y2' in 'dat' correspond to the sizes of the individual at 't1' and 't2', with column 'tdiff'='t2'-'t1'.
 Column 'max_y' correspond to maximum size attainable by the individual when time tends to infinite.
 
 The 'sigmoid_rate' option allows us to guarantee that \code{k} is ecologically sound.

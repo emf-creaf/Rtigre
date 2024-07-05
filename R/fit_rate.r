@@ -8,7 +8,7 @@
 #' and accompanying Vignettes for a description.
 #' @param fo an object of class "formula"
 #' @param type string to select which growth function to use. It can be equal to 'logistic',
-#' 'schumacher', 'monomolecular', 'gompertz', 'arctangent', 'hyperbolic' or 'user'.
+#' 'schumacher', 'monomolecular', 'gompertz', 'arctangent', 'hyperbolic', 'gr_arctangent_exp', 'gr_rational' or 'user'.
 #' @param sigmoid_rate logical. If TRUE, the growth rate 'k' is further modelled as a logistic function.
 #' @param kmax numeric. If NULL, \code{kmax} will be estimated from the data.
 #'

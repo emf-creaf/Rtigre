@@ -9,7 +9,7 @@ string_gr(curve_type = "logistic", equation_type = "rate")
 \arguments{
 \item{curve_type}{string. It indicates which curve type to provide. Possible
 values are: "logistic", "schumacher", "gompertz", "monomolecular", "arctangent",
-"hyperbolic" or "user".}
+"hyperbolic", "arctangent_exp", "rational" or "user".}
 
 \item{equation_type}{string, can be equal to "rate", "ti" or "td". See Details.}
 }

@@ -14,18 +14,3 @@ points(t,Rtigre::td_size(dat,curve_type="arctangent"),type="l",lwd=2,col=5)
 legend("bottomright",lty=1,c("logistic","schumacher","gompertz","monomolecular",
 "arctangent"),lwd=2,cex=1.1,col=1:6)
 
-## ----fig.align="center", width=8----------------------------------------------
-tdiff <- 5
-max_y <- 120
-y1 <- seq(1,110)
-k <- .1
-dat <- data.frame(tdiff=tdiff,max_y=max_y,k=k,y1=y1)
-plot(y1,Rtigre::ti_size(dat)-dat$y1,xlab="Size at t1",
-     ylab="Size at t2 - size at t1",type="l",lwd=2,col=1,ylim=c(0,100))
-points(y1,Rtigre::ti_size(dat,"schumacher")-dat$y1,type="l",lwd=2,col=2)
-points(y1,Rtigre::ti_size(dat,"gompertz")-dat$y1,type="l",lwd=2,col=3)
-points(y1,Rtigre::ti_size(dat,"monomolecular")-dat$y1,type="l",lwd=2,col=4)
-points(y1,Rtigre::ti_size(dat,"arctangent")-dat$y1,type="l",lwd=2,col=5)
-legend("topright",lty=1,c("logistic","schumacher","gompertz","monomolecular",
-  "arctangent"),lwd=2,cex=1.1,col=1:6)
-

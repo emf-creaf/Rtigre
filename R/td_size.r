@@ -5,7 +5,8 @@
 #' @param dat \code{data.frame} containing at least five columns named 't', 'k', 'max_y' and 'offset'. See Details
 #' and accompanying Vignettes for a description.
 #' @param type string to select which growth function to use. It can be equal to 'logistic',
-#' 'schumacher', 'monomolecular', 'gompertz', 'arctangent' or 'hyperbolic'.
+#' 'schumacher', 'monomolecular', 'gompertz', 'arctangent', 'hyperbolic', 'arctangent_exp'
+#' 'rational' or 'user'.
 #'
 #' @details Some of the growth equations are taken from Table 6.2 in
 #' Burkhart and Tomé (2012).
@@ -41,14 +42,14 @@
 
 td_size <- function(dat, curve_type = "logistic") {
 
-  cl <- match.call()
-  m <- match(c("dat"),names(cl))
-  if (any(is.na(m))) stop("Missing argument")
-  if (!is.data.frame(dat)) stop("'dat' must be a data.frame")
-  if (nrow(dat) == 0) stop("'dat' must have at least one row")
-  if (any(is.na(match(c("t","max_y","k","offset"),colnames(dat))))) stop("Wrong column names")
-  if (!any(curve_type==c("logistic","schumacher","gompertz","monomolecular","arctangent","hyperbolic", "user")))
-    stop("Wrong 'curve_type' value")
+
+  # Checks.
+  stopifnot("Input 'dat' must be a 'data.frame'" = is.data.frame(dat))
+  stopifnot("Wrong 'curve_type'" = any(curve_type %in% c("logistic", "schumacher", "gompertz",
+                                                         "monomolecular", "arctangent",
+                                                         "hyperbolic", "arctangent_exp",
+                                                         "rational", "user")))
+
 
   y <- eval_gr(dat = dat, curve_type = curve_type, equation_type = "td")
 

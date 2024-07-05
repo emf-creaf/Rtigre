@@ -10,7 +10,7 @@ eval_gr(dat, curve_type, equation_type)
 \item{dat}{\code{data.frame} containing data to evaluate the curves.}
 
 \item{curve_type}{\code{character} string. It determines which curve to use: 'logistic' (default),
-'schumacher', 'gompertz', 'monomolecular', 'arctangent', 'hyperbolic' or 'user'.}
+'schumacher', 'gompertz', 'monomolecular', 'arctangent', 'hyperbolic', 'arctangent_exp', 'rational' or 'user'.}
 
 \item{equation_type}{\code{character} string. It should be equal to 'td', 'rate' or 'ti',
 indicating whether to calculate growth time-dependent size, rate parameter or

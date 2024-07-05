@@ -11,7 +11,8 @@ td_size(dat, curve_type = "logistic")
 and accompanying Vignettes for a description.}
 
 \item{type}{string to select which growth function to use. It can be equal to 'logistic',
-'schumacher', 'monomolecular', 'gompertz', 'arctangent' or 'hyperbolic'.}
+'schumacher', 'monomolecular', 'gompertz', 'arctangent', 'hyperbolic', 'arctangent_exp'
+'rational' or 'user'.}
 }
 \value{
 growth value for each 't' value.
