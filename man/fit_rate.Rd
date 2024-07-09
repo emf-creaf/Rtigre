@@ -17,7 +17,7 @@ and accompanying Vignettes for a description.}
 \item{kmax}{numeric. If NULL, \code{kmax} will be estimated from the data.}
 
 \item{type}{string to select which growth function to use. It can be equal to 'logistic',
-'schumacher', 'monomolecular', 'gompertz', 'arctangent', 'hyperbolic', 'gr_arctangent_exp', 'gr_rational' or 'user'.}
+'schumacher', 'monomolecular', 'monomolecular2', 'gompertz', 'arctangent', 'hyperbolic', 'arctangent_exp', 'rational' or 'user'.}
 }
 \value{
 value of rate parameter for each row in 'dat'.

@@ -8,7 +8,7 @@
 #' and accompanying Vignettes for a description.
 #' @param fo an object of class "formula"
 #' @param type string to select which growth function to use. It can be equal to 'logistic',
-#' 'schumacher', 'monomolecular', 'gompertz', 'arctangent', 'hyperbolic', 'gr_arctangent_exp', 'gr_rational' or 'user'.
+#' 'schumacher', 'monomolecular', 'monomolecular2', 'gompertz', 'arctangent', 'hyperbolic', 'arctangent_exp', 'rational' or 'user'.
 #' @param sigmoid_rate logical. If TRUE, the growth rate 'k' is further modelled as a logistic function.
 #' @param kmax numeric. If NULL, \code{kmax} will be estimated from the data.
 #'
@@ -88,7 +88,7 @@ fit_rate <- function(dat, fo,
   # Checks.
   stopifnot("Input 'dat' must be a 'data.frame'" = is.data.frame(dat))
   stopifnot("Input 'fo' must be a 'formula'" = inherits(fo, "formula"))
-  curve_type = match.arg(curve_type, c("logistic","schumacher","gompertz","monomolecular","arctangent","hyperbolic", "user"))
+  curve_type = match.arg(curve_type, all_curve_types())
 
 
   # Check formula.

@@ -64,10 +64,7 @@ rate_gr <- function(dat, curve_type = curve_type) {
 
   # Checks.
   stopifnot("Input 'dat' must be a 'data.frame'" = is.data.frame(dat))
-  stopifnot("Wrong 'curve_type'" = any(curve_type %in% c("logistic", "schumacher", "gompertz",
-                                                         "monomolecular", "arctangent",
-                                                         "hyperbolic", "arctangent_exp",
-                                                         "rational", "user")))
+  curve_type = match.arg(curve_type, all_curve_types())
 
 
   # Evaluate curve.

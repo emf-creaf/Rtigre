@@ -6,7 +6,7 @@
 #' @param dat \code{data.frame} containing at least four columns named 'y1', 'tdiff', 'max_y' and 'k'. See Details
 #' and accompanying Vignettes for a description.
 #' @param type string to select which growth function to use. It can be equal to 'logistic',
-#' 'schumacher', 'monomolecular', 'gompertz' or 'hyperbolic'.
+#' 'schumacher', 'monomolecular', 'monomolecular2', 'gompertz' or 'hyperbolic'.
 #'
 #' @details Growth is defined as the increment in dimension between t1 and t2, with t1<t2.
 #' The growth equations are taken from Table 6.2 in
@@ -52,10 +52,7 @@ ti_size <- function(dat, curve_type = "logistic") {
 
   # Checks.
   stopifnot("Input 'dat' must be a 'data.frame'" = is.data.frame(dat))
-  stopifnot("Wrong 'curve_type'" = any(curve_type %in% c("logistic", "schumacher", "gompertz",
-                                                         "monomolecular", "arctangent",
-                                                         "hyperbolic", "arctangent_exp",
-                                                         "rational", "user")))
+  curve_type = match.arg(curve_type, all_curve_types())
 
 
   y <- eval_gr(dat = dat, curve_type = curve_type, equation_type = "ti")

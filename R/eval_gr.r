@@ -5,7 +5,7 @@
 #'
 #' @param dat \code{data.frame} containing data to evaluate the curves.
 #' @param curve_type \code{character} string. It determines which curve to use: 'logistic' (default),
-#' 'schumacher', 'gompertz', 'monomolecular', 'arctangent', 'hyperbolic', 'arctangent_exp', 'rational' or 'user'.
+#' 'schumacher', 'gompertz', 'monomolecular', 'monomolecular2', 'arctangent', 'hyperbolic', 'arctangent_exp', 'rational' or 'user'.
 #' @param equation_type \code{character} string. It should be equal to 'td', 'rate' or 'ti',
 #' indicating whether to calculate growth time-dependent size, rate parameter or
 #' time-independent size, respectively.
@@ -37,19 +37,12 @@ eval_gr <- function(dat, curve_type, equation_type) {
 
   # Checks.
   stopifnot("Input 'dat' must be a 'data.frame'" = is.data.frame(dat))
-  stopifnot("Wrong 'curve_type'" = any(curve_type %in% c("logistic", "schumacher", "gompertz",
-                                                         "monomolecular", "arctangent",
-                                                         "hyperbolic", "arctangent_exp",
-                                                         "rational", "user")))
+  curve_type = match.arg(curve_type, all_curve_types())
   equation_type <- match.arg(equation_type, c("td", "rate", "ti"))
 
 
   # Check column names.
-  col_names <- switch(equation_type,
-                      td   = c("t", "k", "offset", "max_y"),
-                      rate = c("y1", "y2", "tdiff", "max_y"),
-                      ti   = c("y1", "k", "tdiff", "max_y"))
-  stopifnot("Wrong column names in 'dat'" = all(col_names %in% colnames(dat)))
+  stopifnot("Wrong column names in 'dat'" = all(col_names(equation_type) %in% colnames(dat)))
 
 
   # Evaluate expression.

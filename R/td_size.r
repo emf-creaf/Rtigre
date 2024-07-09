@@ -45,13 +45,11 @@ td_size <- function(dat, curve_type = "logistic") {
 
   # Checks.
   stopifnot("Input 'dat' must be a 'data.frame'" = is.data.frame(dat))
-  stopifnot("Wrong 'curve_type'" = any(curve_type %in% c("logistic", "schumacher", "gompertz",
-                                                         "monomolecular", "arctangent",
-                                                         "hyperbolic", "arctangent_exp",
-                                                         "rational", "user")))
+  curve_type = match.arg(curve_type, all_curve_types())
 
 
   y <- eval_gr(dat = dat, curve_type = curve_type, equation_type = "td")
+
 
   return(y)
 

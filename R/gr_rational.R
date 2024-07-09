@@ -28,11 +28,19 @@ gr_rational <- function(equation_type = "rate") {
   equation_type <- match.arg(equation_type, c("rate", "ti", "td"))
 
 
+  # Equations are rather complicated.
+  if (any(equation_type %in% c("rate", "ti"))) {
+    f <- function(y) {
+      q <- paste0("(2*", y, "/max_y-1)")
+      paste0(q, "/sqrt(1-", q, "^2)")
+    }
+  }
+
   # Choice of equation type.
   z <- switch(equation_type,
-              td   = "max_y*(k*t+offset)/sqrt(1+(k*t+offset)^2)",
-              rate = "1/tdiff*(1/sqrt((max_y/y2)^2-1)-1/sqrt((max_y/y1)^2-1))",
-              ti   = "max_y/sqrt(1+1/(k*tdiff+1/sqrt((max_y/y1)^2-1))^2)"
+              td   = "max_y/2*((k*t+offset)/sqrt(1+(k*t+offset)^2)+1)",
+              rate = paste0("1/tdiff*(", f("y2"), "-", f("y1"), ")"),
+              ti   = paste0("0.5*max_y*(1+(k*tdiff+", f("y1"), ")/sqrt(1+(k*tdiff+", f("y1"), ")^2))")
   )
 
 

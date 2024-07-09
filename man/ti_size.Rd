@@ -11,7 +11,7 @@ ti_size(dat, curve_type = "logistic")
 and accompanying Vignettes for a description.}
 
 \item{type}{string to select which growth function to use. It can be equal to 'logistic',
-'schumacher', 'monomolecular', 'gompertz' or 'hyperbolic'.}
+'schumacher', 'monomolecular', 'monomolecular2', 'gompertz' or 'hyperbolic'.}
 }
 \value{
 new size after a time interval 'tdiff'.

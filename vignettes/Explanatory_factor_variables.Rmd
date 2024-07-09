@@ -2,7 +2,7 @@
 title: "Explanatory factor variables"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Explanatory_factor_variables}
+  %\VignetteIndexEntry{Explanatory factor variables}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

@@ -3,11 +3,13 @@
 #' @description
 #' Non-linear least-squares fit of growth data to a time-independent growth curve.
 #'
-#' @param dat \code{data.frame} containing all data to be used in the fit.
+#' @param dat \code{data.frame} with columns containing the dependent variable and the set
+#' of predictors to be used in the fit.
 #' @param fo \code{formula} describing the right-hand-side of the dependence of the
 #' growth rate on the predictors.
-#' @param sigmoid_rate logical. If TRUE, growth rate will also be represented by a logistic.
-#' @param curve_type character. It indicates the type of growth curve to be used.
+#' @param sigmoid_rate logical. If TRUE, growth rate *k* will also be represented by a logistic
+#' (see vignette).
+#' @param curve_type character indicatingthe type of growth curve to be used.
 #' @param kmax NULL or numeric. If NULL, its value will be calculated from the
 #' data.
 #' @param log_transf logical. If TRUE, a log-transformation will be applied to
@@ -86,7 +88,7 @@ fit_growth <- function(dat, fo, curve_type = "logistic", sigmoid_rate = F, kmax 
   # Checks.
   stopifnot("Input 'dat' must be a 'data.frame'" = is.data.frame(dat))
   stopifnot("Input 'fo' must be a 'formula'" = inherits(fo, "formula"))
-  curve_type = match.arg(curve_type, c("logistic","schumacher","gompertz","monomolecular","arctangent","hyperbolic", "user"))
+  curve_type = match.arg(curve_type, all_curve_types())
   algorithm <- match.arg(algorithm, c("nlsLM", "nls", "nlsr"))
   if (!is.logical(verbose)) stop("Input 'verbose' must be logical")
 
