@@ -16,14 +16,16 @@ fit_growth(
 )
 }
 \arguments{
-\item{dat}{\code{data.frame} containing all data to be used in the fit.}
+\item{dat}{\code{data.frame} with columns containing the dependent variable and the set
+of predictors to be used in the fit.}
 
 \item{fo}{\code{formula} describing the right-hand-side of the dependence of the
 growth rate on the predictors.}
 
-\item{curve_type}{character. It indicates the type of growth curve to be used.}
+\item{curve_type}{character indicatingthe type of growth curve to be used.}
 
-\item{sigmoid_rate}{logical. If TRUE, growth rate will also be represented by a logistic.}
+\item{sigmoid_rate}{logical. If TRUE, growth rate \emph{k} will also be represented by a logistic
+(see vignette).}
 
 \item{kmax}{NULL or numeric. If NULL, its value will be calculated from the
 data.}
