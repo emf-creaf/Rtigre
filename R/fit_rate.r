@@ -115,6 +115,7 @@ fit_rate <- function(dat, fo,
   r <- lm(update(fo, k ~ .),data = dat)
   if (sigmoid_rate) r$kmax <- kmax
 
+
   return(r)
 }
 

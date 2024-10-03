@@ -641,7 +641,7 @@ not well defined for points $k\cdot t_{min}+B\lt 0$. For that reason
 those points to the left in those curves are set to zero in the plot.
 
 ```{r fig.align="center", width=8}
-t <- seq(0, 100, by = .1) ; k  <- 0.1 ; B <- -2
+t <- seq(0, 200, by = .1) ; k  <- 0.1 ; B <- -2
 dat <- data.frame(t = t, k = 0.1, offset = -2, max_y = 120)
 df <- data.frame(x = t, y = Rtigre::td_size(dat, curve_type = "logistic"), curve_type = "logistic")
 for (i in Rtigre:::all_curve_types()[-c(1, 10)]) {
@@ -659,7 +659,7 @@ The figure below shows the time-independent versions of the same curves. The tim
 ```{r fig.align="center", width=8}
 tdiff <- 1
 max_y <- 120
-y1 <- seq(0, 110, length = 1000)
+y1 <- seq(0, max_y, length = 1000)
 k <- .1
 dat <- data.frame(tdiff = tdiff, max_y = max_y, k = k, y1  = y1)
 plot(y1, Rtigre::ti_size(dat)-dat$y1, xlab = "Size at t1",

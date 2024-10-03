@@ -86,11 +86,11 @@ fit_growth <- function(dat, fo, curve_type = "logistic", sigmoid_rate = F, kmax 
 
 
   # Checks.
-  stopifnot("Input 'dat' must be a 'data.frame'" = is.data.frame(dat))
-  stopifnot("Input 'fo' must be a 'formula'" = inherits(fo, "formula"))
+  assertthat::assert_that(is.data.frame(dat), msg = "Input 'dat' must be a 'data.frame'")
+  assertthat::assert_that(inherits(fo, "formula"), msg = "Input 'fo' must be a 'formula'")
+  assertthat::assert_that(is.logical(verbose), msg = "Input 'verbose' must be logical")
   curve_type = match.arg(curve_type, all_curve_types())
   algorithm <- match.arg(algorithm, c("nlsLM", "nls", "nlsr"))
-  if (!is.logical(verbose)) stop("Input 'verbose' must be logical")
 
 
   # Check components in formula.
@@ -104,14 +104,14 @@ fit_growth <- function(dat, fo, curve_type = "logistic", sigmoid_rate = F, kmax 
 
   # Need info on the screen?
   if (verbose) {
-    out <- paste0("Growth regression - ", curve_type, " curve")
-    if (sigmoid_rate) out <- paste0(out," - sigmoid rate")
-    if (log_transf) out <- paste0(out, " - log-transformation")
-    cat(paste0(out,"\n"))
+    out <- paste0("fit_growth: ", curve_type, " curve")
+    if (sigmoid_rate) out <- paste0(out,", sigmoid rate")
+    if (log_transf) out <- paste0(out, ", log-transformation")
+    cli::cli_text(out)
   }
 
   # Get regression parameters.
-  if (verbose) cat("   Linear regression of growth rate against predictors\n")
+  if (verbose) cli::cli_text("fit_growth: linear regression of growth rate against predictors")
   r <- fit_rate(dat = dat, fo = fo, curve_type = curve_type, sigmoid_rate = sigmoid_rate, kmax = kmax)
   coef_start <- coef(r)
 
@@ -148,7 +148,7 @@ fit_growth <- function(dat, fo, curve_type = "logistic", sigmoid_rate = F, kmax 
 
 
   # The non-linear fit.
-  if (verbose) cat("   Non-linear fit\n")
+  if (verbose) cli::cli_text("fit_growth: non-linear fit")
   r <- switch(algorithm,
               nlsLM = minpack.lm::nlsLM(formula(fofo), data = dat, start = coef_start, control = list(maxiter = 1024)),
               nls = nls(formula(fofo), data = dat, start = coef_start, control = list(maxiter = 1000)),
@@ -158,7 +158,7 @@ fit_growth <- function(dat, fo, curve_type = "logistic", sigmoid_rate = F, kmax 
 
   # If a log-transformed regression is sought.
   if (log_transf) {
-    if (verbose) cat("   Non-linear fit of log-transformed data\n")
+    if (verbose) cli::cli_text("fit_growth: non-linear fit of log-transformed data")
     fofo <- paste0("log(y2-y1)~log(", z, ")")
     r <- switch(algorithm,
                 nlsLM = minpack.lm::nlsLM(formula(fofo), data = dat, start = coef_start, control = list(maxiter = 1024)),

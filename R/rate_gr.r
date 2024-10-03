@@ -70,5 +70,6 @@ rate_gr <- function(dat, curve_type = curve_type) {
   # Evaluate curve.
   k <- eval_gr(dat = dat, curve_type = curve_type, equation_type = "rate")
 
+
   return(k)
 }
