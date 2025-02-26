@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Factor_explanatory_variables</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Factor_explanatory_variables</h1>
+
+
+
+<div id="example-data" class="section level1">
+<h1>Example data</h1>
+<p>To show how this all works we will use the “iris” dataset.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>ggplot2<span class="sc">::</span><span class="fu">ggplot</span>(iris, ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">x =</span> Sepal.Length, <span class="at">y =</span> Sepal.Width,</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>               <span class="at">group =</span> Species, <span class="at">colour =</span> Species)) <span class="sc">+</span> </span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">scale_colour_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>, <span class="st">&quot;green&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Sepal length&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Sepal width&quot;</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+<p><br></p>
+<p>The “Species” column in the “iris” data.frame is coded as a factor
+with 3 levels containing the name of the 3 species of plants. For a
+successful non-linear regression scheme with the built-in “nls” function
+or the “nlsLM” from the “minpack.lm” R package we must code the factor
+variable as several <em>dummy</em> variables. In our example with the
+“iris” dataset, if the factor “Species” has 3 levels we must build 3
+dummy variables containing 0’s and 1’s.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>iris<span class="sc">$</span>setosa <span class="ot">&lt;-</span> iris<span class="sc">$</span>Species <span class="sc">==</span> <span class="st">&quot;setosa&quot;</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>iris<span class="sc">$</span>versicolor <span class="ot">&lt;-</span> iris<span class="sc">$</span>Species <span class="sc">==</span> <span class="st">&quot;versicolor&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>iris<span class="sc">$</span>virginica <span class="ot">&lt;-</span> iris<span class="sc">$</span>Species <span class="sc">==</span> <span class="st">&quot;virginica&quot;</span></span></code></pre></div>
+<p><br></p>
+<p>Although a linear model would probably be good enough for the “iris”
+dataset, we will apply a non-linear model to demonstrate how one can
+implement it in “nls”. In our case, we will assume that sepal width is a
+function of sepal length of the form:</p>
+<span class="math display">\[\begin{equation}
+f\left(y\right)=c1\cdot\ e^{-\left(c2\cdot x+Species\right)}
+\end{equation}\]</span>
+<p>where, for the sake of conciseness, “x” stands for sepal length and
+“y” for sepal width. <br></p>
+<p>Since function “nls” does not accept factor “Species” as a valid
+explanatory variable, we will use the dummy variables calculated
+above.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">nls</span>(Sepal.Width <span class="sc">~</span> c1 <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span>(c2<span class="sc">*</span>Sepal.Length <span class="sc">+</span> c3<span class="sc">*</span>setosa <span class="sc">+</span> c4<span class="sc">*</span>versicolor)), iris,</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>         <span class="at">start =</span> <span class="fu">list</span>(<span class="at">c1 =</span> <span class="dv">1</span>, <span class="at">c2 =</span> .<span class="dv">01</span>, <span class="at">c3 =</span> <span class="dv">0</span>, <span class="at">c4 =</span> <span class="dv">0</span>))</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">nls</span>(Sepal.Width <span class="sc">~</span> <span class="fu">exp</span>(<span class="sc">-</span>(c2<span class="sc">*</span>Sepal.Length <span class="sc">+</span> c3<span class="sc">*</span>setosa <span class="sc">+</span> c4<span class="sc">*</span>versicolor <span class="sc">+</span> c5<span class="sc">*</span>virginica)), iris,</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>         <span class="at">start =</span> <span class="fu">list</span>(<span class="at">c2 =</span> .<span class="dv">01</span>, <span class="at">c3 =</span> <span class="dv">0</span>, <span class="at">c4 =</span> <span class="dv">0</span>,  <span class="at">c5 =</span> <span class="dv">0</span>))</span></code></pre></div>
+<p><br></p>
+<p>Notice that <span class="math inline">\(c1=e^{-c5}\)</span>, as
+expected.</p>
+<p>In this example we have introduced first guesses (the “start” list)
+that are sufficiently close to the final solution that the algorithm in
+“nls” converges quickly and smoothly. Those values were produced through
+a trial-and-error hand procedure in which the “nls” function was run
+with several different parameters until successful convergence could be
+reached. However, when the non-linear expression to be fitted is very
+complex, it is usually very hard or almost impossible to guess start
+values for the regression parameters.</p>
+<p>Several strategies can be implemented to find reasonable start values
+for a non-linear problem. For example, if an approximate range of values
+for each parameter is known, it should be possible to automatize the
+trial-and-error strategy mentioned above until convergence is
+guaranteed. Another possibility would be to treat the regression as a
+minimization problem and use the “optim” function with the robust,
+though slow, “Nelder-Mean” method, which requires less precise starting
+values to converge.</p>
+<p>In the case of the highly non-linear growth equations exemplified in
+this package, those procedures are probably too hard to implement and
+have no guarantee of succeeding. However, as discussed in an
+accompanying vignette, we can algebraically derive alternative
+expressions that can then be used to obtain first guesses for the
+parameters easily.</p>
+<div id="growth-equations" class="section level2">
+<h2>Growth equations</h2>
+<p>We will now turn to a “real” case and will apply the growth equations
+implemented in this package.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">library</span>(Rtigre)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;Punci_IFN&quot;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>Punci_IFN<span class="sc">$</span>Treatment <span class="ot">&lt;-</span> <span class="fu">sample</span>(LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>], <span class="fu">nrow</span>(Punci_IFN), <span class="at">replace =</span> T)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>Punci_IFN<span class="sc">$</span>tdiff <span class="ot">&lt;-</span> <span class="dv">10</span></span></code></pre></div>
+<p><br></p>
+<p>Next, we codify the 3-level factor “Treatment” in as many new dummy
+variables (although we will use only two of them).</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>Punci_IFN<span class="sc">$</span>A <span class="ot">&lt;-</span> (Punci_IFN<span class="sc">$</span>Treatment <span class="sc">==</span> <span class="st">&quot;A&quot;</span>)<span class="sc">*</span><span class="dv">1</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>Punci_IFN<span class="sc">$</span>B <span class="ot">&lt;-</span> (Punci_IFN<span class="sc">$</span>Treatment <span class="sc">==</span> <span class="st">&quot;B&quot;</span>)<span class="sc">*</span><span class="dv">1</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>Punci_IFN<span class="sc">$</span>C <span class="ot">&lt;-</span> (Punci_IFN<span class="sc">$</span>Treatment <span class="sc">==</span> <span class="st">&quot;C&quot;</span>)<span class="sc">*</span><span class="dv">1</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">fit_growth</span>(Punci_IFN, <span class="sc">~</span> prec <span class="sc">+</span> temp <span class="sc">+</span> A <span class="sc">+</span> B, <span class="at">verbose =</span> F)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; Called from: fit_growth(Punci_IFN, ~prec + temp + A + B, verbose = F)</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; debug en C:/Roberto/EcosystemModellingFacility/Rpackages/Rtigre/R/fit_growth.r#160: if (log_transf) {</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt;     if (verbose) </span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt;         cli::cli_text(&quot;fit_growth: non-linear fit of log-transformed data&quot;)</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt;     fofo &lt;- paste0(&quot;log(y2-y1)~log(&quot;, z, &quot;)&quot;)</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt;     r &lt;- switch(algorithm, nlsLM = minpack.lm::nlsLM(formula(fofo), </span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt;         data = dat, start = coef_start, control = list(maxiter = 1024)), </span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt;         nls = nls(formula(fofo), data = dat, start = coef_start, </span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt;             control = list(maxiter = 1000)), nlsr = nlsr::nlsr(formula(fofo), </span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt;             data = dat, start = coef_start))</span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt; }</span></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co">#&gt; debug en C:/Roberto/EcosystemModellingFacility/Rpackages/Rtigre/R/fit_growth.r#161: if (verbose) cli::cli_text(&quot;fit_growth: non-linear fit of log-transformed data&quot;)</span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co">#&gt; debug en C:/Roberto/EcosystemModellingFacility/Rpackages/Rtigre/R/fit_growth.r#162: fofo &lt;- paste0(&quot;log(y2-y1)~log(&quot;, z, &quot;)&quot;)</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co">#&gt; debug en C:/Roberto/EcosystemModellingFacility/Rpackages/Rtigre/R/fit_growth.r#163: r &lt;- switch(algorithm, nlsLM = minpack.lm::nlsLM(formula(fofo), </span></span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="co">#&gt;     data = dat, start = coef_start, control = list(maxiter = 1024)), </span></span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="co">#&gt;     nls = nls(formula(fofo), data = dat, start = coef_start, </span></span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a><span class="co">#&gt;         control = list(maxiter = 1000)), nlsr = nlsr::nlsr(formula(fofo), </span></span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a><span class="co">#&gt;         data = dat, start = coef_start))</span></span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="co">#&gt; debug en C:/Roberto/EcosystemModellingFacility/Rpackages/Rtigre/R/fit_growth.r#170: return(r)</span></span></code></pre></div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

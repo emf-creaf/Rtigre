@@ -95,9 +95,9 @@ fit_rate <- function(dat, fo,
   cl <- match.call()
   m <- match(c("dat", "fo"), names(cl))
   if (any(is.na(m))) stop("Missing argument")
-  tf <- terms.formula(fo)
-  is.intercept <- attr(tf, "intercept")
-  if (length(is.intercept) == 0) stop("Expression in formula 'fo' must have an intercept term")
+  # tf <- terms.formula(fo)
+  # is.intercept <- attr(tf, "intercept")
+  # if (length(is.intercept) == 0) stop("Expression in formula 'fo' must have an intercept term")
 
 
   # Transformation to build a linear expression for k.

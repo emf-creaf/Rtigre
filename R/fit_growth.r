@@ -97,9 +97,9 @@ fit_growth <- function(dat, fo, curve_type = "logistic", sigmoid_rate = F, kmax 
   cl <- match.call()
   m <- match(c("dat","fo"),names(cl))
   if (any(is.na(m))) stop("Missing argument")
-  tf <- terms.formula(fo)
-  is.intercept <- attr(tf,"intercept")
-  if (length(is.intercept)==0) stop("Expression in formula 'fo' must have an intercept term")
+  # tf <- terms.formula(fo)
+  # is.intercept <- attr(tf,"intercept")
+  # if (length(is.intercept)==0) stop("Expression in formula 'fo' must have an intercept term")
 
 
   # Need info on the screen?
@@ -124,8 +124,8 @@ fit_growth <- function(dat, fo, curve_type = "logistic", sigmoid_rate = F, kmax 
   # If fo contains more predictors, add them to the formula string.
   if (length(coef_start) > 1) {
     for (i in 2:length(coef_start)) {
-      x <- paste0(x,"+coef_",names(coef_start)[i],"*",names(coef_start)[i])
-      names_start <- c(names_start,paste0("coef_",names(coef_start)[i]))
+      x <- paste0(x, "+coef_", names(coef_start)[i], "*", names(coef_start)[i])
+      names_start <- c(names_start, paste0("coef_", names(coef_start)[i]))
     }
   }
   names(coef_start) <- names_start
@@ -159,11 +159,15 @@ fit_growth <- function(dat, fo, curve_type = "logistic", sigmoid_rate = F, kmax 
   # If a log-transformed regression is sought.
   if (log_transf) {
     if (verbose) cli::cli_text("fit_growth: non-linear fit of log-transformed data")
-    fofo <- paste0("log(y2-y1)~log(", z, ")")
+    fofo <- as.formula(paste0("log(y2-y1)~log(", z, ")"))
+
+    browser()
+    coef_start <- fit_optim(dat, fofo, coef_start)
+
     r <- switch(algorithm,
-                nlsLM = minpack.lm::nlsLM(formula(fofo), data = dat, start = coef_start, control = list(maxiter = 1024)),
-                nls = nls(formula(fofo), data = dat, start = coef_start, control = list(maxiter = 1000)),
-                nlsr = nlsr::nlsr(formula(fofo), data = dat, start = coef_start)
+                nlsLM = minpack.lm::nlsLM(fofo, data = dat, start = coef_start, control = list(maxiter = 1024)),
+                nls = nls(fofo, data = dat, start = coef_start, control = list(maxiter = 1000)),
+                nlsr = nlsr::nlsr(fofo, data = dat, start = coef_start)
     )
   }
 
