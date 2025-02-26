@@ -25,7 +25,7 @@
 #'
 #' Although exported, the user is not supposed to call this function directly.
 #'
-#' @export
+#' @noRd
 #'
 #' @examples
 #' dat <- data.frame(y1 = 10, y2 = 43, tdiff = 10, max_y = 80, t = 25, k = .025, offset = -.1)

@@ -43,7 +43,7 @@
 #' tdiff <- 5
 #' t <- seq(1, 100, by = tdiff)
 #' max_y <- 120
-#' k <- .1
+#' k <- 1.5
 #'
 #' ## Fake climatic data.
 #' temp <- runif(100, 18.6, 21.3)

@@ -16,6 +16,8 @@
 #'
 #' @return growth value for each 't' value.
 #'
+#' @noRd
+#'
 #' @examples
 #'
 #' ## Common parameters.

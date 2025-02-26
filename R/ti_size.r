@@ -16,6 +16,8 @@
 #'
 #' @return new size after a time interval 'tdiff'.
 #'
+#' @noRd
+#'
 #' @examples
 #'
 #' ## Common parameters.
@@ -45,8 +47,6 @@
 #' legend("topright",lty=1,c("logistic","schumacher","gompertz","monomolecular",
 #' "arctangent","hyperbolic"),lwd=2,cex=1.1,col=1:6)
 #'
-#' @export
-
 ti_size <- function(dat, curve_type = "logistic") {
 
 
