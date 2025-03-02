@@ -7,7 +7,16 @@
 fit_optim(dat, fo, coef, method = "Nelder-Mead")
 }
 \arguments{
-\item{fo}{}
+\item{dat}{data.frame}
+
+\item{fo}{formula object}
+
+\item{coef}{named numeric vector with initial values of the coefficients.}
+
+\item{method}{character string corresponding to the \code{method} option in the \code{optim} function.}
+}
+\value{
+A \code{nls} object.
 }
 \description{
 Title

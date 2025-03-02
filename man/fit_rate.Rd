@@ -35,6 +35,9 @@ The 'sigmoid_rate' option allows us to guarantee that \code{k} is ecologically s
 That implies that it is never negative and has an upper limit,
 Negative \code{k} values may happen when growth curves
 are used to calculate growth under conditions much different from the initial ones.
+
+An intercept is not assumed in the regression model. If we seek to include one, add a constant column
+to the input data.frame 'dat' with 1's and specify this column in the model 'fo' (see example below).
 }
 \examples{
 
@@ -52,7 +55,11 @@ y <- td_size(dat,"logistic") + rnorm(length(t))*.01
 plot(t,y,xlab="Time",ylab="Size")
 
 dat <- data.frame(tdiff=tdiff,max_y=max_y,y1=y[-length(t)],y2=y[-1])
-r1 <- fit_rate(dat,~1)
+
+# We add an intercept term.
+dat$Intercept <- 1
+
+r1 <- fit_rate(dat, ~ Intercept)
 
 ## Fake climatic data.
 temp <- runif(100,18.6,21.3)
@@ -67,15 +74,15 @@ y2 <- max_y/(1+exp(-(k*t[2]-2)))
 dat <- data.frame(tdiff=t[2]-t[1],max_y=max_y,y1=y1,y2=y2,temp=temp,prec=prec)
 
 ## Logistic growth.
-r2 <- fit_rate(dat,~1)
+r2 <- fit_rate(dat, ~ Intercept)
 summary(r2)
 
 ## A better model.
-r3 <- fit_rate(dat,~temp+prec)
+r3 <- fit_rate(dat, ~ Intercept + temp + prec)
 summary(r3)
 
 ## Assuming a sigmoid expression for k.
-r4 <- fit_rate(dat,~temp+prec, sigmoid_rate = T)
+r4 <- fit_rate(dat, ~ Intercept + temp + prec, sigmoid_rate = T)
 summary(r4)
 
 ## Actual Pinus uncinata data from the Spanish Forest Inventories.
@@ -84,7 +91,7 @@ data("Punci_IFN")
 ## Add time difference between second and third Inventory.
 Punci_IFN$tdiff <- 10
 
-k <- fit_rate(Punci_IFN, ~prec + temp, sigmoid_rate = T)
+k <- fit_rate(Punci_IFN, ~ Intercept + prec + temp, sigmoid_rate = T)
 summary(k)
 
 }

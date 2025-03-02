@@ -1,9 +1,13 @@
 #' Title
 #'
-#' @param dat
-#' @param fo
+#' @param dat data.frame
+#' @param fo formula object
+#' @param coef named numeric vector with initial values of the coefficients.
+#' @param method character string corresponding to the \code{method} option in the \code{optim} function.
 #'
 #' @returns
+#' A \code{nls} object.
+#'
 #' @export
 #'
 #' @examples
@@ -42,18 +46,29 @@ fit_optim <- function(dat, fo, coef, method = "Nelder-Mead") {
   }
 
 
-  # Call to "optim".
+  # Call to "optim" to polish up coefficients.
   out <- optim(par = coef, fn = fn, gr = NULL, dat, method = "Nelder-Mead")
   out <- optim(par = out$par, fn = fn, gr = NULL, dat, method = "Nelder-Mead")
   out <- optim(par = out$par, fn = fn, gr = NULL, dat, method = "BFGS")
 
-  hess <- numDeriv::hessian(fn, out$par, method = "Richardson",
-                               method.args = list(eps = 1e-4, d = 0.1,
-                                                  zero.tol = sqrt(.Machine$double.eps/7e-7),
-                                                  r = 4, v = 2, show.details = FALSE),
-                               dat)
 
-browser()
-  return(list(coef = out$par, hessian = out$hessian))
+  # Build a minimum rtigre object that accepts a predict.rtigre method with external data and nothing else.
+  create_minimal_rtigre <- function(formula, coefficients) {
+    structure(
+      list(
+        m = list(
+          formula = formula,
+          getPars = function() coefficients
+        ),
+        data = list(),
+        call = match.call()
+      ),
+      class = c("rtigre")
+    )
+  }
+
+  obj <- create_minimal_nls(fo, out$par)
+
+  return(obj)
 
 }

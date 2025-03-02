@@ -116,24 +116,27 @@ fit_growth <- function(dat, fo, curve_type = "logistic", sigmoid_rate = F, kmax 
   coef_start <- coef(r)
 
 
-  # Intercept term.
-  x <- names(coef_start)[1]
-  names_start <- "Intercept"
+  # Build string with predictors and their coefficients.
+  # x <- names(coef_start)[1]
+  # names_start <- "Intercept"
+  # names_start <- paste0("coef_", x)
 
 
-  # If fo contains more predictors, add them to the formula string.
-  if (length(coef_start) > 1) {
-    for (i in 2:length(coef_start)) {
-      x <- paste0(x, "+coef_", names(coef_start)[i], "*", names(coef_start)[i])
-      names_start <- c(names_start, paste0("coef_", names(coef_start)[i]))
-    }
+  # # If fo contains more predictors, add them to the formula string.
+  # if (length(coef_start) > 1) {
+  x <- names_start <- NULL
+  for (i in 1:length(coef_start)) {
+    xx <- ifelse(i == 1, "coef_", " + coef_")
+    x <- paste0(x, xx, names(coef_start)[i], "*", names(coef_start)[i])
+    names_start <- c(names_start, paste0("coef_", names(coef_start)[i]))
   }
+  # }
   names(coef_start) <- names_start
 
 
   # If we opted for a sigmoid formula...
   if (sigmoid_rate) {
-    x <- paste0("kmax/(1+exp(-(",x,")))")
+    x <- paste0("kmax/(1+exp(-(", x, ")))")
     coef_start <- c(r$kmax, coef_start)
     names(coef_start)[1] <- "kmax"
   }
@@ -141,9 +144,9 @@ fit_growth <- function(dat, fo, curve_type = "logistic", sigmoid_rate = F, kmax 
 
   # Next, we build the formula. We leave it as a string in case a log-transformation
   # is required below. It's easy to work with strings in that case.
-  x <- paste0("(",x,")")
+  x <- paste0("(", x, ")")
   y <- string_gr(curve_type, "ti")
-  z <- gsub("k",x,y)
+  z <- gsub("k", x, y)
   fofo <- paste0("y2-y1~",z,"-y1")
 
 
