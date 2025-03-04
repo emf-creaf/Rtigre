@@ -8,7 +8,7 @@ fit_growth(
   dat,
   fo,
   curve_type = "logistic",
-  sigmoid_rate = F,
+  method_rate = NULL,
   kmax = NULL,
   algorithm = "nlsLM",
   log_transf = T,
@@ -22,10 +22,12 @@ of predictors to be used in the fit.}
 \item{fo}{\code{formula} describing the right-hand-side of the dependence of the
 growth rate on the predictors.}
 
-\item{curve_type}{character indicatingthe type of growth curve to be used.}
+\item{curve_type}{character indicating the type of growth curve to be used.}
 
-\item{sigmoid_rate}{logical. If TRUE, growth rate \emph{k} will also be represented by a logistic
-(see vignette).}
+\item{method_rate}{character indicating which method to implement to ensure that growth rate
+always stays positive. It can take values \code{method = "sigmoid"} or
+\code{method = "softplus"} . If \code{method = NULL} (default), no method is implemented
+If \code{NULL}, no method is implemented.}
 
 \item{kmax}{NULL or numeric. If NULL, its value will be calculated from the
 data.}

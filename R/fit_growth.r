@@ -7,9 +7,11 @@
 #' of predictors to be used in the fit.
 #' @param fo \code{formula} describing the right-hand-side of the dependence of the
 #' growth rate on the predictors.
-#' @param sigmoid_rate logical. If TRUE, growth rate *k* will also be represented by a logistic
-#' (see vignette).
-#' @param curve_type character indicatingthe type of growth curve to be used.
+#' @param curve_type character indicating the type of growth curve to be used.
+#' @param method_rate character indicating which method to implement to ensure that growth rate
+#' always stays positive. It can take values \code{method = "sigmoid"} or
+#' \code{method = "softplus"} . If \code{method = NULL} (default), no method is implemented
+#' If \code{NULL}, no method is implemented.
 #' @param kmax NULL or numeric. If NULL, its value will be calculated from the
 #' data.
 #' @param log_transf logical. If TRUE, a log-transformation will be applied to
@@ -82,14 +84,15 @@
 #' plot(with(Punci_IFN, y2-y1), exp(predict(r)+.5*var(summary(r)$residuals)), pch = 16, cex = .1, xlim = c(0,10), ylim = c(0,10))
 #'
 #'
-fit_growth <- function(dat, fo, curve_type = "logistic", sigmoid_rate = F, kmax = NULL, algorithm = "nlsLM", log_transf = T, verbose = T) {
+fit_growth <- function(dat, fo, curve_type = "logistic", method_rate = NULL, kmax = NULL, algorithm = "nlsLM", log_transf = T, verbose = T) {
 
 
   # Checks.
   assertthat::assert_that(is.data.frame(dat), msg = "Input 'dat' must be a 'data.frame'")
   assertthat::assert_that(inherits(fo, "formula"), msg = "Input 'fo' must be a 'formula'")
   assertthat::assert_that(is.logical(verbose), msg = "Input 'verbose' must be logical")
-  curve_type = match.arg(curve_type, all_curve_types())
+  curve_type <- match.arg(curve_type, all_curve_types())
+  if (!is.null(method_rate)) method_rate <- match.arg(method_rate, c("sigmoid", "softplus"))
   algorithm <- match.arg(algorithm, c("nlsLM", "nls", "nlsr"))
 
 
@@ -97,23 +100,28 @@ fit_growth <- function(dat, fo, curve_type = "logistic", sigmoid_rate = F, kmax 
   cl <- match.call()
   m <- match(c("dat","fo"),names(cl))
   if (any(is.na(m))) stop("Missing argument")
-  # tf <- terms.formula(fo)
-  # is.intercept <- attr(tf,"intercept")
-  # if (length(is.intercept)==0) stop("Expression in formula 'fo' must have an intercept term")
 
 
   # Need info on the screen?
   if (verbose) {
     out <- paste0("fit_growth: ", curve_type, " curve")
-    if (sigmoid_rate) out <- paste0(out,", sigmoid rate")
+    out <- switch(ifelse(is.null(method_rate), "empty", method_rate),
+                  sigmoid = paste0(out,", sigmoid rate"),
+                  softplus = paste0(out,", softplus rate"),
+                  empty = out)
     if (log_transf) out <- paste0(out, ", log-transformation")
     cli::cli_text(out)
   }
 
   # Get regression parameters.
   if (verbose) cli::cli_text("fit_growth: linear regression of growth rate against predictors")
-  r <- fit_rate(dat = dat, fo = fo, curve_type = curve_type, sigmoid_rate = sigmoid_rate, kmax = kmax)
+  r <- fit_rate(dat = dat, fo = fo, curve_type = curve_type, method_rate = method_rate, kmax = kmax)
   coef_start <- coef(r)
+
+
+  # Add new columns.
+  dat$y2y1 <- dat$y2 - dat$y1
+  dat$log_y2y1 <- log(dat$y2y1)
 
 
   # Build string with predictors and their coefficients.
@@ -134,14 +142,15 @@ fit_growth <- function(dat, fo, curve_type = "logistic", sigmoid_rate = F, kmax 
   names(coef_start) <- names_start
 
 
-  # If we opted for a sigmoid formula...
-  if (sigmoid_rate) {
-    # x <- paste0("kmax/(1+exp(-(", x, ")))")
-    # coef_start <- c(r$kmax, coef_start)
-    # names(coef_start)[1] <- "kmax"
-
-
-    x <- paste0("log(1 + exp(", x, "))")
+  # If we opted for a method to ensure k>=0.
+  if (!is.null(method_rate)) {
+    if (method_rate == "sigmoid") {
+      x <- paste0("kmax/(1+exp(-(", x, ")))")
+      coef_start <- c(r$kmax, coef_start)
+      names(coef_start)[1] <- "kmax"
+    } else if (method_rate == "softplus") {
+      x <- paste0("log(1+exp(", x, "))")
+    }
   }
 
 
@@ -150,9 +159,9 @@ fit_growth <- function(dat, fo, curve_type = "logistic", sigmoid_rate = F, kmax 
   x <- paste0("(", x, ")")
   y <- string_gr(curve_type, "ti")
   z <- gsub("k", x, y)
-  fofo <- paste0("y2-y1~",z,"-y1")
+  fofo <- paste0("y2y1~",z,"-y1")
 
-browser()
+
   # The non-linear fit.
   if (verbose) cli::cli_text("fit_growth: non-linear fit")
   r <- switch(algorithm,
@@ -165,7 +174,7 @@ browser()
   # If a log-transformed regression is sought.
   if (log_transf) {
     if (verbose) cli::cli_text("fit_growth: non-linear fit of log-transformed data")
-    fofo <- as.formula(paste0("log(y2-y1)~log(", z, ")"))
+    fofo <- as.formula(paste0("log_y2y1~log(", z, ")"))
     coef_start <- coef(r)
 browser()
     r <- tryCatch(switch(algorithm,

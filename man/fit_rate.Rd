@@ -4,7 +4,7 @@
 \alias{fit_rate}
 \title{Regression on rate parameter}
 \usage{
-fit_rate(dat, fo, curve_type = curve_type, sigmoid_rate = F, kmax = NULL)
+fit_rate(dat, fo, curve_type = "logistic", method_rate = NULL, kmax = NULL)
 }
 \arguments{
 \item{dat}{\code{data.frame} containing at least four columns named 'y1', 'y2', 'tdiff' and 'max_y'. See Details
@@ -12,12 +12,9 @@ and accompanying Vignettes for a description.}
 
 \item{fo}{an object of class "formula"}
 
-\item{sigmoid_rate}{logical. If TRUE, the growth rate 'k' is further modelled as a logistic function.}
+\item{method_rate}{}
 
 \item{kmax}{numeric. If NULL, \code{kmax} will be estimated from the data.}
-
-\item{type}{string to select which growth function to use. It can be equal to 'logistic',
-'schumacher', 'monomolecular', 'monomolecular2', 'gompertz', 'arctangent', 'hyperbolic', 'arctangent_exp', 'rational' or 'user'.}
 }
 \value{
 value of rate parameter for each row in 'dat'.
@@ -46,15 +43,15 @@ to the input data.frame 'dat' with 1's and specify this column in the model 'fo'
 
 ## Common parameters. Simple example.
 tdiff <- 5
-t <- seq(1,100,by=tdiff)
+t <- seq(1, 100, by = tdiff)
 max_y <- 120
 k <- .1
 
-dat <- data.frame(t=t,max_y=max_y,offset=2,k=.05)
-y <- td_size(dat,"logistic") + rnorm(length(t))*.01
-plot(t,y,xlab="Time",ylab="Size")
+dat <- data.frame(t = t, max_y = max_y, offset = 2, k = .05, Intercept = 1)
+y <- td_size(dat, "logistic") + rnorm(length(t))*.01
+plot(t, y, xlab = "Time", ylab = "Size")
 
-dat <- data.frame(tdiff=tdiff,max_y=max_y,y1=y[-length(t)],y2=y[-1])
+dat <- data.frame(tdiff = tdiff, max_y = max_y, y1 = y[-length(t)], y2 = y[-1])
 
 # We add an intercept term.
 dat$Intercept <- 1
@@ -62,16 +59,16 @@ dat$Intercept <- 1
 r1 <- fit_rate(dat, ~ Intercept)
 
 ## Fake climatic data.
-temp <- runif(100,18.6,21.3)
-prec <- runif(100,359,514)
-t <- c(10,20)
-intercept <- .02
+temp <- runif(100, 18.6, 21.3)
+prec <- runif(100, 359, 514)
+t <- c(10, 20)
+Intercept <- .02
 coef_temp <- .00061
 coef_prec <- .000052
-k <- intercept+coef_temp*temp+coef_prec*prec+rnorm(length(temp))*.001
+k <- Intercept + coef_temp*temp + coef_prec*prec + rnorm(length(temp))*.001
 y1 <- max_y/(1+exp(-(k*t[1]-2)))
 y2 <- max_y/(1+exp(-(k*t[2]-2)))
-dat <- data.frame(tdiff=t[2]-t[1],max_y=max_y,y1=y1,y2=y2,temp=temp,prec=prec)
+dat <- data.frame(tdiff = t[2]-t[1], max_y = max_y, y1 = y1, y2 = y2, temp = temp, prec = prec, Intercept = 1)
 
 ## Logistic growth.
 r2 <- fit_rate(dat, ~ Intercept)
@@ -82,7 +79,7 @@ r3 <- fit_rate(dat, ~ Intercept + temp + prec)
 summary(r3)
 
 ## Assuming a sigmoid expression for k.
-r4 <- fit_rate(dat, ~ Intercept + temp + prec, sigmoid_rate = T)
+r4 <- fit_rate(dat, ~ Intercept + temp + prec, method_rate = "sigmoid")
 summary(r4)
 
 ## Actual Pinus uncinata data from the Spanish Forest Inventories.
@@ -90,9 +87,12 @@ data("Punci_IFN")
 
 ## Add time difference between second and third Inventory.
 Punci_IFN$tdiff <- 10
+Punci_IFN$Intercept <- 1
 
-k <- fit_rate(Punci_IFN, ~ Intercept + prec + temp, sigmoid_rate = T)
-summary(k)
+k1 <- fit_rate(Punci_IFN, ~ Intercept + prec + temp, method_rate = "softplus")
+k2 <- fit_rate(Punci_IFN, ~ Intercept + prec + temp, method_rate = "sigmoid")
+summary(k1)
+summary(k2)
 
 }
 \references{

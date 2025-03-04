@@ -7,10 +7,9 @@
 #' @param dat \code{data.frame} containing at least four columns named 'y1', 'y2', 'tdiff' and 'max_y'. See Details
 #' and accompanying Vignettes for a description.
 #' @param fo an object of class "formula"
-#' @param type string to select which growth function to use. It can be equal to 'logistic',
-#' 'schumacher', 'monomolecular', 'monomolecular2', 'gompertz', 'arctangent', 'hyperbolic', 'arctangent_exp', 'rational' or 'user'.
-#' @param sigmoid_rate logical. If TRUE, the growth rate 'k' is further modelled as a logistic function.
 #' @param kmax numeric. If NULL, \code{kmax} will be estimated from the data.
+#' @param curve_type
+#' @param method_rate
 #'
 #' @details Some of the growth equations are taken from Table 6.2 in #' Burkhart and Tomé (2012).
 #' Columns  'y1' and 'y2' in 'dat' correspond to the sizes of the individual at 't1' and 't2', with column 'tdiff'='t2'-'t1'.
@@ -33,15 +32,15 @@
 #'
 #' ## Common parameters. Simple example.
 #' tdiff <- 5
-#' t <- seq(1,100,by=tdiff)
+#' t <- seq(1, 100, by = tdiff)
 #' max_y <- 120
 #' k <- .1
 #'
-#' dat <- data.frame(t=t,max_y=max_y,offset=2,k=.05)
-#' y <- td_size(dat,"logistic") + rnorm(length(t))*.01
-#' plot(t,y,xlab="Time",ylab="Size")
+#' dat <- data.frame(t = t, max_y = max_y, offset = 2, k = .05, Intercept = 1)
+#' y <- td_size(dat, "logistic") + rnorm(length(t))*.01
+#' plot(t, y, xlab = "Time", ylab = "Size")
 #'
-#' dat <- data.frame(tdiff=tdiff,max_y=max_y,y1=y[-length(t)],y2=y[-1])
+#' dat <- data.frame(tdiff = tdiff, max_y = max_y, y1 = y[-length(t)], y2 = y[-1])
 #'
 #' # We add an intercept term.
 #' dat$Intercept <- 1
@@ -49,16 +48,16 @@
 #' r1 <- fit_rate(dat, ~ Intercept)
 #'
 #' ## Fake climatic data.
-#' temp <- runif(100,18.6,21.3)
-#' prec <- runif(100,359,514)
-#' t <- c(10,20)
-#' intercept <- .02
+#' temp <- runif(100, 18.6, 21.3)
+#' prec <- runif(100, 359, 514)
+#' t <- c(10, 20)
+#' Intercept <- .02
 #' coef_temp <- .00061
 #' coef_prec <- .000052
-#' k <- intercept+coef_temp*temp+coef_prec*prec+rnorm(length(temp))*.001
+#' k <- Intercept + coef_temp*temp + coef_prec*prec + rnorm(length(temp))*.001
 #' y1 <- max_y/(1+exp(-(k*t[1]-2)))
 #' y2 <- max_y/(1+exp(-(k*t[2]-2)))
-#' dat <- data.frame(tdiff=t[2]-t[1],max_y=max_y,y1=y1,y2=y2,temp=temp,prec=prec)
+#' dat <- data.frame(tdiff = t[2]-t[1], max_y = max_y, y1 = y1, y2 = y2, temp = temp, prec = prec, Intercept = 1)
 #'
 #' ## Logistic growth.
 #' r2 <- fit_rate(dat, ~ Intercept)
@@ -69,7 +68,7 @@
 #' summary(r3)
 #'
 #' ## Assuming a sigmoid expression for k.
-#' r4 <- fit_rate(dat, ~ Intercept + temp + prec, sigmoid_rate = T)
+#' r4 <- fit_rate(dat, ~ Intercept + temp + prec, method_rate = "sigmoid")
 #' summary(r4)
 #'
 #' ## Actual Pinus uncinata data from the Spanish Forest Inventories.
@@ -77,9 +76,12 @@
 #'
 #' ## Add time difference between second and third Inventory.
 #' Punci_IFN$tdiff <- 10
+#' Punci_IFN$Intercept <- 1
 #'
-#' k <- fit_rate(Punci_IFN, ~ Intercept + prec + temp, sigmoid_rate = T)
-#' summary(k)
+#' k1 <- fit_rate(Punci_IFN, ~ Intercept + prec + temp, method_rate = "softplus")
+#' k2 <- fit_rate(Punci_IFN, ~ Intercept + prec + temp, method_rate = "sigmoid")
+#' summary(k1)
+#' summary(k2)
 #'
 #' @references
 #' Burkhart, Harold E., and Margarida Tomé. "Growth functions." In Modeling forest trees and stands,
@@ -88,8 +90,8 @@
 #' @export
 
 fit_rate <- function(dat, fo,
-                     curve_type = curve_type,
-                     sigmoid_rate = F, kmax = NULL) {
+                     curve_type = "logistic",
+                     method_rate = NULL, kmax = NULL) {
 
 
   # Checks.
@@ -102,9 +104,6 @@ fit_rate <- function(dat, fo,
   cl <- match.call()
   m <- match(c("dat", "fo"), names(cl))
   if (any(is.na(m))) stop("Missing argument")
-  # tf <- terms.formula(fo)
-  # is.intercept <- attr(tf, "intercept")
-  # if (length(is.intercept) == 0) stop("Expression in formula 'fo' must have an intercept term")
 
 
   # Transformation to build a linear expression for k.
@@ -112,15 +111,19 @@ fit_rate <- function(dat, fo,
 
 
   # sigmoid_rate = TRUE only makes sense if there are predictor variables in the formula.
-  if (sigmoid_rate) {
-    if (is.null(kmax)) kmax <- max(dat$k)*1.05 # A bit larger.
-    dat$k <- log(dat$k/(kmax-dat$k))    # Further logit transformation.
+  if (!is.null(method_rate)) {
+    if (method_rate == "sigmoid") {
+      if (is.null(kmax)) kmax <- max(dat$k)*1.05        # A bit larger.
+      dat$k <- log(dat$k/(kmax-dat$k))                  # Further logit transformation.
+    } else if (method_rate == "softplus") {
+      dat$k <- log(1+exp(dat$k))
+    }
   }
 
 
   # Linear regression. Intercept-by-default is removed.
-  r <- lm(update(fo, k ~ -1 + .),data = dat)
-  if (sigmoid_rate) r$kmax <- kmax
+  r <- lm(update(fo, k ~ -1 + .), data = dat)
+  if (!is.null(method_rate)) if (method_rate == "sigmoid") r$kmax <- kmax
 
 
   return(r)
