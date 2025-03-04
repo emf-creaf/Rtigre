@@ -41,34 +41,17 @@ fit_optim <- function(dat, fo, coef, method = "Nelder-Mead") {
     for (i in names(coef)) dat[[i]] <- coef[i]
 
     # Evaluate and output.
-    expression <- parse(text = paste0("mean((", paste0(lhs, " - (", rhs, "))^2)")))
+    expression <- parse(text = paste0("sum((", paste0(lhs, " - (", rhs, "))^2, na.rm = TRUE)")))
     eval(parse(text = expression), envir = dat)
   }
 
-
+browser()
   # Call to "optim" to polish up coefficients.
   out <- optim(par = coef, fn = fn, gr = NULL, dat, method = "Nelder-Mead")
   out <- optim(par = out$par, fn = fn, gr = NULL, dat, method = "Nelder-Mead")
   out <- optim(par = out$par, fn = fn, gr = NULL, dat, method = "BFGS")
 
 
-  # Build a minimum rtigre object that accepts a predict.rtigre method with external data and nothing else.
-  create_minimal_rtigre <- function(formula, coefficients) {
-    structure(
-      list(
-        m = list(
-          formula = formula,
-          getPars = function() coefficients
-        ),
-        data = list(),
-        call = match.call()
-      ),
-      class = c("rtigre")
-    )
-  }
-
-  obj <- create_minimal_nls(fo, out$par)
-
-  return(obj)
+  return(out)
 
 }

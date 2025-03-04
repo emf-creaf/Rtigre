@@ -136,9 +136,12 @@ fit_growth <- function(dat, fo, curve_type = "logistic", sigmoid_rate = F, kmax 
 
   # If we opted for a sigmoid formula...
   if (sigmoid_rate) {
-    x <- paste0("kmax/(1+exp(-(", x, ")))")
-    coef_start <- c(r$kmax, coef_start)
-    names(coef_start)[1] <- "kmax"
+    # x <- paste0("kmax/(1+exp(-(", x, ")))")
+    # coef_start <- c(r$kmax, coef_start)
+    # names(coef_start)[1] <- "kmax"
+
+
+    x <- paste0("log(1 + exp(", x, "))")
   }
 
 
@@ -149,7 +152,7 @@ fit_growth <- function(dat, fo, curve_type = "logistic", sigmoid_rate = F, kmax 
   z <- gsub("k", x, y)
   fofo <- paste0("y2-y1~",z,"-y1")
 
-
+browser()
   # The non-linear fit.
   if (verbose) cli::cli_text("fit_growth: non-linear fit")
   r <- switch(algorithm,
@@ -163,15 +166,20 @@ fit_growth <- function(dat, fo, curve_type = "logistic", sigmoid_rate = F, kmax 
   if (log_transf) {
     if (verbose) cli::cli_text("fit_growth: non-linear fit of log-transformed data")
     fofo <- as.formula(paste0("log(y2-y1)~log(", z, ")"))
-
-    browser()
-    coef_start <- fit_optim(dat, fofo, coef_start)
-
-    r <- switch(algorithm,
+    coef_start <- coef(r)
+browser()
+    r <- tryCatch(switch(algorithm,
                 nlsLM = minpack.lm::nlsLM(fofo, data = dat, start = coef_start, control = list(maxiter = 1024)),
                 nls = nls(fofo, data = dat, start = coef_start, control = list(maxiter = 1000)),
-                nlsr = nlsr::nlsr(fofo, data = dat, start = coef_start)
-    )
+                nlsr = nlsr::nlsr(fofo, data = dat, start = coef_start)),
+                error = function(e) return(NULL))
+browser()
+    if (is.null(r)) {
+      cli::cli_alert(paste0("Convergence problems. Switching to fit_optim"))
+      browser()
+      coef_start <- fit_optim(dat, fofo, coef_start)
+
+    }
   }
 
   return(r)
