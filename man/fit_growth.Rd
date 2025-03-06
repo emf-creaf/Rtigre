@@ -9,7 +9,7 @@ fit_growth(
   fo,
   curve_type = "logistic",
   method_rate = NULL,
-  kmax = NULL,
+  k_param = NULL,
   algorithm = "nlsLM",
   log_transf = T,
   verbose = T
@@ -25,12 +25,16 @@ growth rate on the predictors.}
 \item{curve_type}{character indicating the type of growth curve to be used.}
 
 \item{method_rate}{character indicating which method to implement to ensure that growth rate
-always stays positive. It can take values \code{method = "sigmoid"} or
-\code{method = "softplus"} . If \code{method = NULL} (default), no method is implemented
+always stays positive. It can take values \code{method_rate = "sigmoid"} or
+\code{method_rate = "softplus"}. The latter corresponds to a smooth approximation to the
+ramp function. If \code{method = NULL} (default), no method is implemented
 If \code{NULL}, no method is implemented.}
 
-\item{kmax}{NULL or numeric. If NULL, its value will be calculated from the
-data.}
+\item{k_param}{numeric. If \code{method_rate = NULL} or not set, \code{k_param} is not evaluated.
+If \code{method_rate = "sigmoid"}, \code{k_param} will indicate the maximum value of the sigmoid transformation
+for the rate function \code{k}, and if not set it will be approximated from the data.
+If \code{method_rate = "softplus"}, \code{k_param} corresponds to the softplus parameter that
+modifies the behaviour of the curve.}
 
 \item{algorithm}{character, the algorithm to be used. See 'Details'.}
 
@@ -64,31 +68,30 @@ is very fast and stable and should work fine most of the time.
 \examples{
 
 ## Common parameters. Simple example.
+npoints <- 100
 tdiff <- 5
-t <- seq(1, 100, by = tdiff)
+t <- sample(10:150, npoints, replace = T)
 max_y <- 120
-k <- .1
 
 ## Fake climatic data.
-temp <- runif(100, 18.6, 21.3)
-prec <- runif(100, 359, 514)
-t <- c(10, 20)
-intercept <- .02
+temp <- rnorm(npoints, mean = 15.4, sd = 1)
+prec <- rnorm(npoints, mean = 560, sd = 50)
+Intercept <- .02
 coef_temp <- .00061
 coef_prec <- .000052
-k <- intercept+coef_temp*temp+coef_prec*prec+rnorm(length(temp))*.001
-y1 <- max_y/(1+exp(-(k*t[1]-2)))
-y2 <- max_y/(1+exp(-(k*t[2]-2)))
-dat <- data.frame(tdiff = t[2]-t[1], max_y = max_y, y1 = y1, y2 = y2, temp = temp, prec = prec)
-r <- fit_growth(dat, ~ temp + prec, curve_type = "logistic", log_transf = F, sigmoid_rate = F)
+k <- Intercept + coef_temp*temp + coef_prec*prec + rnorm(npoints)*.001
+y1 <- max_y/(1+exp(-(k*t-5)))
+y2 <- max_y/(1+exp(-(k*(t+tdiff)-5))) + rnorm(npoints)*.01
+dat <- data.frame(tdiff = tdiff, max_y = max_y, y1 = y1, y2 = y2, temp = temp, prec = prec, Intercept = 1)
+r <- fit_growth(dat, ~ Intercept + temp + prec, curve_type = "logistic", log_transf = F, method_rate = "softplus")
 print(summary(r))
 
 ## Same data, but simulating a sigmoid rate.
-k <- 2/(1+exp(-(intercept+coef_temp*temp+coef_prec*prec)))+rnorm(length(temp))*.01
+k <- 2/(1 + exp(-(intercept + coef_temp*temp + coef_prec*prec))) + rnorm(length(temp))*.01
 y1 <- max_y/(1+exp(-(k*t[1]-2)))
 y2 <- max_y/(1+exp(-(k*t[2]-2)))
 dat <- data.frame(tdiff=t[2]-t[1], max_y = max_y, y1 = y1, y2 = y2, temp = temp, prec = prec)
-r <- fit_growth(dat, ~ temp + prec, curve_type = "logistic", log_transf = F, sigmoid_rate = T)
+r <- fit_growth(dat, ~ temp + prec, curve_type = "logistic", log_transf = F, method_rate = "sigmoid")
 print(summary(r))
 
 ## Actual Pinus uncinata data from the Spanish Forest Inventories.
@@ -101,7 +104,7 @@ r <- fit_growth(Punci_IFN, ~prec+temp)
 print(summary(r))
 plot(with(Punci_IFN, y2-y1), predict(r), pch = 16, cex = .1)
 
-r <- fit_growth(Punci_IFN, ~prec+temp, sigmoid_rate = T)
+r <- fit_growth(Punci_IFN, ~prec+temp, method_rate = "sigmoid")
 print(summary(r))
 plot(with(Punci_IFN, y2-y1), exp(predict(r)+.5*var(summary(r)$residuals)), pch = 16, cex = .1, xlim = c(0,10), ylim = c(0,10))
 

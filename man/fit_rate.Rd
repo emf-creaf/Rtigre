@@ -4,7 +4,7 @@
 \alias{fit_rate}
 \title{Regression on rate parameter}
 \usage{
-fit_rate(dat, fo, curve_type = "logistic", method_rate = NULL, kmax = NULL)
+fit_rate(dat, fo, curve_type = "logistic", method_rate = NULL, k_param = NULL)
 }
 \arguments{
 \item{dat}{\code{data.frame} containing at least four columns named 'y1', 'y2', 'tdiff' and 'max_y'. See Details
@@ -12,7 +12,7 @@ and accompanying Vignettes for a description.}
 
 \item{fo}{an object of class "formula"}
 
-\item{method_rate}{}
+\item{method_rate}{see \code{\link{function_name}}.}
 
 \item{kmax}{numeric. If NULL, \code{kmax} will be estimated from the data.}
 }

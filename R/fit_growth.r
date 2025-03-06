@@ -9,11 +9,15 @@
 #' growth rate on the predictors.
 #' @param curve_type character indicating the type of growth curve to be used.
 #' @param method_rate character indicating which method to implement to ensure that growth rate
-#' always stays positive. It can take values \code{method = "sigmoid"} or
-#' \code{method = "softplus"} . If \code{method = NULL} (default), no method is implemented
+#' always stays positive. It can take values \code{method_rate = "sigmoid"} or
+#' \code{method_rate = "softplus"}. The latter corresponds to a smooth approximation to the
+#' ramp function. If \code{method = NULL} (default), no method is implemented
 #' If \code{NULL}, no method is implemented.
-#' @param kmax NULL or numeric. If NULL, its value will be calculated from the
-#' data.
+#' @param k_param numeric. If \code{method_rate = NULL} or not set, \code{k_param} is not evaluated.
+#' If \code{method_rate = "sigmoid"}, \code{k_param} will indicate the maximum value of the sigmoid transformation
+#' for the rate function \code{k}, and if not set it will be approximated from the data.
+#' If \code{method_rate = "softplus"}, \code{k_param} corresponds to the softplus parameter that
+#' modifies the behaviour of the curve.
 #' @param log_transf logical. If TRUE, a log-transformation will be applied to
 #' the dependent variable.
 #' @param verbose logical. If TRUE, information on the progress of the regression is produced.
@@ -42,31 +46,30 @@
 #' @examples
 #'
 #' ## Common parameters. Simple example.
+#' npoints <- 100
 #' tdiff <- 5
-#' t <- seq(1, 100, by = tdiff)
+#' t <- sample(10:150, npoints, replace = T)
 #' max_y <- 120
-#' k <- .1
 #'
 #' ## Fake climatic data.
-#' temp <- runif(100, 18.6, 21.3)
-#' prec <- runif(100, 359, 514)
-#' t <- c(10, 20)
-#' intercept <- .02
+#' temp <- rnorm(npoints, mean = 15.4, sd = 1)
+#' prec <- rnorm(npoints, mean = 560, sd = 50)
+#' Intercept <- .02
 #' coef_temp <- .00061
 #' coef_prec <- .000052
-#' k <- intercept+coef_temp*temp+coef_prec*prec+rnorm(length(temp))*.001
-#' y1 <- max_y/(1+exp(-(k*t[1]-2)))
-#' y2 <- max_y/(1+exp(-(k*t[2]-2)))
-#' dat <- data.frame(tdiff = t[2]-t[1], max_y = max_y, y1 = y1, y2 = y2, temp = temp, prec = prec)
-#' r <- fit_growth(dat, ~ temp + prec, curve_type = "logistic", log_transf = F, sigmoid_rate = F)
+#' k <- Intercept + coef_temp*temp + coef_prec*prec + rnorm(npoints)*.001
+#' y1 <- max_y/(1+exp(-(k*t-5)))
+#' y2 <- max_y/(1+exp(-(k*(t+tdiff)-5))) + rnorm(npoints)*.01
+#' dat <- data.frame(tdiff = tdiff, max_y = max_y, y1 = y1, y2 = y2, temp = temp, prec = prec, Intercept = 1)
+#' r <- fit_growth(dat, ~ Intercept + temp + prec, curve_type = "logistic", log_transf = F, method_rate = "softplus")
 #' print(summary(r))
 #'
 #' ## Same data, but simulating a sigmoid rate.
-#' k <- 2/(1+exp(-(intercept+coef_temp*temp+coef_prec*prec)))+rnorm(length(temp))*.01
+#' k <- 2/(1 + exp(-(intercept + coef_temp*temp + coef_prec*prec))) + rnorm(length(temp))*.01
 #' y1 <- max_y/(1+exp(-(k*t[1]-2)))
 #' y2 <- max_y/(1+exp(-(k*t[2]-2)))
 #' dat <- data.frame(tdiff=t[2]-t[1], max_y = max_y, y1 = y1, y2 = y2, temp = temp, prec = prec)
-#' r <- fit_growth(dat, ~ temp + prec, curve_type = "logistic", log_transf = F, sigmoid_rate = T)
+#' r <- fit_growth(dat, ~ temp + prec, curve_type = "logistic", log_transf = F, method_rate = "sigmoid")
 #' print(summary(r))
 #'
 #' ## Actual Pinus uncinata data from the Spanish Forest Inventories.
@@ -79,21 +82,22 @@
 #' print(summary(r))
 #' plot(with(Punci_IFN, y2-y1), predict(r), pch = 16, cex = .1)
 #'
-#' r <- fit_growth(Punci_IFN, ~prec+temp, sigmoid_rate = T)
+#' r <- fit_growth(Punci_IFN, ~prec+temp, method_rate = "sigmoid")
 #' print(summary(r))
 #' plot(with(Punci_IFN, y2-y1), exp(predict(r)+.5*var(summary(r)$residuals)), pch = 16, cex = .1, xlim = c(0,10), ylim = c(0,10))
 #'
 #'
-fit_growth <- function(dat, fo, curve_type = "logistic", method_rate = NULL, kmax = NULL, algorithm = "nlsLM", log_transf = T, verbose = T) {
+fit_growth <- function(dat, fo, curve_type = "logistic", method_rate = NULL, k_param = NULL, algorithm = "nlsLM", log_transf = T, verbose = T) {
 
 
   # Checks.
-  assertthat::assert_that(is.data.frame(dat), msg = "Input 'dat' must be a 'data.frame'")
-  assertthat::assert_that(inherits(fo, "formula"), msg = "Input 'fo' must be a 'formula'")
-  assertthat::assert_that(is.logical(verbose), msg = "Input 'verbose' must be logical")
+  stopifnot("Input 'dat' must be a 'data.frame'" = is.data.frame(dat))
+  stopifnot("Input 'fo' must be a 'formula'" = inherits(fo, "formula"))
+  stopifnot("Input 'verbose' must be logical" = is.logical(verbose))
   curve_type <- match.arg(curve_type, all_curve_types())
   if (!is.null(method_rate)) method_rate <- match.arg(method_rate, c("sigmoid", "softplus"))
   algorithm <- match.arg(algorithm, c("nlsLM", "nls", "nlsr"))
+  stopifnot("Values in 'tdiff' column must be all strictly positive" = all(dat$tdiff > 0))
 
 
   # Check components in formula.
@@ -115,41 +119,29 @@ fit_growth <- function(dat, fo, curve_type = "logistic", method_rate = NULL, kma
 
   # Get regression parameters.
   if (verbose) cli::cli_text("fit_growth: linear regression of growth rate against predictors")
-  r <- fit_rate(dat = dat, fo = fo, curve_type = curve_type, method_rate = method_rate, kmax = kmax)
+  r <- fit_rate(dat = dat, fo = fo, curve_type = curve_type, method_rate = method_rate, k_param = k_param)
   coef_start <- coef(r)
 
 
-  # Add new columns.
-  dat$y2y1 <- dat$y2 - dat$y1
-  dat$log_y2y1 <- log(dat$y2y1)
-
-
-  # Build string with predictors and their coefficients.
-  # x <- names(coef_start)[1]
-  # names_start <- "Intercept"
-  # names_start <- paste0("coef_", x)
-
-
   # # If fo contains more predictors, add them to the formula string.
-  # if (length(coef_start) > 1) {
   x <- names_start <- NULL
   for (i in 1:length(coef_start)) {
     xx <- ifelse(i == 1, "coef_", " + coef_")
     x <- paste0(x, xx, names(coef_start)[i], "*", names(coef_start)[i])
     names_start <- c(names_start, paste0("coef_", names(coef_start)[i]))
   }
-  # }
   names(coef_start) <- names_start
 
 
   # If we opted for a method to ensure k>=0.
   if (!is.null(method_rate)) {
     if (method_rate == "sigmoid") {
-      x <- paste0("kmax/(1+exp(-(", x, ")))")
-      coef_start <- c(r$kmax, coef_start)
-      names(coef_start)[1] <- "kmax"
+      x <- paste0("k_param/(1+exp(-(", x, ")))")
+      coef_start <- c(r$k_param, coef_start)
+      names(coef_start)[1] <- "k_param"
     } else if (method_rate == "softplus") {
-      x <- paste0("log(1+exp(", x, "))")
+      if (is.null(k_param)) k_param <- 1
+      x <- paste0("log(1+exp(k_param * ", x, "))/k_param")
     }
   }
 
@@ -159,9 +151,9 @@ fit_growth <- function(dat, fo, curve_type = "logistic", method_rate = NULL, kma
   x <- paste0("(", x, ")")
   y <- string_gr(curve_type, "ti")
   z <- gsub("k", x, y)
-  fofo <- paste0("y2y1~",z,"-y1")
+  fofo <- paste0("log(y2-y1) ~ log(",z," - y1)")
 
-
+browser()
   # The non-linear fit.
   if (verbose) cli::cli_text("fit_growth: non-linear fit")
   r <- switch(algorithm,
@@ -174,20 +166,19 @@ fit_growth <- function(dat, fo, curve_type = "logistic", method_rate = NULL, kma
   # If a log-transformed regression is sought.
   if (log_transf) {
     if (verbose) cli::cli_text("fit_growth: non-linear fit of log-transformed data")
-    fofo <- as.formula(paste0("log_y2y1~log(", z, ")"))
+    fofo <- as.formula(paste0("log(y2-y1)~log(", z, ")"))
     coef_start <- coef(r)
-browser()
+
     r <- tryCatch(switch(algorithm,
                 nlsLM = minpack.lm::nlsLM(fofo, data = dat, start = coef_start, control = list(maxiter = 1024)),
                 nls = nls(fofo, data = dat, start = coef_start, control = list(maxiter = 1000)),
                 nlsr = nlsr::nlsr(fofo, data = dat, start = coef_start)),
                 error = function(e) return(NULL))
-browser()
+
     if (is.null(r)) {
       cli::cli_alert(paste0("Convergence problems. Switching to fit_optim"))
-      browser()
-      coef_start <- fit_optim(dat, fofo, coef_start)
-
+      out_optim <- fit_optim(dat, fofo, coef_start)
+      nls = nls(fofo, data = dat, start = out_optim$par, control = list(tol = 1e64))
     }
   }
 

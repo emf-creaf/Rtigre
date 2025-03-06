@@ -9,7 +9,7 @@
 #' @param fo an object of class "formula"
 #' @param kmax numeric. If NULL, \code{kmax} will be estimated from the data.
 #' @param curve_type
-#' @param method_rate
+#' @param method_rate see \code{\link{function_name}}.
 #'
 #' @details Some of the growth equations are taken from Table 6.2 in #' Burkhart and Tomé (2012).
 #' Columns  'y1' and 'y2' in 'dat' correspond to the sizes of the individual at 't1' and 't2', with column 'tdiff'='t2'-'t1'.
@@ -89,9 +89,7 @@
 #'
 #' @export
 
-fit_rate <- function(dat, fo,
-                     curve_type = "logistic",
-                     method_rate = NULL, kmax = NULL) {
+fit_rate <- function(dat, fo, curve_type = "logistic", method_rate = NULL, k_param = NULL) {
 
 
   # Checks.
@@ -110,20 +108,21 @@ fit_rate <- function(dat, fo,
   dat$k <- rate_gr(dat, curve_type = curve_type)
 
 
-  # sigmoid_rate = TRUE only makes sense if there are predictor variables in the formula.
+  # If 'method_rate' is not NULL, k_param must be specified either on input or below.
   if (!is.null(method_rate)) {
     if (method_rate == "sigmoid") {
-      if (is.null(kmax)) kmax <- max(dat$k)*1.05        # A bit larger.
-      dat$k <- log(dat$k/(kmax-dat$k))                  # Further logit transformation.
+      if (is.null(k_param)) k_param <- max(dat$k)*1.05        # A bit larger.
+      dat$k <- log(dat$k/(k_param-dat$k))                     # Further logit transformation.
     } else if (method_rate == "softplus") {
-      dat$k <- log(1+exp(dat$k))
+      if (is.null(k_param)) k_param <- 1
+      dat$k <- log(1+exp(k_param*dat$k))/k_param
     }
   }
 
 
   # Linear regression. Intercept-by-default is removed.
   r <- lm(update(fo, k ~ -1 + .), data = dat)
-  if (!is.null(method_rate)) if (method_rate == "sigmoid") r$kmax <- kmax
+  if (!is.null(method_rate)) r$k_param <- k_param
 
 
   return(r)

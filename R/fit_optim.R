@@ -45,8 +45,8 @@ fit_optim <- function(dat, fo, coef, method = "Nelder-Mead") {
     eval(parse(text = expression), envir = dat)
   }
 
-browser()
-  # Call to "optim" to polish up coefficients.
+
+  # Calls to "optim".
   out <- optim(par = coef, fn = fn, gr = NULL, dat, method = "Nelder-Mead")
   out <- optim(par = out$par, fn = fn, gr = NULL, dat, method = "Nelder-Mead")
   out <- optim(par = out$par, fn = fn, gr = NULL, dat, method = "BFGS")
