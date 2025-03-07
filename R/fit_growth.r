@@ -121,7 +121,7 @@ fit_growth <- function(dat, fo, curve_type = "logistic", method_rate = NULL, k_p
   if (verbose) cli::cli_text("fit_growth: linear regression of growth rate against predictors")
   r <- fit_rate(dat = dat, fo = fo, curve_type = curve_type, method_rate = method_rate, k_param = k_param)
   coef_start <- coef(r)
-browser()
+
 
   # # If fo contains more predictors, add them to the formula string.
   x <- names_start <- NULL
@@ -131,7 +131,7 @@ browser()
     names_start <- c(names_start, paste0("coef_", names(coef_start)[i]))
   }
   names(coef_start) <- names_start
-
+browser()
 
   # If we opted for a method to ensure k>=0.
   if (!is.null(method_rate)) {
