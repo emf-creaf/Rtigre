@@ -121,7 +121,7 @@ fit_growth <- function(dat, fo, curve_type = "logistic", method_rate = NULL, k_p
   if (verbose) cli::cli_text("fit_growth: linear regression of growth rate against predictors")
   r <- fit_rate(dat = dat, fo = fo, curve_type = curve_type, method_rate = method_rate, k_param = k_param)
   coef_start <- coef(r)
-
+browser()
 
   # # If fo contains more predictors, add them to the formula string.
   x <- names_start <- NULL
@@ -151,9 +151,9 @@ fit_growth <- function(dat, fo, curve_type = "logistic", method_rate = NULL, k_p
   x <- paste0("(", x, ")")
   y <- string_gr(curve_type, "ti")
   z <- gsub("k", x, y)
-  fofo <- paste0("log(y2-y1) ~ log(",z," - y1)")
+  fofo <- paste0("y2-y1 ~ ", z," - y1")
 
-browser()
+
   # The non-linear fit.
   if (verbose) cli::cli_text("fit_growth: non-linear fit")
   r <- switch(algorithm,
