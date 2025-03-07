@@ -123,15 +123,19 @@ fit_growth <- function(dat, fo, curve_type = "logistic", method_rate = NULL, k_p
   coef_start <- coef(r)
 
 
+  # Add backticks to coefficient names to avoid having problems with e.g. coef_log(y1)
+  names(coef_start) <- paste0("`", coef_start, "`")
+
+
   # # If fo contains more predictors, add them to the formula string.
   x <- names_start <- NULL
   for (i in 1:length(coef_start)) {
-    xx <- ifelse(i == 1, "`coef_", " + `coef_")
-    x <- paste0(x, xx, names(coef_start)[i], "` * ", names(coef_start)[i])
-    names_start <- c(names_start, paste0("`coef_", names(coef_start)[i]))
+    xx <- ifelse(i == 1, "coef_", " + coef_")
+    x <- paste0(x, xx, names(coef_start)[i], "*", names(coef_start)[i])
+    names_start <- c(names_start, paste0("coef_", names(coef_start)[i]))
   }
   names(coef_start) <- names_start
-browser()
+
 
   # If we opted for a method to ensure k>=0.
   if (!is.null(method_rate)) {
