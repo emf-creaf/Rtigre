@@ -123,17 +123,21 @@ fit_growth <- function(dat, fo, curve_type = "logistic", method_rate = NULL, k_p
   coef_start <- coef(r)
 
 
-  # Add backticks to coefficient names to avoid having problems with e.g. coef_log(y1)
-  names(coef_start) <- paste0("`", coef_start, "`")
-
 
   # # If fo contains more predictors, add them to the formula string.
+  # Parentheses ")" or "(" are swapped for an underscore "_".
+  # This way R will not stop the execution by complaining about unacceptable parameter names.
   x <- names_start <- NULL
   for (i in 1:length(coef_start)) {
     xx <- ifelse(i == 1, "coef_", " + coef_")
     x <- paste0(x, xx, names(coef_start)[i], "*", names(coef_start)[i])
     names_start <- c(names_start, paste0("coef_", names(coef_start)[i]))
   }
+
+
+  # Parentheses ")" or "(" are swapped for an underscore "_".
+  # This way R will not stop the execution by complaining about unacceptable parameter names.
+  names_start <-  sapply(names_start, function(x) gsub("\\(|\\)", "_", x), USE.NAMES = F)
   names(coef_start) <- names_start
 
 
