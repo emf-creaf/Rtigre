@@ -125,19 +125,17 @@ fit_growth <- function(dat, fo, curve_type = "logistic", method_rate = NULL, k_p
 
 
   # # If fo contains more predictors, add them to the formula string.
-  # Parentheses ")" or "(" are swapped for an underscore "_".
+  # Parentheses ")" or "(", and power sign "^", are swapped for an underscore "_".
   # This way R will not stop the execution by complaining about unacceptable parameter names.
   x <- names_start <- NULL
   for (i in 1:length(coef_start)) {
     xx <- ifelse(i == 1, "coef_", " + coef_")
-    x <- paste0(x, xx, names(coef_start)[i], "*", names(coef_start)[i])
-    names_start <- c(names_start, paste0("coef_", names(coef_start)[i]))
+    namcof <- names(coef_start)[i]
+    namcof <- gsub("\\(|\\)", "_", namcof)
+    namcof <- gsub("\\^", "_", namcof)
+    x <- paste0(x, xx, namcof, "*", names(coef_start)[i])
+    names_start <- c(names_start, paste0("coef_", namcof))
   }
-
-
-  # Parentheses ")" or "(" are swapped for an underscore "_".
-  # This way R will not stop the execution by complaining about unacceptable parameter names.
-  names_start <-  sapply(names_start, function(x) gsub("\\(|\\)", "_", x), USE.NAMES = F)
   names(coef_start) <- names_start
 
 
