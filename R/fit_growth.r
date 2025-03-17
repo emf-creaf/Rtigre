@@ -23,7 +23,8 @@
 #' @param verbose logical. If TRUE, information on the progress of the regression is produced.
 #' @param algorithm character, the algorithm to be used. See 'Details'.
 #'
-#' @return a \code{nls} object. See \link[stats]{nls} for details.
+#' @return a \code{nls} object. See \link[stats]{nls} for details. A 'log_transf' logical attribute is
+#' added to the \code{nls} object and is set to the value of the \code{log_transf} parameter.
 #'
 #' @details
 #' It is challenging to figure good starting values for a non-linear fit. When the algorithm implemented
@@ -147,7 +148,8 @@ fit_growth <- function(dat, fo, curve_type = "logistic", method_rate = NULL, k_p
       names(coef_start)[1] <- "k_param"
     } else if (method_rate == "softplus") {
       if (is.null(k_param)) k_param <- 1
-      x <- paste0("log(1+exp(k_param * ", x, "))/k_param")
+      # x <- paste0("log(1+exp(k_para(m * ", x, "))/k_param")
+      x <- paste0("log(exp(k_param * (", x, "))-1)/k_param")
     }
   }
 
@@ -184,8 +186,13 @@ fit_growth <- function(dat, fo, curve_type = "logistic", method_rate = NULL, k_p
     if (is.null(r)) {
       cli::cli_alert(paste0("Convergence problems. Switching to fit_optim"))
       out_optim <- fit_optim(dat, fofo, coef_start)
-      nls = nls(fofo, data = dat, start = out_optim$par, control = list(tol = 1e64))
+      r = nls(fofo, data = dat, start = out_optim$par, control = list(tol = 1e64))
     }
+
+    attr(r, "log_trans") <- TRUE
+
+  } else {
+    attr(r, "log_trans") <- FALSE
   }
 
   return(r)

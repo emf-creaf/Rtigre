@@ -44,7 +44,8 @@ the dependent variable.}
 \item{verbose}{logical. If TRUE, information on the progress of the regression is produced.}
 }
 \value{
-a \code{nls} object. See \link[stats]{nls} for details.
+a \code{nls} object. See \link[stats]{nls} for details. A 'log_transf' logical attribute is
+added to the \code{nls} object and is set to the value of the \code{log_transf} parameter.
 }
 \description{
 Non-linear least-squares fit of growth data to a time-independent growth curve.
