@@ -8,11 +8,10 @@
 #' @param fo \code{formula} describing the right-hand-side of the dependence of the
 #' growth rate on the predictors.
 #' @param curve_type character indicating the type of growth curve to be used.
-#' @param method_rate character indicating which method to implement to ensure that growth rate
-#' always stays positive. It can take values \code{method_rate = "sigmoid"} or
-#' \code{method_rate = "softplus"}. The latter corresponds to a smooth approximation to the
-#' ramp function. If \code{method = NULL} (default), no method is implemented
-#' If \code{NULL}, no method is implemented.
+#' @param positive_rate logical parameter to ensure that growth rate 'k' is always positive.
+#' If TRUE, growth rate 'k' is approximated by a 'softplus' function. In that case, 'k_param'
+#' corresponds to a 'softplus' parameter such that larger 'k_param' values make the elbow
+#' of the "softplus" curve more pronounced.
 #' @param k_param numeric. If \code{method_rate = NULL} or not set, \code{k_param} is not evaluated.
 #' If \code{method_rate = "sigmoid"}, \code{k_param} will indicate the maximum value of the sigmoid transformation
 #' for the rate function \code{k}, and if not set it will be approximated from the data.
@@ -88,7 +87,7 @@
 #' plot(with(Punci_IFN, y2-y1), exp(predict(r)+.5*var(summary(r)$residuals)), pch = 16, cex = .1, xlim = c(0,10), ylim = c(0,10))
 #'
 #'
-fit_growth <- function(dat, fo, curve_type = "logistic", method_rate = NULL, k_param = NULL, algorithm = "nlsLM", log_transf = T, verbose = T) {
+fit_growth <- function(dat, fo, curve_type = "logistic", positive_rate = FALSE, k_param = NULL, algorithm = "nlsLM", log_transf = T, verbose = T) {
 
 
   # Checks.
@@ -96,7 +95,6 @@ fit_growth <- function(dat, fo, curve_type = "logistic", method_rate = NULL, k_p
   stopifnot("Input 'fo' must be a 'formula'" = inherits(fo, "formula"))
   stopifnot("Input 'verbose' must be logical" = is.logical(verbose))
   curve_type <- match.arg(curve_type, all_curve_types())
-  if (!is.null(method_rate)) method_rate <- match.arg(method_rate, c("sigmoid", "softplus"))
   algorithm <- match.arg(algorithm, c("nlsLM", "nls", "nlsr"))
   stopifnot("Values in 'tdiff' column must be all strictly positive" = all(dat$tdiff > 0))
 
@@ -124,7 +122,6 @@ fit_growth <- function(dat, fo, curve_type = "logistic", method_rate = NULL, k_p
   coef_start <- coef(r)
 
 
-
   # # If fo contains more predictors, add them to the formula string.
   # Parentheses ")" or "(", and power sign "^", are swapped for an underscore "_".
   # This way R will not stop the execution by complaining about unacceptable parameter names.
@@ -143,13 +140,13 @@ fit_growth <- function(dat, fo, curve_type = "logistic", method_rate = NULL, k_p
   # If we opted for a method to ensure k>=0.
   if (!is.null(method_rate)) {
     if (method_rate == "sigmoid") {
-      x <- paste0("k_param/(1+exp(-(", x, ")))")
-      coef_start <- c(r$k_param, coef_start)
-      names(coef_start)[1] <- "k_param"
+      x <- paste0(k_param, "/(1+exp(-(", x, ")))")
+      # coef_start <- c(r$k_param, coef_start)
+      # names(coef_start)[1] <- "k_param"
     } else if (method_rate == "softplus") {
       if (is.null(k_param)) k_param <- 1
       # x <- paste0("log(1+exp(k_para(m * ", x, "))/k_param")
-      x <- paste0("log(exp(k_param * (", x, "))-1)/k_param")
+      x <- paste0("log(1+exp(k_param * (", x, ")))/k_param")
     }
   }
 
@@ -170,7 +167,7 @@ fit_growth <- function(dat, fo, curve_type = "logistic", method_rate = NULL, k_p
               nlsr = nlsr::nlsr(formula(fofo), data = dat, start = coef_start)
   )
 
-
+browser()
   # If a log-transformed regression is sought.
   if (log_transf) {
     if (verbose) cli::cli_text("fit_growth: non-linear fit of log-transformed data")

@@ -9,14 +9,13 @@
 #' @param fo an object of class "formula"
 #' @param kmax numeric. If NULL, \code{kmax} will be estimated from the data.
 #' @param curve_type
-#' @param method_rate see \code{\link{function_name}}.
+#' @param positive_rate see \code{\link{fit_growth}}.
 #'
 #' @details Some of the growth equations are taken from Table 6.2 in #' Burkhart and Tomé (2012).
 #' Columns  'y1' and 'y2' in 'dat' correspond to the sizes of the individual at 't1' and 't2', with column 'tdiff'='t2'-'t1'.
 #' Column 'max_y' correspond to maximum size attainable by the individual when time tends to infinite.
 #'
-#' The 'sigmoid_rate' option allows us to guarantee that \code{k} is ecologically sound.
-#' That implies that it is never negative and has an upper limit,
+#' The 'positive_rate = TRUE' option allows us to guarantee that \code{k} always remains positive.
 #' Negative \code{k} values may happen when growth curves
 #' are used to calculate growth under conditions much different from the initial ones.
 #'
@@ -68,7 +67,7 @@
 #' summary(r3)
 #'
 #' ## Assuming a sigmoid expression for k.
-#' r4 <- fit_rate(dat, ~ Intercept + temp + prec, method_rate = "sigmoid")
+#' r4 <- fit_rate(dat, ~ Intercept + temp + prec, positive_rate = TRUE)
 #' summary(r4)
 #'
 #' ## Actual Pinus uncinata data from the Spanish Forest Inventories.
@@ -78,8 +77,8 @@
 #' Punci_IFN$tdiff <- 10
 #' Punci_IFN$Intercept <- 1
 #'
-#' k1 <- fit_rate(Punci_IFN, ~ Intercept + prec + temp, method_rate = "softplus")
-#' k2 <- fit_rate(Punci_IFN, ~ Intercept + prec + temp, method_rate = "sigmoid")
+#' k1 <- fit_rate(Punci_IFN, ~ Intercept + prec + temp)
+#' k2 <- fit_rate(Punci_IFN, ~ Intercept + prec + temp, positive_rate = TRUE)
 #' summary(k1)
 #' summary(k2)
 #'
@@ -89,13 +88,14 @@
 #'
 #' @export
 
-fit_rate <- function(dat, fo, curve_type = "logistic", method_rate = NULL, k_param = NULL) {
+fit_rate <- function(dat, fo, curve_type = "logistic", positive_rate = FALSE, k_param = NULL) {
 
 
   # Checks.
   stopifnot("Input 'dat' must be a 'data.frame'" = is.data.frame(dat))
   stopifnot("Input 'fo' must be a 'formula'" = inherits(fo, "formula"))
   curve_type = match.arg(curve_type, all_curve_types())
+  stopifnot("Input 'k_param' must be positive" = k_param > 0)
 
 
   # Check formula.
@@ -108,21 +108,16 @@ fit_rate <- function(dat, fo, curve_type = "logistic", method_rate = NULL, k_par
   dat$k <- rate_gr(dat, curve_type = curve_type)
 
 
-  # If 'method_rate' is not NULL, k_param must be specified either on input or below.
-  if (!is.null(method_rate)) {
-    if (method_rate == "sigmoid") {
-      if (is.null(k_param)) k_param <- max(dat$k)*1.05        # A bit larger.
-      dat$k <- log(dat$k/(k_param-dat$k))                     # Further logit transformation.
-    } else if (method_rate == "softplus") {
-      if (is.null(k_param)) k_param <- 1
-      dat$k <- log(1+exp(k_param*dat$k))/k_param
-    }
+  # If 'positive_rate = TRUE' is not NULL, k_param must be specified either on input.
+  # If not, a value of 1 is assumed.
+  if (positive_rate) {
+    if (is.null(k_param)) k_param <- 1
+    dat$k <- log(exp(k_param*dat$k)-1)/k_param
   }
 
 
   # Linear regression. Intercept-by-default is removed.
   r <- lm(update(fo, k ~ -1 + .), data = dat)
-  if (!is.null(method_rate)) r$k_param <- k_param
 
 
   return(r)
