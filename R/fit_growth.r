@@ -52,16 +52,20 @@
 #' Intercept <- .1
 #' coef_temp <- -.00061
 #' coef_prec <- -.000052
-#' k <- Intercept + coef_temp*temp + coef_prec*prec + rnorm(npoints)*.001
+#' k <- Intercept + coef_temp*temp + coef_prec*prec + rnorm(npoints)*.01
 #' y1 <- max_y/(1+exp(-(k*t-5)))
 #' y2 <- max_y/(1+exp(-(k*(t+tdiff)-5))) + rnorm(npoints)*.01
 #' dat <- data.frame(tdiff = tdiff, max_y = max_y, y1 = y1, y2 = y2, temp = temp, prec = prec, Intercept = 1)
 #' r <- fit_growth(dat, ~ Intercept + temp + prec, curve_type = "logistic", log_transf = F, positive_rate = F)
 #' print(summary(r))
+#' plot(with(dat, y2-y1), predict(r), pch = 16, cex = .1, log = "xy")
+#' points(c(0.01, 50), c(0.01, 50), type = "l", lwd = 2, col = "red")
 #'
 #' ## Same data, but forcing growth rate to be strictly positive.
 #' r <- fit_growth(dat, ~ Intercept + temp + prec, curve_type = "logistic", log_transf = F, positive_rate = T)
 #' print(summary(r))
+#' plot(with(dat, y2-y1), predict(r), pch = 16, cex = .1, log = "xy")
+#' points(c(0.01, 50), c(0.01, 50), type = "l", lwd = 2, col = "red")
 #'
 #' ## Actual Pinus uncinata data from the Spanish Forest Inventories.
 #' data("Punci_IFN")
