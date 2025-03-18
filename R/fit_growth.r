@@ -191,10 +191,10 @@ fit_growth <- function(dat, fo, curve_type = "logistic", log_transf = FALSE, pos
       cli::cli_abort("Could not fit the data with the selected input parameters")
     }
 
-    attr(r, "log_trans") <- TRUE
+    attr(r, "log_transf") <- TRUE
 
   } else {
-    attr(r, "log_trans") <- FALSE
+    attr(r, "log_transf") <- FALSE
   }
 
   return(r)
