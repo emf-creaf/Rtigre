@@ -18,6 +18,8 @@ and accompanying Vignettes for a description.}
 
 \item{fo}{an object of class "formula"}
 
+\item{curve_type}{character indicating the type of growth curve to be used.}
+
 \item{positive_rate}{see \code{\link{fit_growth}}.}
 
 \item{kmax}{numeric. If NULL, \code{kmax} will be estimated from the data.}

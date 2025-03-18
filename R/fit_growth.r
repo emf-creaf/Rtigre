@@ -12,11 +12,11 @@
 #' If TRUE, growth rate 'k' is approximated by a 'softplus' function. In that case, 'k_param'
 #' corresponds to a 'softplus' parameter such that larger 'k_param' values make the elbow
 #' of the "softplus" curve more pronounced.
-#' @param k_param numeric. If \code{method_rate = NULL} or not set, \code{k_param} is not evaluated.
-#' If \code{method_rate = "sigmoid"}, \code{k_param} will indicate the maximum value of the sigmoid transformation
-#' for the rate function \code{k}, and if not set it will be approximated from the data.
-#' If \code{method_rate = "softplus"}, \code{k_param} corresponds to the softplus parameter that
-#' modifies the behaviour of the curve.
+#'
+#' @param k_param numeric indicating the value of the softplus transformation parameter.
+#' If \code{positive_rate = FALSE} or not set, \code{k_param} is not evaluated.
+#' If \code{positive_rate = TRUE} and not set, it will be assumed  \code{k_param=1}.
+#'
 #' @param log_transf logical. If TRUE, a log-transformation will be applied to
 #' the dependent variable.
 #' @param verbose logical. If TRUE, information on the progress of the regression is produced.
@@ -26,18 +26,13 @@
 #' added to the \code{nls} object and is set to the value of the \code{log_transf} parameter.
 #'
 #' @details
-#' It is challenging to figure good starting values for a non-linear fit. When the algorithm implemented
-#' in e.g. \link[stats]{nls} does not work (which is often the case), one can then turn to using a
-#' slower but safer method like e.g. "Nelder-Mead", or  of the \link[stats]{nls}
-#'
 #' The algorithm first fits an explicit expression of the growth rate as a function of the
 #' explanatory variables. The resulting coefficients will be the starting values for the
 #' final non-linear regression.
-#' Be aware that, in some cases, \code{sigmoid = T} may give rise to "singular gradient" error messages in
-#' \link[stats]{nls} or some other error and/or warning messages for \link[minpack.lm]{nlsLM}
-#' or \link[nlsr]{nlsr}.
-#' The default algorithm is "nlsLM", which implements the "nlsLM" function in package
-#' \code{minpack}. Other allowed values are "nls", which used the built-in \code{nls}
+#' If \code{positive_rate = FALSE} a softplus transformation is performed to ensure that
+#' the growth rate 'k' is always positive.
+#' The default non-linear least-squares algorithm is "nlsLM", which is implemented in package
+#' \code{minpack}. Other allowed values are "nls", which uses the built-in \code{nls}
 #' function and "nlsr" from package \code{nlsr}. The Levenberg-Marquardt in \link[minpack.lm]{nlsLM}
 #' is very fast and stable and should work fine most of the time.
 #'
@@ -54,22 +49,18 @@
 #' ## Fake climatic data.
 #' temp <- rnorm(npoints, mean = 15.4, sd = 1)
 #' prec <- rnorm(npoints, mean = 560, sd = 50)
-#' Intercept <- .02
-#' coef_temp <- .00061
-#' coef_prec <- .000052
+#' Intercept <- .1
+#' coef_temp <- -.00061
+#' coef_prec <- -.000052
 #' k <- Intercept + coef_temp*temp + coef_prec*prec + rnorm(npoints)*.001
 #' y1 <- max_y/(1+exp(-(k*t-5)))
 #' y2 <- max_y/(1+exp(-(k*(t+tdiff)-5))) + rnorm(npoints)*.01
 #' dat <- data.frame(tdiff = tdiff, max_y = max_y, y1 = y1, y2 = y2, temp = temp, prec = prec, Intercept = 1)
-#' r <- fit_growth(dat, ~ Intercept + temp + prec, curve_type = "logistic", log_transf = F, method_rate = "softplus")
+#' r <- fit_growth(dat, ~ Intercept + temp + prec, curve_type = "logistic", log_transf = F, positive_rate = F)
 #' print(summary(r))
 #'
-#' ## Same data, but simulating a sigmoid rate.
-#' k <- 2/(1 + exp(-(intercept + coef_temp*temp + coef_prec*prec))) + rnorm(length(temp))*.01
-#' y1 <- max_y/(1+exp(-(k*t[1]-2)))
-#' y2 <- max_y/(1+exp(-(k*t[2]-2)))
-#' dat <- data.frame(tdiff=t[2]-t[1], max_y = max_y, y1 = y1, y2 = y2, temp = temp, prec = prec)
-#' r <- fit_growth(dat, ~ temp + prec, curve_type = "logistic", log_transf = F, method_rate = "sigmoid")
+#' ## Same data, but forcing growth rate to be strictly positive.
+#' r <- fit_growth(dat, ~ Intercept + temp + prec, curve_type = "logistic", log_transf = F, positive_rate = T)
 #' print(summary(r))
 #'
 #' ## Actual Pinus uncinata data from the Spanish Forest Inventories.
@@ -78,16 +69,22 @@
 #' ## Add time difference between second and third Inventory.
 #' Punci_IFN$tdiff <- 10
 #'
-#' r <- fit_growth(Punci_IFN, ~prec+temp)
+#' r <- fit_growth(Punci_IFN, ~ prec + temp, log_transf = F, positive_rate = F)
 #' print(summary(r))
-#' plot(with(Punci_IFN, y2-y1), predict(r), pch = 16, cex = .1)
+#' plot(with(Punci_IFN, y2-y1), predict(r), pch = 16, cex = .1, log = "xy")
+#' points(c(0.01, 50), c(0.01, 50), type = "l", lwd = 2, col = "red")
 #'
-#' r <- fit_growth(Punci_IFN, ~prec+temp, method_rate = "sigmoid")
+#' r <- fit_growth(Punci_IFN, ~ prec + temp, log_transf = F, positive_rate = T)
 #' print(summary(r))
-#' plot(with(Punci_IFN, y2-y1), exp(predict(r)+.5*var(summary(r)$residuals)), pch = 16, cex = .1, xlim = c(0,10), ylim = c(0,10))
+#' plot(with(Punci_IFN, y2-y1), predict(r), pch = 16, cex = .1, log = "xy")
+#' points(c(0.01, 50), c(0.01, 50), type = "l", lwd = 2, col = "red")
 #'
+#' r <- fit_growth(Punci_IFN, ~ prec + temp, log_transf = T, positive_rate = T)
+#' print(summary(r))
+#' plot(with(Punci_IFN, log(y2-y1)), predict(r), pch = 16, cex = .1)
+#' points(c(-50, 50), c(-50, 50), type = "l", lwd = 2, col = "red")
 #'
-fit_growth <- function(dat, fo, curve_type = "logistic", positive_rate = FALSE, k_param = NULL, algorithm = "nlsLM", log_transf = T, verbose = T) {
+fit_growth <- function(dat, fo, curve_type = "logistic", log_transf = FALSE, positive_rate = FALSE, k_param = NULL, algorithm = "nlsLM", verbose = T) {
 
 
   # Checks.
@@ -96,7 +93,11 @@ fit_growth <- function(dat, fo, curve_type = "logistic", positive_rate = FALSE, 
   stopifnot("Input 'verbose' must be logical" = is.logical(verbose))
   curve_type <- match.arg(curve_type, all_curve_types())
   algorithm <- match.arg(algorithm, c("nlsLM", "nls", "nlsr"))
+
+
+  # Check that tdiff and observed growth are always positive.
   stopifnot("Values in 'tdiff' column must be all strictly positive" = all(dat$tdiff > 0))
+  stopifnot("Difference 'y2-y1' must be always positive" = all((dat$y2-dat$y1) > 0))
 
 
   # Check components in formula.
@@ -108,51 +109,40 @@ fit_growth <- function(dat, fo, curve_type = "logistic", positive_rate = FALSE, 
   # Need info on the screen?
   if (verbose) {
     out <- paste0("fit_growth: ", curve_type, " curve")
-    out <- switch(ifelse(is.null(method_rate), "empty", method_rate),
-                  sigmoid = paste0(out,", sigmoid rate"),
-                  softplus = paste0(out,", softplus rate"),
-                  empty = out)
+    if (positive_rate) out <- paste0(out,", softplus transformation")
     if (log_transf) out <- paste0(out, ", log-transformation")
     cli::cli_text(out)
   }
 
-  # Get regression parameters.
+
+  # Get first guess for regression parameters.
   if (verbose) cli::cli_text("fit_growth: linear regression of growth rate against predictors")
-  r <- fit_rate(dat = dat, fo = fo, curve_type = curve_type, method_rate = method_rate, k_param = k_param)
+  r <- fit_rate(dat = dat, fo = fo, curve_type = curve_type, positive_rate = positive_rate, k_param = k_param)
   coef_start <- coef(r)
 
 
-  # # If fo contains more predictors, add them to the formula string.
-  # Parentheses ")" or "(", and power sign "^", are swapped for an underscore "_".
+  # # If 'fo' contains more predictors, add them to the formula string.
+  # Parentheses ")" or "(", and power sign "^", are swapped for an underscore "_" in names.
   # This way R will not stop the execution by complaining about unacceptable parameter names.
   x <- names_start <- NULL
   for (i in 1:length(coef_start)) {
-    xx <- ifelse(i == 1, "coef_", " + coef_")
-    namcof <- names(coef_start)[i]
-    namcof <- gsub("\\(|\\)", "_", namcof)
+    namcof <- gsub("\\(|\\)", "_", names(coef_start)[i])
     namcof <- gsub("\\^", "_", namcof)
+    xx <- ifelse(i == 1, "coef_", " + coef_")
     x <- paste0(x, xx, namcof, "*", names(coef_start)[i])
     names_start <- c(names_start, paste0("coef_", namcof))
   }
   names(coef_start) <- names_start
 
 
-  # If we opted for a method to ensure k>=0.
-  if (!is.null(method_rate)) {
-    if (method_rate == "sigmoid") {
-      x <- paste0(k_param, "/(1+exp(-(", x, ")))")
-      # coef_start <- c(r$k_param, coef_start)
-      # names(coef_start)[1] <- "k_param"
-    } else if (method_rate == "softplus") {
-      if (is.null(k_param)) k_param <- 1
-      # x <- paste0("log(1+exp(k_para(m * ", x, "))/k_param")
-      x <- paste0("log(1+exp(k_param * (", x, ")))/k_param")
-    }
+  # Softplus transformation to ensure k>=0.
+  if (positive_rate) {
+    if (is.null(k_param)) k_param <- 1
+    x <- paste0("log(1+exp(", k_param, " * (", x, ")))/", k_param)
   }
 
 
-  # Next, we build the formula. We leave it as a string in case a log-transformation
-  # is required below. It's easy to work with strings in that case.
+  # Next, we build the formula.
   x <- paste0("(", x, ")")
   y <- string_gr(curve_type, "ti")
   z <- gsub("k", x, y)
@@ -167,23 +157,34 @@ fit_growth <- function(dat, fo, curve_type = "logistic", positive_rate = FALSE, 
               nlsr = nlsr::nlsr(formula(fofo), data = dat, start = coef_start)
   )
 
-browser()
+
   # If a log-transformed regression is sought.
   if (log_transf) {
     if (verbose) cli::cli_text("fit_growth: non-linear fit of log-transformed data")
-    fofo <- as.formula(paste0("log(y2-y1)~log(", z, ")"))
+    fofo <- as.formula(paste0("log(y2-y1)~log(", z, " - y1)"))
     coef_start <- coef(r)
 
+    # The non-linear least-squares again.
     r <- tryCatch(switch(algorithm,
                 nlsLM = minpack.lm::nlsLM(fofo, data = dat, start = coef_start, control = list(maxiter = 1024)),
                 nls = nls(fofo, data = dat, start = coef_start, control = list(maxiter = 1000)),
                 nlsr = nlsr::nlsr(fofo, data = dat, start = coef_start)),
                 error = function(e) return(NULL))
 
+    # If the starting coefficients are not good enough we turn to 'optim' for a better guess.
     if (is.null(r)) {
       cli::cli_alert(paste0("Convergence problems. Switching to fit_optim"))
-      out_optim <- fit_optim(dat, fofo, coef_start)
-      r = nls(fofo, data = dat, start = out_optim$par, control = list(tol = 1e64))
+      coef_start <- fit_optim(dat, fofo, coef_start)$par
+      r <- tryCatch(switch(algorithm,
+                           nlsLM = minpack.lm::nlsLM(fofo, data = dat, start = coef_start, control = list(maxiter = 1024)),
+                           nls = nls(fofo, data = dat, start = coef_start, control = list(maxiter = 1000)),
+                           nlsr = nlsr::nlsr(fofo, data = dat, start = coef_start)),
+                    error = function(e) return(NULL))
+    }
+
+    # Despite our best attempts, convergence could not be achieved.
+    if (is.null(r)) {
+      cli::cli_abort("Could not fit the data with the selected input parameters")
     }
 
     attr(r, "log_trans") <- TRUE

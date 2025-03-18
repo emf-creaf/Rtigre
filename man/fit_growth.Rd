@@ -8,10 +8,10 @@ fit_growth(
   dat,
   fo,
   curve_type = "logistic",
-  method_rate = NULL,
+  log_transf = FALSE,
+  positive_rate = FALSE,
   k_param = NULL,
   algorithm = "nlsLM",
-  log_transf = T,
   verbose = T
 )
 }
@@ -24,22 +24,19 @@ growth rate on the predictors.}
 
 \item{curve_type}{character indicating the type of growth curve to be used.}
 
-\item{method_rate}{character indicating which method to implement to ensure that growth rate
-always stays positive. It can take values \code{method_rate = "sigmoid"} or
-\code{method_rate = "softplus"}. The latter corresponds to a smooth approximation to the
-ramp function. If \code{method = NULL} (default), no method is implemented
-If \code{NULL}, no method is implemented.}
-
-\item{k_param}{numeric. If \code{method_rate = NULL} or not set, \code{k_param} is not evaluated.
-If \code{method_rate = "sigmoid"}, \code{k_param} will indicate the maximum value of the sigmoid transformation
-for the rate function \code{k}, and if not set it will be approximated from the data.
-If \code{method_rate = "softplus"}, \code{k_param} corresponds to the softplus parameter that
-modifies the behaviour of the curve.}
-
-\item{algorithm}{character, the algorithm to be used. See 'Details'.}
-
 \item{log_transf}{logical. If TRUE, a log-transformation will be applied to
 the dependent variable.}
+
+\item{positive_rate}{logical parameter to ensure that growth rate 'k' is always positive.
+If TRUE, growth rate 'k' is approximated by a 'softplus' function. In that case, 'k_param'
+corresponds to a 'softplus' parameter such that larger 'k_param' values make the elbow
+of the "softplus" curve more pronounced.}
+
+\item{k_param}{numeric indicating the value of the softplus transformation parameter.
+If \code{positive_rate = FALSE} or not set, \code{k_param} is not evaluated.
+If \code{positive_rate = TRUE} and not set, it will be assumed  \code{k_param=1}.}
+
+\item{algorithm}{character, the algorithm to be used. See 'Details'.}
 
 \item{verbose}{logical. If TRUE, information on the progress of the regression is produced.}
 }
@@ -51,18 +48,13 @@ added to the \code{nls} object and is set to the value of the \code{log_transf} 
 Non-linear least-squares fit of growth data to a time-independent growth curve.
 }
 \details{
-It is challenging to figure good starting values for a non-linear fit. When the algorithm implemented
-in e.g. \link[stats]{nls} does not work (which is often the case), one can then turn to using a
-slower but safer method like e.g. "Nelder-Mead", or  of the \link[stats]{nls}
-
 The algorithm first fits an explicit expression of the growth rate as a function of the
 explanatory variables. The resulting coefficients will be the starting values for the
 final non-linear regression.
-Be aware that, in some cases, \code{sigmoid = T} may give rise to "singular gradient" error messages in
-\link[stats]{nls} or some other error and/or warning messages for \link[minpack.lm]{nlsLM}
-or \link[nlsr]{nlsr}.
-The default algorithm is "nlsLM", which implements the "nlsLM" function in package
-\code{minpack}. Other allowed values are "nls", which used the built-in \code{nls}
+If \code{positive_rate = FALSE} a softplus transformation is performed to ensure that
+the growth rate 'k' is always positive.
+The default non-linear least-squares algorithm is "nlsLM", which is implemented in package
+\code{minpack}. Other allowed values are "nls", which uses the built-in \code{nls}
 function and "nlsr" from package \code{nlsr}. The Levenberg-Marquardt in \link[minpack.lm]{nlsLM}
 is very fast and stable and should work fine most of the time.
 }
@@ -77,22 +69,18 @@ max_y <- 120
 ## Fake climatic data.
 temp <- rnorm(npoints, mean = 15.4, sd = 1)
 prec <- rnorm(npoints, mean = 560, sd = 50)
-Intercept <- .02
-coef_temp <- .00061
-coef_prec <- .000052
+Intercept <- .1
+coef_temp <- -.00061
+coef_prec <- -.000052
 k <- Intercept + coef_temp*temp + coef_prec*prec + rnorm(npoints)*.001
 y1 <- max_y/(1+exp(-(k*t-5)))
 y2 <- max_y/(1+exp(-(k*(t+tdiff)-5))) + rnorm(npoints)*.01
 dat <- data.frame(tdiff = tdiff, max_y = max_y, y1 = y1, y2 = y2, temp = temp, prec = prec, Intercept = 1)
-r <- fit_growth(dat, ~ Intercept + temp + prec, curve_type = "logistic", log_transf = F, method_rate = "softplus")
+r <- fit_growth(dat, ~ Intercept + temp + prec, curve_type = "logistic", log_transf = F, positive_rate = F)
 print(summary(r))
 
-## Same data, but simulating a sigmoid rate.
-k <- 2/(1 + exp(-(intercept + coef_temp*temp + coef_prec*prec))) + rnorm(length(temp))*.01
-y1 <- max_y/(1+exp(-(k*t[1]-2)))
-y2 <- max_y/(1+exp(-(k*t[2]-2)))
-dat <- data.frame(tdiff=t[2]-t[1], max_y = max_y, y1 = y1, y2 = y2, temp = temp, prec = prec)
-r <- fit_growth(dat, ~ temp + prec, curve_type = "logistic", log_transf = F, method_rate = "sigmoid")
+## Same data, but forcing growth rate to be strictly positive.
+r <- fit_growth(dat, ~ Intercept + temp + prec, curve_type = "logistic", log_transf = F, positive_rate = T)
 print(summary(r))
 
 ## Actual Pinus uncinata data from the Spanish Forest Inventories.
@@ -101,13 +89,19 @@ data("Punci_IFN")
 ## Add time difference between second and third Inventory.
 Punci_IFN$tdiff <- 10
 
-r <- fit_growth(Punci_IFN, ~prec+temp)
+r <- fit_growth(Punci_IFN, ~ prec + temp, log_transf = F, positive_rate = F)
 print(summary(r))
-plot(with(Punci_IFN, y2-y1), predict(r), pch = 16, cex = .1)
+plot(with(Punci_IFN, y2-y1), predict(r), pch = 16, cex = .1, log = "xy")
+points(c(0.01, 50), c(0.01, 50), type = "l", lwd = 2, col = "red")
 
-r <- fit_growth(Punci_IFN, ~prec+temp, method_rate = "sigmoid")
+r <- fit_growth(Punci_IFN, ~ prec + temp, log_transf = F, positive_rate = T)
 print(summary(r))
-plot(with(Punci_IFN, y2-y1), exp(predict(r)+.5*var(summary(r)$residuals)), pch = 16, cex = .1, xlim = c(0,10), ylim = c(0,10))
+plot(with(Punci_IFN, y2-y1), predict(r), pch = 16, cex = .1, log = "xy")
+points(c(0.01, 50), c(0.01, 50), type = "l", lwd = 2, col = "red")
 
+r <- fit_growth(Punci_IFN, ~ prec + temp, log_transf = T, positive_rate = T)
+print(summary(r))
+plot(with(Punci_IFN, log(y2-y1)), predict(r), pch = 16, cex = .1)
+points(c(-50, 50), c(-50, 50), type = "l", lwd = 2, col = "red")
 
 }

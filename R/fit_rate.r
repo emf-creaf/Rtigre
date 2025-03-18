@@ -8,7 +8,7 @@
 #' and accompanying Vignettes for a description.
 #' @param fo an object of class "formula"
 #' @param kmax numeric. If NULL, \code{kmax} will be estimated from the data.
-#' @param curve_type
+#' @param curve_type character indicating the type of growth curve to be used.
 #' @param positive_rate see \code{\link{fit_growth}}.
 #'
 #' @details Some of the growth equations are taken from Table 6.2 in #' Burkhart and Tomé (2012).
