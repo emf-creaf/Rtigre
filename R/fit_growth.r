@@ -88,6 +88,34 @@
 #' plot(with(Punci_IFN, log(y2-y1)), predict(r), pch = 16, cex = .1)
 #' points(c(-50, 50), c(-50, 50), type = "l", lwd = 2, col = "red")
 #'
+#' # We try all curve types at once and implement a training-test (80%-20%) approach.
+#' curves <- Rtigre:::all_curve_types()
+#' curves <- curves[-match("user", curves)]
+#' npoints <- nrow(Punci_IFN)
+#' ntrain <- round(npoints*.8)
+#' nsimu <- 100
+#' fo <- ~ prec + temp
+#'
+#' out <- data.frame(matrix(0, nsimu, length(curves)))
+#' names(out) <- curves
+#' for (i in 1:nsimu) {
+#'   j <- sample(npoints)[1:ntrain]
+#'   dat <- Punci_IFN[j, ]
+#'   r <- lapply(curves, function(x) fit_growth(dat, fo, log_transf = T, positive_rate = T, curve_type = x, verbose = F))
+#'   dat <- Punci_IFN[-j, ]
+#'   out[i, ] <- sapply(r, function(x) sd(predict(x, newdata = dat) - log(dat$y2-dat$y1)))
+#' }
+#' library(ggplot2)
+#' library(gridExtra)
+#' plot_list <- list()
+#' for (i in curves) {
+#'   plot_list[[i]] <- ggplot(out, aes_string(x = i)) +
+#'     geom_histogram(breaks = seq(.8, 1.5, by = .02), fill = "skyblue", color = "black") +
+#'     ggtitle(i) +
+#'     theme_minimal()
+#' }
+#' grid.arrange(grobs = plot_list, nrow = 3, ncol = 3)
+#'
 fit_growth <- function(dat, fo, curve_type = "logistic", log_transf = FALSE, positive_rate = FALSE, k_param = NULL, algorithm = "nlsLM", verbose = T) {
 
 
