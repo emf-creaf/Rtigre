@@ -121,9 +121,9 @@ names(out) <- curves
 for (i in 1:nsimu) {
   j <- sample(npoints)[1:ntrain]
   dat <- Punci_IFN[j, ]
-  r <- lapply(curves, function(x) fit_growth(dat, fo, log_transf = T, positive_rate = T, curve_type = x, verbose = F))
+  r <- lapply(curves, function(x) fit_growth(dat, fo, log_transf = T, positive_rate = F, curve_type = x, verbose = F))
   dat <- Punci_IFN[-j, ]
-  out[i, ] <- sapply(r, function(x) sd(predict(x, newdata = dat) - log(dat$y2-dat$y1)))
+  out[i, ] <- sapply(r, function(x) cor(predict(x, newdata = dat), (dat$y2-dat$y1))^2)
 }
 library(ggplot2)
 library(gridExtra)

@@ -5,7 +5,7 @@
 \title{Title}
 \usage{
 evaluate_fits(
-  dat,
+  df,
   fo,
   log_transf = FALSE,
   train_proportion = 0.8,
