@@ -3,8 +3,8 @@ title: "Regression of time-independent growth equations"
 author: "Roberto Molowny-Horas"
 date: "`r Sys.Date()`"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -12,15 +12,29 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
+### Introduction
+
+Tree growth curves are graphical representation of the changes over time in diameter, height, volume, etc. of an individual tree. For most trees those changes are monotonically increasing and usually follow a characteristic sigmoid pattern, where we can distinguish three main phases:
+
+* Slow initial growth: 
+* Rapid growth:
+* Maturation:
+
+Tree growth depends on different factors like e.g. species, site quality (for instance, soil composition and texture, soil depth and water-holding capacity), topography, climate, intra or interspecies competition, management practices, disturbances, etc. The exact functional dependence of tree growth on these and other factors is usually unknown, or very hard to derive from e.g. process-based models. 
+
+
+Thus, in this work we will determine tree growth from a regression-based model in which a given relationship, usually non-linear, is assumed between tree growth and growth factors. However, to be able to simplify our non-linear regression approach, we look for sigmoid functions where time $t$ is multiplied by a single term $k$ (that is, $k\cdot t$) which, from now on, we will define as **growth rate**. It is through this term $k$ that we will convey the dependence of tree growth on those growth factors.
+
+
 ### Growth rate parameter
 
-We assume that the dependence of the growth rate parameter on a given set of predictors $X_{i}$ is linear. Then, $k$ can then be expressed as:
+We assume that the dependence of the growth rate parameter $k$ on a given set of factors $X_{i}$ is linear. Then, $k$ can then be expressed simply as:
 
 \begin{equation}
   k=\sum_{i=1}^{n} a_{i}\cdot X_{i}
 \end{equation}
 
-where the coefficients $a_{i}$ are unknown and must be calculated. There are cases where we wish to impose a strict positivity on $k$. At the same time, we prefer an expression that does not lead to unrealistically high values for $k$. Examples of this behaviour may come about, for example, when computing projections for $X_{i}$ values that are very different from the ones used during calibration. In those instances, we can force $k$ to be strictly positive by expressing it as a logistic function of the variables $X_{i}$. In this case, we replace the lineal expression from above with the following:
+where the coefficients $a_{i}$ are unknown and must be calculated. There are cases where we wish to constrain $k$ to be strictly positive. At the same time, we prefer an expression that does not lead to unrealistically high values for $k$. Examples of this behaviour may come about, for example, when computing projections for $X_{i}$ values that are very different from the ones used during calibration. In those instances, we can force $k$ to be strictly positive by expressing it as a logistic function of the variables $X_{i}$. In this case, we replace the lineal expression from above with the following:
 
 \begin{equation}
 k=\frac{C}{1+e^{-\sum_{i=1}^{n} a_{i}\cdot X_{i}}}
