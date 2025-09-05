@@ -78,7 +78,7 @@ test_that("Testing fit_growth", {
 
   for (i in c("Quercus ilex", "Pinus halepensis")) {
 
-    dat <- treesIFN[treesIFN$species == "Quercus ilex", ]
+    dat <- treesIFN[treesIFN$species == i, ]
     dat$y2 <- dat$dbh3
     dat$y1 <- dat$dbh2
     dat$intercept <- rep(1, nrow(dat))

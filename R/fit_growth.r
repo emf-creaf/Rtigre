@@ -116,6 +116,26 @@
 #' }
 #' grid.arrange(grobs = plot_list, nrow = 3, ncol = 3)
 #'
+#'
+#'
+#'  data(treesIFN)
+#'  for (i in c("Quercus ilex", "Pinus halepensis")) {
+#'    dat <- treesIFN[treesIFN$species == i, ]
+#'    dat$y2 <- dat$dbh3
+#'    dat$y1 <- dat$dbh2
+#'    dat$tdiff <- rep(10, nrow(dat))
+#'    dat$max_y <- 150
+#'
+#'    # We allow for an intercept.
+#'    dat$intercept <- rep(1, nrow(dat))
+#'
+#'    # This is the model.
+#'    fo <- ~ intercept + y1 + temp + prec
+#'
+#'    # We fit the same data with and without the positive_rate parameter.
+#'    m1 <- dat |> fit_growth(fo, log_transf = FALSE, positive_rate = TRUE, verbose = F)
+#'    m2 <- dat |> fit_growth(fo, log_transf = FALSE, positive_rate = FALSE, verbose = F)
+#'
 fit_growth <- function(dat, fo, curve_type = "logistic", log_transf = FALSE, positive_rate = FALSE, k_param = NULL, algorithm = "nlsLM", verbose = T) {
 
 
@@ -219,10 +239,11 @@ fit_growth <- function(dat, fo, curve_type = "logistic", log_transf = FALSE, pos
       cli::cli_abort("Could not fit the data with the selected input parameters")
     }
 
-    attr(r, "log_transf") <- TRUE
+    r <- Rtigre(r, log_transf = TRUE)
 
   } else {
-    attr(r, "log_transf") <- FALSE
+
+    r <- Rtigre(r, log_transf = FALSE)
   }
 
   return(r)
