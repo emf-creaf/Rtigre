@@ -16,9 +16,6 @@
 #' coef <- c(a = 2, b = .2)
 #' fit_optim(dat, fo, coef)
 
-
-
-
 fit_optim <- function(dat, fo, coef, method = "Nelder-Mead") {
 
 

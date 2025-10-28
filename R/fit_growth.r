@@ -139,16 +139,20 @@
 fit_growth <- function(dat, fo, curve_type = "logistic", log_transf = FALSE, positive_rate = FALSE, k_param = NULL, algorithm = "nlsLM", verbose = T) {
 
 
-  # Checks.
+  # First checks.
+  if (missing(dat)) stop("The 'dat' argument is required")
+  if (missing(fo)) stop("The 'fo' argument is required")
   stopifnot("Input 'dat' must be a 'data.frame'" = is.data.frame(dat))
   stopifnot("Input 'fo' must be a 'formula'" = inherits(fo, "formula"))
-  stopifnot("Input 'verbose' must be logical" = is.logical(verbose))
-  curve_type <- match.arg(curve_type, all_curve_types())
+  curve_type = match.arg(curve_type, all_curve_types())
   algorithm <- match.arg(algorithm, c("nlsLM", "nls", "nlsr"))
+  stopifnot("Input 'verbose' must be logical" = is.logical(verbose))
 
 
-  # Check that tdiff and observed growth are always positive.
-  stopifnot("Values in 'tdiff' column must be all strictly positive" = all(dat$tdiff > 0))
+  # Check that y1, y2 and tdiff are there and are correctly specified..
+  stopifnot("The 'y1', 'y2' and 'tdiff' columns must be specified" = all(c("y1", "y2", "tdiff") %in% colnames(dat)))
+  stopifnot("Columns 'y1', 'y2' and 'tdiff' must be numeric" = all(sapply(dat[, c("y1", "y2", "tdiff")], is.numeric)))
+  stopifnot("Values in 'y1', 'y2' and 'tdiff' column must be strictly positive" = all(dat[, c("y1", "y2", "tdiff")] > 0))
   stopifnot("Difference 'y2-y1' must be always positive" = all((dat$y2-dat$y1) > 0))
 
 
@@ -204,21 +208,29 @@ fit_growth <- function(dat, fo, curve_type = "logistic", log_transf = FALSE, pos
   # The non-linear fit.
   if (verbose) cli::cli_text("fit_growth: non-linear fit")
   r <- switch(algorithm,
-              nlsLM = minpack.lm::nlsLM(formula(fofo), data = dat, start = coef_start, control = list(maxiter = 1024)),
+              nlsLM = minpack.lm::nlsLM(formula(fofo), data = dat, start = coef_start, control = list(maxiter = 1000)),
               nls = nls(formula(fofo), data = dat, start = coef_start, control = list(maxiter = 1000)),
               nlsr = nlsr::nlsr(formula(fofo), data = dat, start = coef_start)
   )
 
 
-  # If a log-transformed regression is sought.
+  # Raise a warning as to whether any predicted value is zero or negative.
+  pred_negative <- any(predict(r) <= 0)
+  if (pred_negative) cli::cli_alert_warning("Some predicted values may be zero or negative")
+
+
+  # A log-transformed regression is sought.
   if (log_transf) {
+    if (pred_negative) cli::cli_abort("Negative predicted values are incompatible with log_transf = TRUE")
+
     if (verbose) cli::cli_text("fit_growth: non-linear fit of log-transformed data")
     fofo <- as.formula(paste0("log(y2-y1)~log(", z, " - y1)"))
     coef_start <- coef(r)
 
+
     # The non-linear least-squares again.
     r <- tryCatch(switch(algorithm,
-                nlsLM = minpack.lm::nlsLM(fofo, data = dat, start = coef_start, control = list(maxiter = 1024)),
+                nlsLM = minpack.lm::nlsLM(fofo, data = dat, start = coef_start, control = list(maxiter = 1000)),
                 nls = nls(fofo, data = dat, start = coef_start, control = list(maxiter = 1000)),
                 nlsr = nlsr::nlsr(fofo, data = dat, start = coef_start)),
                 error = function(e) return(NULL))
@@ -228,22 +240,20 @@ fit_growth <- function(dat, fo, curve_type = "logistic", log_transf = FALSE, pos
       cli::cli_alert(paste0("Convergence problems. Switching to fit_optim"))
       coef_start <- fit_optim(dat, fofo, coef_start)$par
       r <- tryCatch(switch(algorithm,
-                           nlsLM = minpack.lm::nlsLM(fofo, data = dat, start = coef_start, control = list(maxiter = 1024)),
+                           nlsLM = minpack.lm::nlsLM(fofo, data = dat, start = coef_start, control = list(maxiter = 1000)),
                            nls = nls(fofo, data = dat, start = coef_start, control = list(maxiter = 1000)),
                            nlsr = nlsr::nlsr(fofo, data = dat, start = coef_start)),
                     error = function(e) return(NULL))
     }
 
     # Despite our best attempts, convergence could not be achieved.
-    if (is.null(r)) {
-      cli::cli_abort("Could not fit the data with the selected input parameters")
-    }
+    if (is.null(r)) stop("Could not fit the data with the selected input parameters")
 
-    r <- Rtigre(r, log_transf = TRUE)
+    attr(r, "log_transf") <- TRUE
 
   } else {
 
-    r <- Rtigre(r, log_transf = FALSE)
+    attr(r, "log_transf") <- FALSE
   }
 
   return(r)
